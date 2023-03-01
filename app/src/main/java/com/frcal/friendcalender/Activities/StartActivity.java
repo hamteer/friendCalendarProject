@@ -1,4 +1,4 @@
-package com.example.friendcalender;
+package com.frcal.friendcalender.Activities;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
@@ -17,9 +17,14 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.frcal.friendcalender.R;
+
 import java.util.concurrent.Executor;
 
-public class LoginActivity extends AppCompatActivity {
+// TODO:
+//  - Dokumentation
+//  - Deaktivierung des Sensors je nach Nutzereinstellung
+public class StartActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 99999;
     private ImageView viewFingerprint;
@@ -30,19 +35,19 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_start);
         viewFingerprint = findViewById(R.id.viewFingerprint);
-// for fingerprint-login
+        // for fingerprint-login
         BiometricManager biometricManager = BiometricManager.from(this);
         switch (biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)) {
             case BiometricManager.BIOMETRIC_SUCCESS:
-                Log.d("MY_APP_TAG", "App can authenticate using biometrics.");
+                Log.d("frCal", "App can authenticate using biometrics.");
                 break;
             case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                Log.e("MY_APP_TAG", "No biometric features available on this device.");
+                Log.d("frCal", "No biometric features available on this device.");
                 break;
             case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                Log.e("MY_APP_TAG", "Biometric features are currently unavailable.");
+                Log.d("frCal", "Biometric features are currently unavailable.");
                 break;
             case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
                 // Prompts the user to create credentials that your app accepts.
@@ -53,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                 break;
         }
         executor = ContextCompat.getMainExecutor(this);
-        biometricPrompt = new BiometricPrompt(LoginActivity.this,
+        biometricPrompt = new BiometricPrompt(StartActivity.this,
                 executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode,
@@ -68,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                startActivity(new Intent(LoginActivity.this, CalenderActivity.class));
+                startActivity(new Intent(StartActivity.this, AppLoginActivity.class));
                 Toast.makeText(getApplicationContext(),
                         "Authentication succeeded!", Toast.LENGTH_SHORT).show();
             }
@@ -89,8 +94,6 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         // Prompt appears when user clicks "Log in".
-        // Consider integrating with the keystore to unlock cryptographic operations,
-        // if needed by your app.
         viewFingerprint.setOnClickListener(view -> {
             biometricPrompt.authenticate(promptInfo);
         });
