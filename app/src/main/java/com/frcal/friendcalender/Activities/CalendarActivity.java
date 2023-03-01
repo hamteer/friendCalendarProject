@@ -19,7 +19,7 @@ import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import Decorators.OneDayDecorator;
+import com.frcal.friendcalender.Decorators.OneDayDecorator;
 
 // TODO:
 //  - DB-Anbindung & API-Anbindung, Aufruf bei Start, um Termine anzuzeigen

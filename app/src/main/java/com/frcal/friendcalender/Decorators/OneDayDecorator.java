@@ -1,4 +1,4 @@
-package Decorators;
+package com.frcal.friendcalender.Decorators;
 
 import android.content.Context;
 import android.graphics.Typeface;

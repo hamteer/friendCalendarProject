@@ -1,4 +1,4 @@
-package Decorators;
+package com.frcal.friendcalender.Decorators;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
