@@ -15,6 +15,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    packagingOptions{
+        exclude 'META-INF/DEPENDENCIES'
+    }
 
     buildTypes {
         release {
@@ -29,6 +32,14 @@ android {
 }
 
 dependencies {
+
+    // benötigte Dependencies zur Nutzung der Room Persistence Library
+    implementation "androidx.room:room-runtime:2.3.0"
+    implementation 'com.google.firebase:protolite-well-known-types:18.0.0'
+    annotationProcessor "androidx.room:room-compiler:2.3.0"
+    // Google Calender API
+    implementation 'com.google.api-client:google-api-client:2.0.0'
+
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
