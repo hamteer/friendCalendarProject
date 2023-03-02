@@ -90,7 +90,7 @@ public class StartActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                startActivity(new Intent(StartActivity.this, AppLoginActivity.class));
+                startActivity(new Intent(StartActivity.this, CalendarActivity.class));
                 Toast.makeText(getApplicationContext(),
                         "Authentication succeeded!", Toast.LENGTH_SHORT).show();
             }
@@ -116,7 +116,7 @@ public class StartActivity extends AppCompatActivity {
         });
 
         viewStartButton.setOnClickListener(view -> {
-            startActivity(new Intent(StartActivity.this, AppLoginActivity.class));
+            startActivity(new Intent(StartActivity.this, CalendarActivity.class));
             Toast.makeText(getApplicationContext(),
                     "No authentication", Toast.LENGTH_SHORT).show();
         });

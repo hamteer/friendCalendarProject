@@ -37,7 +37,6 @@ public class SettingsActivity extends AppCompatActivity implements
 
     private GoogleSignInClient mGoogleSignInClient;
     private TextView mIdTokenTextView, mIdTokenNr;
-    private Button mRefreshButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +57,12 @@ public class SettingsActivity extends AppCompatActivity implements
                 editor.apply();
             }
         });
-        //For login with Oauth
-        // Views
-        mRefreshButton = findViewById(R.id.token_action);
-        mRefreshButton.setText(R.string.refresh_token);
 
         // Button click listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.disconnect_button).setOnClickListener(this);
-        mRefreshButton.setOnClickListener(this);
+
 
         // For sample only: make sure there is a valid server client ID.
         validateServerClientID();
@@ -181,14 +176,11 @@ public class SettingsActivity extends AppCompatActivity implements
 
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
-            mRefreshButton.setVisibility(View.VISIBLE);
         } else {
             ((TextView) findViewById(R.id.status)).setText(R.string.signed_out);
             mIdTokenTextView.setText(getString(R.string.id_token_fmt, "null"));
-
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
-            mRefreshButton.setVisibility(View.GONE);
         }
     }
 
@@ -218,9 +210,6 @@ public class SettingsActivity extends AppCompatActivity implements
                 break;
             case R.id.disconnect_button:
                 revokeAccess();
-                break;
-            case R.id.token_action:
-                refreshIdToken();
                 break;
         }
     }

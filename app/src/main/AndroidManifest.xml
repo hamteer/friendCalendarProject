@@ -19,16 +19,10 @@
             android:name=".Activities.AddDateActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.AppLoginActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activities.CalendarActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.DateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activities.GoogleLoginActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.SettingsActivity"
