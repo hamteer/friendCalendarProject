@@ -3,6 +3,9 @@
     <string name="mode_switch">Ansicht wechseln</string>
     <string name="dates_of_day">Termine am xx.yy.zzzz</string>
     <string name="title_text">Google Sign-In\nQuickstart</string>
+    <string name="settings_headline">Einstellungen</string>
+    <string name="google_login_icon">Login mit Google</string>
+    <string name="fingerprint_switch_text">Fingerabdruck-Login       </string>
 
     <!-- Sign-in status messages -->
     <string name="signed_in_fmt">Signed in as: %s</string>
@@ -52,5 +55,6 @@
     <string name="msg_contacts_failed">Get contacts failed.</string>
 
     <string name="server_client_id">764959564302-kk5n95aabkm0sj9eae9n28l1neit61i9.apps.googleusercontent.com</string>
+    <string name="calendar_headline">Mein Kalender</string>
 
 </resources>
