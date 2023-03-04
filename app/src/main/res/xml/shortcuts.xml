@@ -17,7 +17,7 @@
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.frcal.friendcalender"
             android:targetClass="com.frcal.friendcalender.Activities.AddDateActivity">
-            <extra android:name="@string/unregular_opening_key" android:value="@string/unregular_opening_string"/>
+<!--            <extra android:name="@string/unregular_opening_key" android:value="@string/unregular_opening_string"/>-->
         </intent>
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
