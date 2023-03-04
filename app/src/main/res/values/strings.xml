@@ -57,4 +57,14 @@
     <string name="server_client_id">764959564302-kk5n95aabkm0sj9eae9n28l1neit61i9.apps.googleusercontent.com</string>
     <string name="calendar_headline">Mein Kalender</string>
 
+    <!-- Shortcuts -->
+    <string name="shortcut_label_short">Termin erstellen</string>
+    <string name="shortcut_label_long">Einen neuen Termin erstellen</string>
+
+    <string name="shortcut_disabled_message">Leider können Sie keinen neuen Termin erstellen</string>
+
+    <!-- Extra, falls Activity nicht über normalem Weg aufgerufen wurde -->
+    <string name="unregular_opening_key">Unregulaer</string>
+    <string name="unregular_opening_string">True</string>
+
 </resources>

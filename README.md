@@ -24,6 +24,10 @@
 
 [Nennen Sie mindestens eine Komponente Ihrer Anwendung, die in wesentlichen Teilen vom jeweiligen Teammitglied entwickelt wurde.]
 
+### Projektablauf
+
+[Beschreiben Sie die verschiedenen Schritte und Zusammentreffen bis zum Abschluss des Projekts.]
+
 ## Guidelines zur Nutzung dieses Repositorys
 
 ### Allgemeine Hinweise und Vorgaben
