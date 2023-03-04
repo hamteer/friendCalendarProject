@@ -63,8 +63,4 @@
 
     <string name="shortcut_disabled_message">Leider können Sie keinen neuen Termin erstellen</string>
 
-    <!-- Extra, falls Activity nicht über normalem Weg aufgerufen wurde -->
-    <string name="unregular_opening_key">Unregulaer</string>
-    <string name="unregular_opening_string">True</string>
-
 </resources>
