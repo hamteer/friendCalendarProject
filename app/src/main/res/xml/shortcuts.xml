@@ -4,10 +4,10 @@
     <shortcut
         android:enabled="true"
         android:icon="@drawable/baseline_add_24"
-        android:shortcutDisabledMessage="@string/shortcut_disabled_message"
-        android:shortcutId="compose"
-        android:shortcutLongLabel="@string/shortcut_label_long"
-        android:shortcutShortLabel="@string/shortcut_label_short"
+        android:shortcutDisabledMessage="@string/add_date_shortcut_disabled_message"
+        android:shortcutId="AddDateShortcut"
+        android:shortcutLongLabel="@string/add_date_shortcut_label_long"
+        android:shortcutShortLabel="@string/add_date_shortcut_label_short"
         tools:targetApi="n_mr1">
         <intent
             android:action="android.intent.action.VIEW"
@@ -16,8 +16,25 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="com.frcal.friendcalender.Activities.AddDateActivity"
-            android:targetPackage="com.frcal.friendcalender"/>
+            android:targetPackage="com.frcal.friendcalender" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
-    <!-- Possible other shortcut -->
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/baseline_calendar_month_black_24"
+        android:shortcutDisabledMessage="@string/add_calendar_shortcut_disabled_message"
+        android:shortcutId="AddCalendarShortcut"
+        android:shortcutLongLabel="@string/add_calendar_shortcut_label_long"
+        android:shortcutShortLabel="@string/add_calendar_shortcut_label_short"
+        tools:targetApi="n_mr1">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.frcal.friendcalender.Activities.CalendarActivity"
+            android:targetPackage="com.frcal.friendcalender" />
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.frcal.friendcalender.Activities.AddCalendarActivity"
+            android:targetPackage="com.frcal.friendcalender" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
 </shortcuts>

@@ -5,7 +5,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,13 +34,21 @@ public class CalendarActivity extends AppCompatActivity {
     private MaterialCalendarView calendarView;
 
     private ImageView settings_action_bar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
-        initCalendarView();
-        initUI();
-        initActionBar();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
+        boolean fingerprintActive = sharedPreferences.getBoolean("fingerprintSwitchState", false);
+        if (getIntent().getAction() != null && fingerprintActive) {
+            startActivity(new Intent(this, FingerprintActivity.class).putExtra(getString(R.string.intent_key), this.getClass().getCanonicalName()));
+        } else {
+            setContentView(R.layout.activity_calendar);
+            initCalendarView();
+            initUI();
+            initActionBar();
+        }
     }
 
     private void initUI() {
@@ -131,6 +141,9 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        if (addCalButton == null) {
+            (new Handler()).postDelayed(null, 5000);
+        }
         addCalButton.setVisibility(View.INVISIBLE);
         addDateButton.setVisibility(View.INVISIBLE);
         addCalButton.setEnabled(false);

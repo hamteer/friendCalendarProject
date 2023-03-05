@@ -22,9 +22,10 @@ public class AddDateActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
         boolean fingerprintActive = sharedPreferences.getBoolean("fingerprintSwitchState", false);
-        if (getIntent().getAction() != null /*&& fingerprintActive*/) {
-            startActivity(new Intent(this, FingerprintActivity.class).putExtra("class", this.getClass().toString()));
+        if (getIntent().getAction() != null && fingerprintActive) {
+            startActivity(new Intent(this, FingerprintActivity.class).putExtra(getString(R.string.intent_key), this.getClass().getCanonicalName()));
+        } else {
+            setContentView(R.layout.activity_add_date);
         }
-        setContentView(R.layout.activity_add_date);
     }
 }
