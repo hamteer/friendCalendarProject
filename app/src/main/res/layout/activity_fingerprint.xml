@@ -7,7 +7,7 @@
     tools:context=".Activities.FingerprintActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/title_fingerprint_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
@@ -19,9 +19,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/subtitle_fingerprint_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:text="@string/subtitle_fingerprint_activity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_fingerprint_activity" />
+
 
     <ImageView
-        android:id="@+id/view_fingerprint"
+        android:id="@+id/fingerprint_view"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginBottom="140dp"
@@ -31,6 +44,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/baseline_fingerprint_24"
         android:contentDescription="@string/fingerprint_image_description" />
+
+    <TextView
+        android:id="@+id/description_fingerprint_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/action_description_fingerprint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fingerprint_view" />
 
     <Button
         android:id="@+id/authentication_button"

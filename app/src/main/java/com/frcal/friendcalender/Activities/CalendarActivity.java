@@ -55,6 +55,12 @@ public class CalendarActivity extends AppCompatActivity {
         addButton = (FloatingActionButton) findViewById(R.id.add_fab);
         addCalButton = (FloatingActionButton) findViewById(R.id.add_cal_fab);
         addDateButton = (FloatingActionButton) findViewById(R.id.add_date_fab);
+
+        addCalButton.setVisibility(View.INVISIBLE);
+        addDateButton.setVisibility(View.INVISIBLE);
+        addCalButton.setEnabled(false);
+        addDateButton.setEnabled(false);
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,15 +144,4 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (addCalButton == null) {
-            (new Handler()).postDelayed(null, 5000);
-        }
-        addCalButton.setVisibility(View.INVISIBLE);
-        addDateButton.setVisibility(View.INVISIBLE);
-        addCalButton.setEnabled(false);
-        addDateButton.setEnabled(false);
-    }
 }
