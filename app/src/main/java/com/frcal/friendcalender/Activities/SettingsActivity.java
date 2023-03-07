@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -124,8 +125,6 @@ public class SettingsActivity extends AppCompatActivity implements
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             String idToken = account.getIdToken();
 
-            // TODO(developer): send ID Token to server and validate
-
             updateUI(account);
         } catch (ApiException e) {
             Log.w(TAG, "handleSignInResult:error", e);
@@ -178,7 +177,6 @@ public class SettingsActivity extends AppCompatActivity implements
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
             ((TextView) findViewById(R.id.status)).setText(R.string.signed_out);
-            mIdTokenTextView.setText(getString(R.string.id_token_fmt, "null"));
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
