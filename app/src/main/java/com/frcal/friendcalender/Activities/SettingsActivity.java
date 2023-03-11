@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Collections;
 
 // TODO: all
 public class SettingsActivity extends AppCompatActivity implements
@@ -35,10 +46,12 @@ public class SettingsActivity extends AppCompatActivity implements
     private ImageView viewFingerprint;
     private static final String TAG = "IdTokenActivity";
     private static final int RC_GET_TOKEN = 9002;
-
     private GoogleSignInClient mGoogleSignInClient;
     private TextView mIdTokenTextView, mIdTokenNr;
 
+    // for verfiy token
+    private static final HttpTransport httpTransport = new NetHttpTransport();
+    private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,51 +78,23 @@ public class SettingsActivity extends AppCompatActivity implements
         findViewById(R.id.disconnect_button).setOnClickListener(this);
 
 
-        // For sample only: make sure there is a valid server client ID.
-        validateServerClientID();
-
-        // [START configure_signin]
-        // Request only the user's ID token, which can be used to identify the
-        // user securely to your backend. This will contain the user's basic
-        // profile (name, profile picture URL, etc) so you should not need to
-        // make an additional call to personalize your application.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("764959564302-kk5n95aabkm0sj9eae9n28l1neit61i9.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
-        // [END configure_signin]
 
-        // Build GoogleAPIClient with the Google Sign-In API and the above options.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
     }
-/*
-    private void initUI() {
-        Button toGoogleLogin = (Button) findViewById(R.id.sign_in_button);
 
-        toGoogleLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), GoogleLoginActivity.class));
-            }
-        });
-    }*/
     //For Google-Login with Token
     private void getIdToken() {
-        // Show an account picker to let the user choose a Google account from the device.
-        // If the GoogleSignInOptions only asks for IDToken and/or profile and/or email then no
-        // consent screen will be shown here.
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_GET_TOKEN);
     }
 
     private void refreshIdToken() {
-        // Attempt to silently refresh the GoogleSignInAccount. If the GoogleSignInAccount
-        // already has a valid token this method may complete immediately.
-        //
-        // If the user has not previously signed in on this device or the sign-in has expired,
-        // this asynchronous branch will attempt to sign in the user silently and get a valid
-        // ID token. Cross-device single sign on will occur in this branch.
+
         mGoogleSignInClient.silentSignIn()
                 .addOnCompleteListener(this, new OnCompleteListener<GoogleSignInAccount>() {
                     @Override
@@ -119,11 +104,13 @@ public class SettingsActivity extends AppCompatActivity implements
                 });
     }
 
-    // [START handle_sign_in_result]
     private void handleSignInResult(@NonNull Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             String idToken = account.getIdToken();
+            // verify
+            Verifier verObj = new Verifier(idToken);
+            verObj.execute();
 
             updateUI(account);
         } catch (ApiException e) {
@@ -182,10 +169,6 @@ public class SettingsActivity extends AppCompatActivity implements
         }
     }
 
-    /**
-     * Validates that there is a reasonable server client ID in strings.xml, this is only needed
-     * to make sure users of this sample follow the README.
-     */
     private void validateServerClientID() {
         String serverClientId = getString(R.string.server_client_id);
         String suffix = ".apps.googleusercontent.com";
@@ -212,4 +195,55 @@ public class SettingsActivity extends AppCompatActivity implements
         }
     }
 
+    private class Verifier extends AsyncTask<Void,Void,Void> {
+        private String idToken;
+        Verifier (String idToken) {
+            this.idToken = idToken;
+        }
+        public void verifyToken(String idTokenString) {
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(httpTransport, jsonFactory)
+                    // Specify the CLIENT_ID of the app that accesses the backend:
+                    .setAudience(Collections.singletonList(getString(R.string.server_client_id)))
+                    // Or, if multiple clients access the backend:
+                    //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
+                    .build();
+
+            // (Receive idTokenString by HTTPS POST)
+
+            GoogleIdToken idToken = null;
+            try {
+                idToken = verifier.verify(idTokenString);
+            } catch (GeneralSecurityException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (idToken != null) {
+                GoogleIdToken.Payload payload = idToken.getPayload();
+
+                // Print user identifier
+                String userId = payload.getSubject();
+                System.out.println("User ID: " + userId);
+
+                // Get profile information from payload
+                String email = payload.getEmail();
+                boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
+                String name = (String) payload.get("name");
+                String pictureUrl = (String) payload.get("picture");
+                String locale = (String) payload.get("locale");
+                String familyName = (String) payload.get("family_name");
+                String givenName = (String) payload.get("given_name");
+
+                // Use or store profile information
+                // ...
+            } else {
+                System.out.println("Invalid ID token.");
+            }
+    }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            verifyToken(idToken);
+            return null;
+        }
+    }
 }
