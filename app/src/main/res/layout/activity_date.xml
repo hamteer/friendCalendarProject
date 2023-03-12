@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/add_date_headline"
+        android:id="@+id/edit_date_headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/add_date_title"
+        android:id="@+id/edit_date_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -28,10 +28,10 @@
         android:ems="10"
         android:hint="@string/add_date_name_hint"
         android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@id/add_date_headline" />
+        app:layout_constraintTop_toBottomOf="@id/edit_date_headline" />
 
     <EditText
-        android:id="@+id/add_date_day"
+        android:id="@+id/edit_date_day"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -40,17 +40,17 @@
         android:ems="10"
         android:hint="@string/add_date_name_day"
         android:inputType="date"
-        app:layout_constraintTop_toBottomOf="@id/add_date_title" />
+        app:layout_constraintTop_toBottomOf="@id/edit_date_title" />
 
     <LinearLayout
-        android:id="@+id/add_date_duration"
+        android:id="@+id/edit_date_duration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/add_date_day">
+        app:layout_constraintTop_toBottomOf="@id/edit_date_day">
 
         <EditText
-            android:id="@+id/add_date_from"
+            android:id="@+id/edit_date_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
@@ -61,7 +61,7 @@
             android:hint="@string/add_date_from"
             android:inputType="time"
             android:textAlignment="center"
-            app:layout_constraintRight_toLeftOf="@id/add_date_to" />
+            app:layout_constraintRight_toLeftOf="@id/edit_date_to" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
             android:text="@string/add_date_duration_dash" />
 
         <EditText
-            android:id="@+id/add_date_to"
+            android:id="@+id/edit_date_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -83,11 +83,11 @@
             android:hint="@string/add_date_to"
             android:inputType="time"
             android:textAlignment="center"
-            app:layout_constraintLeft_toRightOf="@id/add_date_from" />
+            app:layout_constraintLeft_toRightOf="@id/edit_date_from" />
     </LinearLayout>
 
     <EditText
-        android:id="@+id/add_date_description"
+        android:id="@+id/edit_date_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -96,10 +96,10 @@
         android:ems="10"
         android:hint="@string/add_date_description"
         android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@id/add_date_duration" />
+        app:layout_constraintTop_toBottomOf="@id/edit_date_duration" />
 
     <EditText
-        android:id="@+id/add_date_location"
+        android:id="@+id/edit_date_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -108,28 +108,17 @@
         android:ems="10"
         android:hint="@string/add_date_location"
         android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@id/add_date_description" />
-
-    <Spinner
-        android:id="@+id/add_date_sharing_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="40dp"
-        android:ems="10"
-        android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@id/add_date_location" />
+        app:layout_constraintTop_toBottomOf="@id/edit_date_description" />
 
     <LinearLayout
-        android:id="@+id/add_date_sync_check"
+        android:id="@+id/edit_date_sync_check"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/add_date_sharing_spinner">
+        app:layout_constraintTop_toBottomOf="@id/edit_date_location">
 
         <CheckBox
-            android:id="@+id/add_date_google_sync_check"
+            android:id="@+id/edit_date_google_sync_check"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -146,14 +135,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/add_date_notif_check"
+        android:id="@+id/edit_date_notif_check"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/add_date_sync_check">
+        app:layout_constraintTop_toBottomOf="@id/edit_date_sync_check">
 
         <CheckBox
-            android:id="@+id/add_date_set_notif_check"
+            android:id="@+id/edit_date_set_notif_check"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -180,7 +169,7 @@
         android:paddingRight="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/add_date_notif_check"
+        app:layout_constraintTop_toBottomOf="@id/edit_date_notif_check"
         tools:visibility="visible">
 
         <Button

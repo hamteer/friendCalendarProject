@@ -29,7 +29,7 @@
                 android:layout_weight="3"
                 android:gravity="start"
                 android:padding="10dp"
-                android:text="Beispieltermin"
+                android:text="@string/listitem_date_name"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 card_view:layout_constraintLeft_toLeftOf="parent"
@@ -42,7 +42,7 @@
                 android:layout_weight="1.5"
                 android:gravity="end"
                 android:padding="10dp"
-                android:text="10:00 - 10:30"
+                android:text="@string/listitem_date_time"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 card_view:layout_constraintRight_toRightOf="parent"
@@ -74,7 +74,7 @@
                 android:layout_weight="3"
                 android:gravity="start"
                 android:padding="10dp"
-                android:text="Beispielbeschreibung für einen Termin, die aber sehr lang ist, um einen Zeilenumbruch zu simulieren"
+                android:text="@string/listitem_date_description"
                 android:textSize="14sp"
                 card_view:layout_constraintLeft_toLeftOf="parent" />
 
@@ -85,7 +85,7 @@
                 android:layout_weight="1.5"
                 android:gravity="end"
                 android:padding="10dp"
-                android:text="Beispielort, der ebenfalls recht lang ist"
+                android:text="@string/listitem_date_location"
                 android:textSize="14sp"
                 card_view:layout_constraintRight_toRightOf="parent" />
 
