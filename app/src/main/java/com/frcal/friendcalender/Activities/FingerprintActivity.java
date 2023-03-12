@@ -18,17 +18,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.frcal.friendcalender.R;
 
 import java.util.concurrent.Executor;
 
-// TODO:
-//  - Dokumentation
-//  - Deaktivierung des Sensors je nach Nutzereinstellung
-public class StartActivity extends AppCompatActivity {
+public class FingerprintActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 99999;
     private ImageView viewFingerprint;
@@ -41,7 +37,15 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
+
+        // access SharedPreferences to decide if Activity should be displayed
+        SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
+        boolean fingerprintActive = sharedPreferences.getBoolean("fingerprintSwitchState", false);
+        if (!fingerprintActive) {
+            startActivity(new Intent(this, CalendarActivity.class));
+        }
+
+        setContentView(R.layout.activity_fingerprint);
         viewFingerprint = findViewById(R.id.viewFingerprint);
         viewStartButton = findViewById(R.id.startButton);
         //load shared preferences
@@ -75,7 +79,7 @@ public class StartActivity extends AppCompatActivity {
                 break;
         }
         executor = ContextCompat.getMainExecutor(this);
-        biometricPrompt = new BiometricPrompt(StartActivity.this,
+        biometricPrompt = new BiometricPrompt(FingerprintActivity.this,
                 executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode,
@@ -90,7 +94,7 @@ public class StartActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                startActivity(new Intent(StartActivity.this, CalendarActivity.class));
+                startActivity(new Intent(FingerprintActivity.this, CalendarActivity.class));
                 Toast.makeText(getApplicationContext(),
                         "Authentication succeeded!", Toast.LENGTH_SHORT).show();
             }
@@ -116,10 +120,21 @@ public class StartActivity extends AppCompatActivity {
         });
 
         viewStartButton.setOnClickListener(view -> {
-            startActivity(new Intent(StartActivity.this, CalendarActivity.class));
+            startActivity(new Intent(FingerprintActivity.this, CalendarActivity.class));
             Toast.makeText(getApplicationContext(),
                     "No authentication", Toast.LENGTH_SHORT).show();
         });
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        // access SharedPreferences to decide if Activity should be displayed
+        SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
+        boolean fingerprintActive = sharedPreferences.getBoolean("fingerprintSwitchState", false);
+        if (!fingerprintActive) {
+            startActivity(new Intent(this, CalendarActivity.class));
+        }
     }
 }

@@ -32,7 +32,7 @@
             android:name=".Activities.SingleDayActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.StartActivity"
+            android:name=".Activities.FingerprintActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

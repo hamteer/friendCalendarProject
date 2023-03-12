@@ -5,16 +5,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,47 +23,34 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.Collections;
+// TODO:
+//  - wenn fingerprintSwitch aktiviert wird, gleich Fingerabdruck-Sensor aktivieren
 
-// TODO: all
-public class SettingsActivity extends AppCompatActivity implements
-        View.OnClickListener {
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private View fpView;
-    private ImageView viewFingerprint;
-    private static final String TAG = "IdTokenActivity";
+    private static final String TAG = "FrCal";
     private static final int RC_GET_TOKEN = 9002;
-    private GoogleSignInClient mGoogleSignInClient;
-    private TextView mIdTokenTextView, mIdTokenNr;
 
-    // for verfiy token
-    private static final HttpTransport httpTransport = new NetHttpTransport();
-    private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+    private GoogleSignInClient googleSignInClient;
+    private TextView idTokenTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
         //For shared Preferences
-        Switch mySwitch = findViewById(R.id.fingerprintSwitch);
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        boolean switchState = prefs.getBoolean("switchState", false);
-        mySwitch.setChecked(switchState);
-        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        Switch fingerprintSwitch = findViewById(R.id.fingerprintSwitch);
+        SharedPreferences prefs = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
+        boolean switchState = prefs.getBoolean("fingerprintSwitchState", false);
+        fingerprintSwitch.setChecked(switchState);
+        fingerprintSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                SharedPreferences prefs = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("switchState", isChecked);
+                editor.putBoolean("fingerprintSwitchState", isChecked);
                 editor.apply();
             }
         });
@@ -78,39 +61,50 @@ public class SettingsActivity extends AppCompatActivity implements
         findViewById(R.id.disconnect_button).setOnClickListener(this);
 
 
+        // For sample only: make sure there is a valid server client ID.
+        validateServerClientID();
+
+        // configure_signin
+        // Request the user's ID token to identify the user to the backend.
+        // This contains the user's basic profile (name, profile picture URL, etc)
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("764959564302-kk5n95aabkm0sj9eae9n28l1neit61i9.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        // Build GoogleAPIClient with the Google Sign-In API and the above options.
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
 
     }
 
     //For Google-Login with Token
     private void getIdToken() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        // Show an account picker to let the user choose a Google account from the device.
+        // If the GoogleSignInOptions only asks for IDToken and/or profile and/or email then no
+        // consent screen will be shown here.
+        Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_GET_TOKEN);
     }
 
     private void refreshIdToken() {
-
-        mGoogleSignInClient.silentSignIn()
-                .addOnCompleteListener(this, new OnCompleteListener<GoogleSignInAccount>() {
-                    @Override
-                    public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
-                        handleSignInResult(task);
-                    }
-                });
+        // Attempt to silently refresh the GoogleSignInAccount.
+        // If the GoogleSignInAccount already has a valid token this method may complete immediately.
+        //
+        // If the user has not previously signed in on this device or the sign-in has expired,
+        // this asynchronous branch will attempt to sign in the user silently and get a valid
+        // ID token. Cross-device single sign on will occur in this branch.
+        googleSignInClient.silentSignIn().addOnCompleteListener(this, new OnCompleteListener<GoogleSignInAccount>() {
+            @Override
+            public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                handleSignInResult(task);
+            }
+        });
     }
 
     private void handleSignInResult(@NonNull Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             String idToken = account.getIdToken();
-            // verify
-            Verifier verObj = new Verifier(idToken);
-            verObj.execute();
 
             updateUI(account);
         } catch (ApiException e) {
@@ -119,10 +113,9 @@ public class SettingsActivity extends AppCompatActivity implements
             updateUI(null);
         }
     }
-    // [END handle_sign_in_result]
 
     private void signOut() {
-        mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        googleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 updateUI(null);
@@ -131,13 +124,12 @@ public class SettingsActivity extends AppCompatActivity implements
     }
 
     private void revokeAccess() {
-        mGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
-                    }
-                });
+        googleSignInClient.revokeAccess().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                updateUI(null);
+            }
+        });
     }
 
     @Override
@@ -145,12 +137,8 @@ public class SettingsActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_GET_TOKEN) {
-            // [START get_id_token]
-            // This task is always completed immediately, there is no need to attach an
-            // asynchronous listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
-            // [END get_id_token]
         }
     }
 
@@ -195,58 +183,4 @@ public class SettingsActivity extends AppCompatActivity implements
         }
     }
 
-    private class Verifier extends AsyncTask<Void,Void,Void> {
-        private String idToken;
-        Verifier (String idToken) {
-            this.idToken = idToken;
-        }
-        public void verifyToken(String idTokenString) {
-            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(httpTransport, jsonFactory)
-                    // Specify the CLIENT_ID of the app that accesses the backend:
-                    .setAudience(Collections.singletonList(getString(R.string.server_client_id)))
-                    // Or, if multiple clients access the backend:
-                    //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
-                    .build();
-
-            // (Receive idTokenString by HTTPS POST)
-
-            GoogleIdToken idToken = null;
-            try {
-                idToken = verifier.verify(idTokenString);
-            } catch (GeneralSecurityException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            if (idToken != null) {
-                GoogleIdToken.Payload payload = idToken.getPayload();
-
-                // Print user identifier
-                String userId = payload.getSubject();
-                System.out.println("User ID: " + userId);
-
-                // Get profile information from payload
-                String email = payload.getEmail();
-                boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
-                String name = (String) payload.get("name");
-                String pictureUrl = (String) payload.get("picture");
-                String locale = (String) payload.get("locale");
-                String familyName = (String) payload.get("family_name");
-                String givenName = (String) payload.get("given_name");
-                SharedPreferences sharedPreferences = getSharedPreferences("MainCal-ID", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("Cal-ID", email);
-                editor.apply();
-                // Use or store profile information
-                // ...
-            } else {
-                System.out.println("Invalid ID token.");
-            }
-    }
-        @Override
-        protected Void doInBackground(Void... voids) {
-            verifyToken(idToken);
-            return null;
-        }
-    }
 }
