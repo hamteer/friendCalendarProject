@@ -21,13 +21,6 @@ public class SingleDayActivity extends AppCompatActivity {
 
     // dummy method to enable progression to other activities
     private void initUI() {
-        Button toCalendar = (Button) findViewById(R.id.to_date_activity);
 
-        toCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DateActivity.class));
-            }
-        });
     }
 }
