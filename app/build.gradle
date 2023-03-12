@@ -7,7 +7,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.friendcalender"
+        applicationId "com.frcal.friendcalender"
         minSdk 24
         targetSdk 33
         versionCode 1
@@ -39,6 +39,9 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.3.0"
     // Google Calender API
     implementation 'com.google.api-client:google-api-client:2.0.0'
+
+    // Notifications
+    implementation 'androidx.core:core:1.9.0'
 
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
