@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.frcal.friendcalender.R;
+import com.frcal.friendcalender.RestAPIClient.CalendarCl;
+import com.frcal.friendcalender.RestAPIClient.CalendarListCl;
 import com.frcal.friendcalender.RestAPIClient.RestAPICl;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -39,41 +41,41 @@ public class AddCalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_calendar);
         Button myButton = findViewById(R.id.startGetCalendar);
+        Button myButton2 = findViewById(R.id.debug2);
+        Button myButton3 = findViewById(R.id.debug3);
         AddCalendarActivity selfRef = this;
 
+        SharedPreferences sharedPreferences = getSharedPreferences("MainCal-ID", Context.MODE_PRIVATE);
+        // Holen Sie sich die Calendar-ID
+        String calendarID = sharedPreferences.getString("Cal-ID", "");
         myButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-/*THREAD
-                //String calenderid = rest_client.getCalendar(access_token);
-                RestAPICl threadAPI = new RestAPICl(1,access_token);
-                // Beispielcode: Zeigen Sie eine Toast-Nachricht an, um den Benutzer zu benachrichtigen, dass der Button geklickt wurde
-                threadAPI.start();
-                try {
-                    // Warte auf den Abschluss des Threads
-                    threadAPI.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }*/
-                RestAPICl restCl = new RestAPICl(1, selfRef);
-                restCl.execute();
-                /*
-                String [] SCOPES = {"https://www.googleapis.com/auth/calendar.readonly"};
-
-                GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(selfRef, Arrays.asList(SCOPES))
-                        .setSelectedAccountName("freundeskalender.kerim@gmail.com");
-                // Calender client
-                Calendar service = new Calendar.Builder(httpTransport, jsonFactory, credential)
-                        .setApplicationName(application_name).build();
-
-                // Retrieve the calendar
-                try {
-                    com.google.api.services.calendar.model.Calendar calendar = service.calendars().get("primary").execute();
-                    Toast.makeText(getApplicationContext(), "ID: "+calendar.getId(), Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
+                /*RestAPICl restCl = new RestAPICl(1, selfRef);
+                restCl.execute();*/
+                CalendarListCl calListCl = new CalendarListCl(1, selfRef, calendarID);
+                calListCl.execute();
                 Toast.makeText(getApplicationContext(), "Response Zero:", Toast.LENGTH_SHORT).show();
+            }
+        });
+        myButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*RestAPICl restCl = new RestAPICl(1, selfRef);
+                restCl.execute();*/
+                CalendarCl calListCl = new CalendarCl(1, selfRef, calendarID);
+                calListCl.execute();
+                Toast.makeText(getApplicationContext(), "insert", Toast.LENGTH_SHORT).show();
+            }
+        });
+        myButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*RestAPICl restCl = new RestAPICl(1, selfRef);
+                restCl.execute();*/
+                CalendarListCl calListCl = new CalendarListCl(1, selfRef, calendarID);
+                calListCl.execute();
+                Toast.makeText(getApplicationContext(), "insert", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -84,9 +86,8 @@ public class AddCalendarActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_AUTHORIZATION) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(getApplicationContext(), "Authentication FIN",
-                                Toast.LENGTH_SHORT)
-                        .show();
+                data.getStringExtra("CalendarList");
+                System.out.println();
             } else {
 
             }
