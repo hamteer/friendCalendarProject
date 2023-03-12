@@ -39,10 +39,16 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs",
+                MODE_PRIVATE);
         boolean fingerprintActive = sharedPreferences.getBoolean("fingerprintSwitchState", false);
-        if (getIntent().getAction() != null && fingerprintActive) {
-            startActivity(new Intent(this, FingerprintActivity.class).putExtra(getString(R.string.intent_key), this.getClass().getCanonicalName()));
+//        boolean firstRunOfApp = sharedPreferences.getBoolean("firstRun", true);
+//        if (firstRunOfApp) {
+//            startActivity(new Intent(this, NotificationInitializationActivity.class));
+//        } else
+            if (getIntent().getAction() != null && fingerprintActive) {
+            startActivity(new Intent(this, FingerprintActivity.class).putExtra(
+                    getString(R.string.intent_key), this.getClass().getCanonicalName()));
         } else {
             setContentView(R.layout.activity_calendar);
             initCalendarView();
@@ -100,7 +106,8 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (calendarView.getCalendarMode() == CalendarMode.WEEKS) {
-                    calendarView.state().edit().setCalendarDisplayMode(CalendarMode.MONTHS).commit();
+                    calendarView.state().edit().setCalendarDisplayMode(
+                            CalendarMode.MONTHS).commit();
                 } else {
                     calendarView.state().edit().setCalendarDisplayMode(CalendarMode.WEEKS).commit();
                 }
@@ -121,9 +128,11 @@ public class CalendarActivity extends AppCompatActivity {
         // OnClickListener für Tage
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+            public void onDateSelected(@NonNull MaterialCalendarView widget,
+                                       @NonNull CalendarDay date, boolean selected) {
                 // create Intent, put date in extras, start SingleDateActivity
-                Log.d("FrCal", "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
+                Log.d("FrCal",
+                        "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
                 Intent intent = new Intent(getApplicationContext(), SingleDayActivity.class);
                 intent.putExtra("SELECTED_DATE", date);
                 startActivity(intent);

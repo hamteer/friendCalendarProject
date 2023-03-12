@@ -28,7 +28,8 @@ import java.util.concurrent.Executor;
 public class FingerprintActivity extends AppCompatActivity {
 
     private enum authenticationMethod {
-        BIOMETRIC_AUTHENTICATION, DEVICE_CREDENTIAL_AUTHENTICATION,
+        BIOMETRIC_AUTHENTICATION,
+        DEVICE_CREDENTIAL_AUTHENTICATION,
         NO_AUTHENTICATION
     }
 
@@ -58,7 +59,7 @@ public class FingerprintActivity extends AppCompatActivity {
     private void initUI(authenticationMethod authMethod) {
         setContentView(R.layout.activity_fingerprint);
 
-        TextView subtitle = (TextView) findViewById(R.id.subtitle_fingerprint_activity);
+        TextView subtitle = findViewById(R.id.subtitle_fingerprint_activity);
         // Anpassen des Untertitels
         try {
             String activity = Class.forName(getIntent().getStringExtra(
@@ -219,7 +220,8 @@ public class FingerprintActivity extends AppCompatActivity {
                     public void onAuthenticationFailed() {
                         super.onAuthenticationFailed();
                         Log.d(tag, "Authentication failed");
-                        Toast.makeText(getApplicationContext(), getString(R.string.fingerprint_error),
+                        Toast.makeText(getApplicationContext(),
+                                getString(R.string.fingerprint_error),
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -237,7 +239,8 @@ public class FingerprintActivity extends AppCompatActivity {
             initUI(authPrompt);
         }
         if (authPrompt == authenticationMethod.NO_AUTHENTICATION) {
-            Toast.makeText(getApplicationContext(), getString(R.string.fingerprint_no_authentification_method),
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.fingerprint_no_authentification_method),
                     Toast.LENGTH_SHORT).show();
         } else {
             String subtitle = getString(R.string.device_credential_prompt_subtitle);
