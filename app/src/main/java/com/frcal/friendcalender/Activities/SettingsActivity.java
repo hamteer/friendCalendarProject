@@ -233,7 +233,10 @@ public class SettingsActivity extends AppCompatActivity implements
                 String locale = (String) payload.get("locale");
                 String familyName = (String) payload.get("family_name");
                 String givenName = (String) payload.get("given_name");
-
+                SharedPreferences sharedPreferences = getSharedPreferences("MainCal-ID", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("Cal-ID", email);
+                editor.apply();
                 // Use or store profile information
                 // ...
             } else {
