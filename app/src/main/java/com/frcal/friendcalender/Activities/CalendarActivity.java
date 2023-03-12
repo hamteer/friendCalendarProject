@@ -5,7 +5,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,19 +34,39 @@ public class CalendarActivity extends AppCompatActivity {
     private MaterialCalendarView calendarView;
 
     private ImageView settings_action_bar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
-        initCalendarView();
-        initUI();
-        initActionBar();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs",
+                MODE_PRIVATE);
+        boolean fingerprintActive = sharedPreferences.getBoolean("fingerprintSwitchState", false);
+//        boolean firstRunOfApp = sharedPreferences.getBoolean("firstRun", true);
+//        if (firstRunOfApp) {
+//            startActivity(new Intent(this, NotificationInitializationActivity.class));
+//        } else
+            if (getIntent().getAction() != null && fingerprintActive) {
+            startActivity(new Intent(this, FingerprintActivity.class).putExtra(
+                    getString(R.string.intent_key), this.getClass().getCanonicalName()));
+        } else {
+            setContentView(R.layout.activity_calendar);
+            initCalendarView();
+            initUI();
+            initActionBar();
+        }
     }
 
     private void initUI() {
         addButton = (FloatingActionButton) findViewById(R.id.add_fab);
         addCalButton = (FloatingActionButton) findViewById(R.id.add_cal_fab);
         addDateButton = (FloatingActionButton) findViewById(R.id.add_date_fab);
+
+        addCalButton.setVisibility(View.INVISIBLE);
+        addDateButton.setVisibility(View.INVISIBLE);
+        addCalButton.setEnabled(false);
+        addDateButton.setEnabled(false);
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +106,8 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (calendarView.getCalendarMode() == CalendarMode.WEEKS) {
-                    calendarView.state().edit().setCalendarDisplayMode(CalendarMode.MONTHS).commit();
+                    calendarView.state().edit().setCalendarDisplayMode(
+                            CalendarMode.MONTHS).commit();
                 } else {
                     calendarView.state().edit().setCalendarDisplayMode(CalendarMode.WEEKS).commit();
                 }
@@ -105,9 +128,11 @@ public class CalendarActivity extends AppCompatActivity {
         // OnClickListener für Tage
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+            public void onDateSelected(@NonNull MaterialCalendarView widget,
+                                       @NonNull CalendarDay date, boolean selected) {
                 // create Intent, put date in extras, start SingleDateActivity
-                Log.d("FrCal", "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
+                Log.d("FrCal",
+                        "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
                 Intent intent = new Intent(getApplicationContext(), SingleDayActivity.class);
                 intent.putExtra("SELECTED_DATE", date);
                 startActivity(intent);
@@ -128,12 +153,4 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        addCalButton.setVisibility(View.INVISIBLE);
-        addDateButton.setVisibility(View.INVISIBLE);
-        addCalButton.setEnabled(false);
-        addDateButton.setEnabled(false);
-    }
 }

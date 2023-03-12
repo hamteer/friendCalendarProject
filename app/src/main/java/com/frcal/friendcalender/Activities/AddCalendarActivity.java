@@ -42,10 +42,17 @@ public class AddCalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_calendar);
         AddCalendarActivity selfRef = this;
 
-        SharedPreferences sharedPreferences = getSharedPreferences("MainCal-ID", Context.MODE_PRIVATE);
+        SharedPreferences sharedClID = getSharedPreferences("MainCal-ID", Context.MODE_PRIVATE);
         // Holen Sie sich die Calendar-ID
-        String calendarID = sharedPreferences.getString("Cal-ID", "");
+        String calendarID = sharedClID.getString("Cal-ID", "");
 
+        SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
+        boolean fingerprintActive = sharedPreferences.getBoolean("fingerprintSwitchState", false);
+        if (getIntent().getAction() != null && fingerprintActive) {
+            startActivity(new Intent(this, FingerprintActivity.class).putExtra(getString(R.string.intent_key), this.getClass().getCanonicalName()));
+        } else {
+            setContentView(R.layout.activity_add_calendar);
+        }
     }
 
     @Override
