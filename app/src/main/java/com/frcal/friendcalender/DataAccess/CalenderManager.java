@@ -1,12 +1,14 @@
-package DataAccess;
+package com.frcal.friendcalender.DataAccess;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.frcal.friendcalender.room.DatabaseHelper;
+
 import java.util.ArrayList;
 
 import DatabaseEntities.Calender;
-import room.DatabaseHelper;
+
 
 /**
  * Use this Class to manipulate Calender-Data in the App

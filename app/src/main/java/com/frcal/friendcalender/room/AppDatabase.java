@@ -1,4 +1,4 @@
-package room;
+package com.frcal.friendcalender.room;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
