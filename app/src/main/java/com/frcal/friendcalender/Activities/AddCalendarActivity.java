@@ -40,44 +40,12 @@ public class AddCalendarActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_calendar);
-        Button myButton = findViewById(R.id.startGetCalendar);
-        Button myButton2 = findViewById(R.id.debug2);
-        Button myButton3 = findViewById(R.id.debug3);
         AddCalendarActivity selfRef = this;
 
         SharedPreferences sharedPreferences = getSharedPreferences("MainCal-ID", Context.MODE_PRIVATE);
         // Holen Sie sich die Calendar-ID
         String calendarID = sharedPreferences.getString("Cal-ID", "");
-        myButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*RestAPICl restCl = new RestAPICl(1, selfRef);
-                restCl.execute();*/
-                CalendarListCl calListCl = new CalendarListCl(1, selfRef, calendarID);
-                calListCl.execute();
-                Toast.makeText(getApplicationContext(), "Response Zero:", Toast.LENGTH_SHORT).show();
-            }
-        });
-        myButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*RestAPICl restCl = new RestAPICl(1, selfRef);
-                restCl.execute();*/
-                CalendarCl calListCl = new CalendarCl(1, selfRef, calendarID);
-                calListCl.execute();
-                Toast.makeText(getApplicationContext(), "insert", Toast.LENGTH_SHORT).show();
-            }
-        });
-        myButton3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*RestAPICl restCl = new RestAPICl(1, selfRef);
-                restCl.execute();*/
-                CalendarListCl calListCl = new CalendarListCl(1, selfRef, calendarID);
-                calListCl.execute();
-                Toast.makeText(getApplicationContext(), "insert", Toast.LENGTH_SHORT).show();
-            }
-        });
+
     }
 
     @Override
