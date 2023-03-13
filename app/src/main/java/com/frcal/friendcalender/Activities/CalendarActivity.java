@@ -46,7 +46,9 @@ public class CalendarActivity extends AppCompatActivity {
 //        if (firstRunOfApp) {
 //            startActivity(new Intent(this, NotificationInitializationActivity.class));
 //        } else
-        if (getIntent().getAction() != null && fingerprintActive) {
+        if ((getIntent().getAction() != null && (getIntent().getAction().equals(
+                "android.intent.action.MAIN") || getIntent().getAction().equals(
+                "android.intent.action.VIEW_LOCUS"))) && fingerprintActive) {
             startActivity(new Intent(this, FingerprintActivity.class).putExtra(
                     getString(R.string.intent_key), this.getClass().getCanonicalName()));
             finish();

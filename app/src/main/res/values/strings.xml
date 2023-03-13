@@ -77,7 +77,7 @@
     <string name="listitem_date_description">Beschreibung des Termins</string>
     <string name="listitem_date_location">Ort</string>
 
-    <!-- Shortcuts -->
+    <!-- Strings for Shortcuts -->
     <string name="add_date_shortcut_label_short">Termin erstellen</string>
     <string name="add_date_shortcut_label_long">Einen neuen Termin erstellen</string>
 
@@ -87,6 +87,12 @@
     <string name="add_calendar_shortcut_label_long">Einen neuen Kalender hinzufügen</string>
 
     <string name="add_calendar_shortcut_disabled_message">Leider können Sie keinen neuen Kalender hinzufügen</string>
+
+
+    <!-- Strings to determine, if app was newly opened, be it through the app icon, shortcuts or notifications -->
+    <string name="newly_opened_extra_key">NewlyOpened</string>
+    <string name="newly_opened_extra_value">True</string>
+
 
     <!-- Strings for FingerprintActivity -->
     <string name="intent_key">class</string>
