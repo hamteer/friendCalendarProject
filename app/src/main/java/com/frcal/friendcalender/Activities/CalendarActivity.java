@@ -46,15 +46,16 @@ public class CalendarActivity extends AppCompatActivity {
 //        if (firstRunOfApp) {
 //            startActivity(new Intent(this, NotificationInitializationActivity.class));
 //        } else
-            if (getIntent().getAction() != null && fingerprintActive) {
+        if (getIntent().getAction() != null && fingerprintActive) {
             startActivity(new Intent(this, FingerprintActivity.class).putExtra(
                     getString(R.string.intent_key), this.getClass().getCanonicalName()));
-        } else {
-            setContentView(R.layout.activity_calendar);
-            initCalendarView();
-            initUI();
-            initActionBar();
+            finish();
         }
+        setContentView(R.layout.activity_calendar);
+        initCalendarView();
+        initUI();
+        initActionBar();
+
     }
 
     private void initUI() {
