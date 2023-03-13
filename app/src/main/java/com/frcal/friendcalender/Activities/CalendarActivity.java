@@ -1,10 +1,13 @@
 package com.frcal.friendcalender.Activities;
 
+import static java.security.AccessController.getContext;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -77,6 +80,20 @@ public class CalendarActivity extends AppCompatActivity {
         calendarView.state().edit()
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit();
+        // set calendar arrows to white if darkmode is enabled:
+        int nightModeFlags = getApplicationContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (nightModeFlags) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                calendarView.setLeftArrow(R.drawable.arrow_left_darkmode);
+                calendarView.setRightArrow(R.drawable.arrow_right_darkmode);
+                break;
+            case Configuration.UI_MODE_NIGHT_NO:
+                calendarView.setLeftArrow(R.drawable.arrow_left_lightmode);
+                calendarView.setRightArrow(R.drawable.arrow_right_lightmode);
+                break;
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                break;
+        }
 
         // Modus zwischen Monats- und Wochenansicht wechseln
         Button btn = (Button) findViewById(R.id.mode_button);
