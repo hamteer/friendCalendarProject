@@ -58,12 +58,12 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
 
     // <editor-fold desc="Konstruktoren">
     //For insert
-    public CalendarEvents(Integer mtdNr, Context context, String calendarID, String eventID, String summary, String description, String location, DateTime startTime, DateTime endTime, List<String> attendees)
+    public CalendarEvents(Integer mtdNr, Context context, String calendarID ,/*, String eventID,*/ String summary, String description, String location, DateTime startTime, DateTime endTime, List<String> attendees)
     {
         this.mtdNr = mtdNr;
         this.context=context;
         this.calendarID= calendarID;
-        this.eventID= eventID;
+        //this.eventID= eventID;
         this.summary=summary;
         this.description=description;
         this.location=location;
