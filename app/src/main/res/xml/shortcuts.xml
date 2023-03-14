@@ -14,7 +14,7 @@
             android:targetClass="com.frcal.friendcalender.Activities.CalendarActivity"
             android:targetPackage="com.frcal.friendcalender" />
         <intent
-            android:action="android.intent.action.VIEW"
+            android:action="android.intent.action.VIEW_LOCUS"
             android:targetClass="com.frcal.friendcalender.Activities.AddDateActivity"
             android:targetPackage="com.frcal.friendcalender" />
         <categories android:name="android.shortcut.conversation" />
@@ -32,7 +32,7 @@
             android:targetClass="com.frcal.friendcalender.Activities.CalendarActivity"
             android:targetPackage="com.frcal.friendcalender" />
         <intent
-            android:action="android.intent.action.VIEW"
+            android:action="android.intent.action.VIEW_LOCUS"
             android:targetClass="com.frcal.friendcalender.Activities.AddCalendarActivity"
             android:targetPackage="com.frcal.friendcalender" />
         <categories android:name="android.shortcut.conversation" />

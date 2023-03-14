@@ -8,23 +8,24 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon_finalthicc"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/icon_finalthicc"
         android:supportsRtl="true"
         android:theme="@style/Theme.FriendCalendar"
         tools:targetApi="31">
         <activity
             android:name=".Activities.AddCalendarActivity"
-            android:parentActivityName=".Activities.CalendarActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Activities.CalendarActivity" />
         <activity
             android:name=".Activities.AddDateActivity"
-            android:parentActivityName=".Activities.CalendarActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Activities.CalendarActivity" />
         <activity
             android:name=".Activities.CalendarActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,26 +37,27 @@
         </activity>
         <activity
             android:name=".Activities.DateActivity"
-            android:parentActivityName=".Activities.SingleDayActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Activities.SingleDayActivity" />
         <activity
             android:name=".Activities.SettingsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Activities.CalendarActivity" />
         <activity
             android:name=".Activities.SingleDayActivity"
-            android:parentActivityName=".Activities.CalendarActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Activities.CalendarActivity" />
         <activity
             android:name=".Activities.FingerprintActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.FingerprintInitializationActivity"
-            android:parentActivityName=".Activities.NotificationInitializationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Activities.NotificationInitializationActivity" />
         <activity
             android:name=".Activities.GoogleInitializationActivity"
-            android:parentActivityName=".Activities.FingerprintInitializationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".Activities.FingerprintInitializationActivity" />
         <activity
             android:name=".Activities.NotificationInitializationActivity"
             android:exported="false" />
