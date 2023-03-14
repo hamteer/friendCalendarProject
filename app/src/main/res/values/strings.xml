@@ -77,4 +77,47 @@
     <string name="listitem_date_description">Beschreibung des Termins</string>
     <string name="listitem_date_location">Ort</string>
 
+    <!-- Strings for Shortcuts -->
+    <string name="add_date_shortcut_label_short">Termin erstellen</string>
+    <string name="add_date_shortcut_label_long">Einen neuen Termin erstellen</string>
+
+    <string name="add_date_shortcut_disabled_message">Leider können Sie keinen neuen Termin erstellen</string>
+
+    <string name="add_calendar_shortcut_label_short">Kalender hinzufügen</string>
+    <string name="add_calendar_shortcut_label_long">Einen neuen Kalender hinzufügen</string>
+
+    <string name="add_calendar_shortcut_disabled_message">Leider können Sie keinen neuen Kalender hinzufügen</string>
+
+
+    <!-- Strings to determine, if app was newly opened, be it through the app icon, shortcuts or notifications -->
+    <string name="newly_opened_extra_key">NewlyOpened</string>
+    <string name="newly_opened_extra_value">True</string>
+
+
+    <!-- Strings for FingerprintActivity -->
+    <string name="intent_key">class</string>
+
+    <string name="subtitle_fingerprint_activity">Öffnen der %1$s</string>
+
+    <string name="fingerprint_image_description">Bild eines Fingerabdrucks</string>
+    <string name="action_description_fingerprint">Drücken, zum Einloggen</string>
+    <string name="fingerprint_alternative_button_text">Login</string>
+
+    <string name="prompt_title">Einloggen, um die App zu nutzen</string>
+    <string name="biometric_prompt_subtitle">Loggen Sie sich mit Ihrem Fingerabdruck ein</string>
+    <string name="device_credential_prompt_subtitle">Loggen Sie sich mit Ihrem Muster, Passwort oder Ihrer PIN ein</string>
+
+    <string name="fingerprint_error">Ein Fehler ist aufgetreten</string>
+    <string name="fingerprint_redirection">Erfolgreicher Login, aber aufgrund eines Fehlers Umleitung zum Kalender</string>
+    <string name="fingerprint_no_authentification_method">Keine Authentifizierungsmethode eingerichtet</string>
+
+    <!-- Strings for Notifications -->
+    <string name="channel_id">default</string>
+    <string name="channel_name">Standard Channel</string>
+    <string name="channel_description">Dieser Channel ist der Standard für alle Benachrichtigungen bezüglich Kalenderereignissen</string>
+
+    <string name="notification_title">Test</string>
+    <string name="notification_text">Das ist ein Test</string>
+
+
 </resources>

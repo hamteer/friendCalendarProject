@@ -3,10 +3,12 @@ package DataAccess;
 import android.content.Context;
 import android.util.Log;
 
+import com.frcal.friendcalender.room.DatabaseHelper;
+
 import java.util.ArrayList;
 
 import DatabaseEntities.CalenderEvent;
-import room.DatabaseHelper;
+
 
 
 /**
