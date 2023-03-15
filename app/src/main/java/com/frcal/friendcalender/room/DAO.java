@@ -9,8 +9,8 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import DatabaseEntities.Calender;
-import DatabaseEntities.CalenderEvent;
+import com.frcal.friendcalender.DatabaseEntities.Calender;
+import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 
 @Dao
 public interface DAO {

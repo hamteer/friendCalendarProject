@@ -16,6 +16,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.frcal.friendcalender.DataAccess.CalenderManager;
+import com.frcal.friendcalender.DataAccess.EventManager;
+import com.frcal.friendcalender.DatabaseEntities.Calender;
+import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 import com.frcal.friendcalender.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -26,15 +30,21 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import com.frcal.friendcalender.Decorators.OneDayDecorator;
 
+import java.util.ArrayList;
+
 // TODO:
 //  - DB-Anbindung & API-Anbindung, Aufruf bei Start, um Termine anzuzeigen
 //  - Ausklappbares Menü zum Auswählen der anzuzeigenden Kalender (Burgermenü in ActionBar?)
 
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener {
 
     FloatingActionButton addButton, addCalButton, addDateButton;
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator(this);
     private MaterialCalendarView calendarView;
+
+    private CalenderManager calenderManager;
+    private EventManager eventManager;
+
 
     private ImageView settings_action_bar;
 
@@ -61,6 +71,13 @@ public class CalendarActivity extends AppCompatActivity {
         initUI();
         initActionBar();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        calenderManager.requestUpdate();
+        eventManager.requestUpdate();
     }
 
     private void initUI() {
@@ -143,6 +160,8 @@ public class CalendarActivity extends AppCompatActivity {
         // Grafische Aufbereitung von Tagen, an denen Termine vorhanden sind
         // TODO: DB-Aufruf für Termine:
         // new DBSimulator().executeOnExecutor(Executors.newSingleThreadExecutor());
+        calenderManager = new CalenderManager(getApplicationContext(),this);
+        eventManager = new EventManager(getApplicationContext(),this);
 
 
         // OnClickListener für Tage
@@ -173,4 +192,18 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
+    // gets called when CalenderList gets updated
+    @Override
+    public void onCalenderListUpdated() {
+        ArrayList <Calender> calenderArrayList = calenderManager.getCalenders();
+        Log.d("CalenderActivity", "onCalenderListUpdated() called");
+        // TODO: Adapter to show Calenders which are stored in calenderArrayList
+    }
+    // gets called when EventList gets updated
+    @Override
+    public void onEventListUpdated() {
+        ArrayList <CalenderEvent> calenderArrayList = eventManager.getEvents();
+        Log.d("CalenderActivity", "onEventListUpdated() called");
+        // TODO: Adapter to show events which are stored in calenderArrayList
+    }
 }
