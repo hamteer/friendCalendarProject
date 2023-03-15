@@ -139,10 +139,8 @@ public class CalendarActivity extends AppCompatActivity {
         // bei App-Start ist inital auch der aktuelle Tag ausgewählt:
         calendarView.setSelectedDate(CalendarDay.today());
 
-
         // Grafische Aufbereitung von Tagen, an denen Termine vorhanden sind
-        // TODO: DB-Aufruf für Termine:
-
+        // TODO: DB-Aufruf für Termine
 
         // OnClickListener für Tage
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
@@ -150,8 +148,7 @@ public class CalendarActivity extends AppCompatActivity {
             public void onDateSelected(@NonNull MaterialCalendarView widget,
                                        @NonNull CalendarDay date, boolean selected) {
                 // create Intent, put date in extras, start SingleDateActivity
-                Log.d("FrCal",
-                        "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
+                Log.d("FrCal", "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
                 Intent intent = new Intent(getApplicationContext(), SingleDayActivity.class);
                 intent.putExtra("SELECTED_DATE", date);
                 startActivity(intent);
@@ -165,7 +162,6 @@ public class CalendarActivity extends AppCompatActivity {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             actionBar.setCustomView(R.layout.action_bar);
             settings_action_bar = actionBar.getCustomView().findViewById(R.id.settings_action_bar);
-
             settings_action_bar.setOnClickListener(view -> {
                 startActivity(new Intent(CalendarActivity.this, SettingsActivity.class));
             });
