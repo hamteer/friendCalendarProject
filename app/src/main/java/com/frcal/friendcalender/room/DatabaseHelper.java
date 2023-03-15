@@ -4,8 +4,8 @@ import android.content.Context;
 import androidx.room.Room;
 import java.util.ArrayList;
 
-import DatabaseEntities.Calender;
-import DatabaseEntities.CalenderEvent;
+import com.frcal.friendcalender.DatabaseEntities.Calender;
+import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 
 public class DatabaseHelper {
 

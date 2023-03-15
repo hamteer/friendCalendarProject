@@ -1,4 +1,4 @@
-package DataAccess;
+package com.frcal.friendcalender.DataAccess;
 
 import android.content.Context;
 import android.util.Log;
@@ -7,7 +7,7 @@ import com.frcal.friendcalender.room.DatabaseHelper;
 
 import java.util.ArrayList;
 
-import DatabaseEntities.CalenderEvent;
+import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 
 
 

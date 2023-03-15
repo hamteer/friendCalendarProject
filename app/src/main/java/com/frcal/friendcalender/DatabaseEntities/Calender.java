@@ -1,4 +1,4 @@
-package DatabaseEntities;
+package com.frcal.friendcalender.DatabaseEntities;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

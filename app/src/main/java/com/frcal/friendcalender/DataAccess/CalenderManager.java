@@ -7,7 +7,7 @@ import com.frcal.friendcalender.room.DatabaseHelper;
 
 import java.util.ArrayList;
 
-import DatabaseEntities.Calender;
+import com.frcal.friendcalender.DatabaseEntities.Calender;
 
 
 /**
