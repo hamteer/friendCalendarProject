@@ -221,7 +221,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
 
     public static LocalDate toLocalDate(DateTime dt) {
         try {
-            DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'+01:00'");
             return LocalDate.parse(dt.toStringRfc3339(), f);
         } catch (Exception e) {
             e.printStackTrace();

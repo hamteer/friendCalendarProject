@@ -12,6 +12,8 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.frcal.friendcalender.DataAccess.EventManager;
+import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 import com.frcal.friendcalender.R;
 import com.google.api.client.util.DateTime;
 
@@ -25,12 +27,15 @@ import java.util.TimeZone;
 //  - Notification
 
 
-public class AddDateActivity extends AppCompatActivity {
+public class AddDateActivity extends AppCompatActivity implements EventManager.EventManagerListener {
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
     String title, desc, loc, dateString, fromString, toString;
     DateTime from, to;
     CheckBox googleSync, notif;
     Button saveBtn;
+
+    EventManager eventManager;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +66,8 @@ public class AddDateActivity extends AppCompatActivity {
         notif = findViewById(R.id.add_date_set_notif_check);
 
         saveBtn = findViewById(R.id.add_date_save_btn);
+
+        eventManager = new EventManager(getApplicationContext(),this);
     }
 
     private void initButton() {
@@ -82,8 +89,10 @@ public class AddDateActivity extends AppCompatActivity {
 
 
                 // TODO:
-                //  - DB-Call: Create CalenderEvent with information given here
+                //  - DB-Call: Change calenderID, creator, updated
 
+                CalenderEvent event = new CalenderEvent(null,null,from,to,desc,title,loc,null,from);
+                eventManager.addEvent(event);
                 if (googleSync.isChecked()) {
                     // TODO:
                     //  - API-Call: use previously created CalenderEvent object to also create a event in the user's Google Calendar
@@ -119,7 +128,12 @@ public class AddDateActivity extends AppCompatActivity {
                 rfcOffset = "+" + offset + ":00";
             }
         }
-        String rfcString = dayMonthYear[2] + "-" + dayMonthYear[1] + "-" + dayMonthYear[0] + "T" + hrMin[0] + ":" + hrMin[1] + ":00" + rfcOffset;
+        String rfcString = dayMonthYear[2] + "-" + dayMonthYear[1] + "-" + dayMonthYear[0] + "T" + hrMin[0] + ":" + hrMin[1] + ":00" ;
         return rfcString;
+    }
+
+    @Override
+    public void onEventListUpdated() {
+
     }
 }
