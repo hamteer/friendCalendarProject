@@ -170,8 +170,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
             public void onDateSelected(@NonNull MaterialCalendarView widget,
                                        @NonNull CalendarDay date, boolean selected) {
                 // create Intent, put date in extras, start SingleDateActivity
-                Log.d("FrCal",
-                        "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
+                Log.d("FrCal", "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
                 Intent intent = new Intent(getApplicationContext(), SingleDayActivity.class);
                 intent.putExtra("SELECTED_DATE", date);
                 startActivity(intent);
