@@ -3,11 +3,12 @@ package com.frcal.friendcalender.DataAccess;
 import android.content.Context;
 import android.util.Log;
 
+import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 import com.frcal.friendcalender.room.DatabaseHelper;
 
 import java.util.ArrayList;
 
-import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
+
 
 
 
@@ -54,14 +55,14 @@ public class EventManager {
         }
         Log.d(logTag, "addEvent() Adding new Event");
         db.addEvent(event);
-        getEvents();
+        requestUpdate();
     }
 
     /**
      * Updates Event in the database
      * @param event event with updated contents
      */
-    void updateEvent(CalenderEvent event){
+    public void updateEvent(CalenderEvent event){
         Log.d(logTag, "updateEvent() Updating existing Event");
         db.updateEvent(event);
         getEvents();
@@ -71,7 +72,7 @@ public class EventManager {
      * Deletes Event in the database
      * @param event event that will be removed
      */
-    void deleteEvent(CalenderEvent event){
+    public void deleteEvent(CalenderEvent event){
         Log.d(logTag, "deleteEvent() Deleting Event");
         db.deleteEvent(event);
         getEvents();
@@ -81,7 +82,7 @@ public class EventManager {
      * refreshes the CalenderEvents list
      * @return List of CalenderEvents pulled from the database
      */
-    ArrayList<CalenderEvent> getEvents(){
+    public ArrayList<CalenderEvent> getEvents(){
         Log.d(logTag, "getEvents() getting Events");
         events = db.getAllCalenderEvents();
         return events;
