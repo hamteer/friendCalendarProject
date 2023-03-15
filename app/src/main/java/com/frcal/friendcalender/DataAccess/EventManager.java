@@ -33,7 +33,7 @@ public class EventManager {
     /**
      * refreshes EventList from database and triggers Listener.onEventListUpdated()
      */
-    void requestUpdate(){
+    public void requestUpdate(){
         getEvents();
         listener.onEventListUpdated();
     }

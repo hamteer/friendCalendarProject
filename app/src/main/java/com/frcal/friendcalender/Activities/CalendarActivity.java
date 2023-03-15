@@ -142,7 +142,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         // Grafische Aufbereitung von Tagen, an denen Termine vorhanden sind
         // TODO: DB-Aufruf für Termine:
-        // new DBSimulator().executeOnExecutor(Executors.newSingleThreadExecutor());
 
 
         // OnClickListener für Tage
