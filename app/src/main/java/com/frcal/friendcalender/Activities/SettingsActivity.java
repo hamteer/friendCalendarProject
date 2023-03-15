@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,12 +21,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.frcal.friendcalender.R;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.BeginSignInResult;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -41,9 +50,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private static final String TAG = "FrCal";
     private static final int RC_GET_TOKEN = 9002;
-
     private GoogleSignInClient googleSignInClient;
     private TextView idTokenTextView;
+
+    private SignInClient oneTapClient;
+    private BeginSignInRequest signUpRequest;
+    private static final int REQ_ONE_TAP = 2;  // Can be any integer unique to the Activity.
+    private boolean showOneTapUI = true;
+
 
     // for verfiy token
     private static final HttpTransport httpTransport = new NetHttpTransport();
@@ -78,6 +92,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         // For sample only: make sure there is a valid server client ID.
         validateServerClientID();
 
+        /*
         // configure_signin
         // Request the user's ID token to identify the user to the backend.
         // This contains the user's basic profile (name, profile picture URL, etc)
@@ -88,6 +103,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         // Build GoogleAPIClient with the Google Sign-In API and the above options.
         googleSignInClient = GoogleSignIn.getClient(this, gso);
+        */
+
 
     }
 
@@ -96,8 +113,39 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         // Show an account picker to let the user choose a Google account from the device.
         // If the GoogleSignInOptions only asks for IDToken and/or profile and/or email then no
         // consent screen will be shown here.
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_GET_TOKEN);
+        //Intent signInIntent = googleSignInClient.getSignInIntent();
+        //startActivityForResult(signInIntent, RC_GET_TOKEN);
+        oneTapClient = Identity.getSignInClient(this);
+        signUpRequest = BeginSignInRequest.builder()
+                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                        .setSupported(true)
+                        // Your server's client ID, not your Android client ID.
+                        .setServerClientId(getString(R.string.server_client_id))
+                        // Show all accounts on the device.
+                        .setFilterByAuthorizedAccounts(false)
+                        .build())
+                .build();
+        oneTapClient.beginSignIn(signUpRequest)
+                .addOnSuccessListener(this, new OnSuccessListener<BeginSignInResult>() {
+                    @Override
+                    public void onSuccess(BeginSignInResult result) {
+                        try {
+                            startIntentSenderForResult(
+                                    result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
+                                    null, 0, 0, 0);
+                        } catch (IntentSender.SendIntentException e) {
+                            Log.e(TAG, "Couldn't start One Tap UI: " + e.getLocalizedMessage());
+                        }
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // No Google Accounts found. Just continue presenting the signed-out UI.
+                        Log.d(TAG, e.getLocalizedMessage());
+                    }
+                });
+
     }
 
     private void refreshIdToken() {
@@ -119,7 +167,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             Verifier verObj = new Verifier(idToken);
             verObj.execute();
 
-            updateUI(account);
+            //updateUI(account);
         } catch (ApiException e) {
             Log.w(TAG, "handleSignInResult:error", e);
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
@@ -129,7 +177,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     // [END handle_sign_in_result]
 
     private void signOut() {
-        googleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        oneTapClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 updateUI(null);
@@ -158,13 +206,46 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             handleSignInResult(task);
             // [END get_id_token]
         }
-    }
+        switch (requestCode) {
+            case REQ_ONE_TAP:
+                try {
+                    SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(data);
+                    String idToken = credential.getGoogleIdToken();
+                    if (idToken !=  null) {
+                        // Got an ID token from Google. Use it to authenticate
+                        // with your backend.
+                        Verifier verObj = new Verifier(idToken);
+                        verObj.execute();
+                        Log.d(TAG, "Got ID token.");
 
-    private void updateUI(@Nullable GoogleSignInAccount account) {
+                        updateUI(credential);
+                    }
+                } catch (ApiException e) {
+                    switch (e.getStatusCode()) {
+                        case CommonStatusCodes.CANCELED:
+                            Log.d(TAG, "One-tap dialog was closed.");
+                            // Don't re-prompt the user.
+                            showOneTapUI = false;
+                            break;
+                        case CommonStatusCodes.NETWORK_ERROR:
+                            Log.d(TAG, "One-tap encountered a network error.");
+                            // Try again or just ignore.
+                            break;
+                        default:
+                            Log.d(TAG, "Couldn't get credential from result."
+                                    + e.getLocalizedMessage());
+                            break;
+                    }
+                }
+                break;
+        }
+        }
+
+
+    private void updateUI(@Nullable SignInCredential account) {
         if (account != null) {
             ((TextView) findViewById(R.id.status)).setText(R.string.signed_in);
 
-            String idToken = account.getIdToken();
 
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
@@ -186,7 +267,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    @Override
+        @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
@@ -196,7 +277,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 signOut();
                 break;
             case R.id.disconnect_button:
-                revokeAccess();
+                signOut();
                 break;
         }
     }
