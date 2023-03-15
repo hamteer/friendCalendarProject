@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,8 +21,10 @@ import com.frcal.friendcalender.DataAccess.CalenderManager;
 import com.frcal.friendcalender.DataAccess.EventManager;
 import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
+import com.frcal.friendcalender.Decorators.EventDecorator;
 import com.frcal.friendcalender.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.api.client.util.DateTime;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
@@ -29,6 +32,10 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import com.frcal.friendcalender.Decorators.OneDayDecorator;
+
+import org.checkerframework.checker.units.qual.A;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 
@@ -70,7 +77,6 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         initCalendarView();
         initUI();
         initActionBar();
-
     }
 
     @Override
@@ -203,6 +209,23 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     public void onEventListUpdated() {
         ArrayList <CalenderEvent> calenderArrayList = eventManager.getEvents();
         Log.d("CalenderActivity", "onEventListUpdated() called");
-        // TODO: Adapter to show events which are stored in calenderArrayList
+        ArrayList<CalendarDay> daysToDecorate = new ArrayList<>();
+        for (CalenderEvent event : calenderArrayList) {
+            Log.d("CalenderActivity", event.eventID);
+            LocalDate date = toLocalDate(event.startTime);
+            CalendarDay day = CalendarDay.from(date);
+            daysToDecorate.add(day);
+        }
+        calendarView.addDecorator(new EventDecorator(Color.RED, daysToDecorate));
+    }
+
+    public static LocalDate toLocalDate(DateTime dt) {
+        try {
+            DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            return LocalDate.parse(dt.toStringRfc3339(), f);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

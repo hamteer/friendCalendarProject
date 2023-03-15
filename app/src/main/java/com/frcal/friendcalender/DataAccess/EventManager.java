@@ -43,7 +43,7 @@ public class EventManager {
      * Adds event to database
      * @param event event that should be added to the database
      */
-    void addEvent(CalenderEvent event){
+    public void addEvent(CalenderEvent event){
         // Check if event already exists in database
         for (CalenderEvent eventListElement: this.events) {
             if (eventListElement.eventID.equals(event.eventID)){
