@@ -47,7 +47,7 @@ public class AddDateActivity extends AppCompatActivity {
     }
 
     private void addEvent() {
-        //Woherbekomm ich die Kalender ID?
+        //Woher bekomme ich die Kalender ID bei AddDateActivity?
         //ID ? Bei der Übergabe in die Datenbank benötigt man eine ID, Welche aber von Google automatisch bestimmt wird
         //package DatabaseEntities; wird rot markiert ist es richtig?
         //Woher attendees
