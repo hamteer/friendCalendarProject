@@ -57,9 +57,10 @@ public class SingleDayActivity extends AppCompatActivity implements DateListRecy
         startActivity(intent);
     }
 
+    // get current eventlist and setEvents in adapter
+    // TODO: filter events to show only events of selected day
     @Override
     public void onEventListUpdated() {
-        // TODO: DB-Anbindung?
         dateListAdapter.setEvents(eventManager.getEvents());
     }
 }
