@@ -211,21 +211,16 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         Log.d("CalenderActivity", "onEventListUpdated() called");
         ArrayList<CalendarDay> daysToDecorate = new ArrayList<>();
         for (CalenderEvent event : calenderArrayList) {
-            Log.d("CalenderActivity", event.eventID);
-            LocalDate date = toLocalDate(event.startTime);
-            CalendarDay day = CalendarDay.from(date);
-            daysToDecorate.add(day);
+            Log.d("CalenderActivity", event.startTime.toString());
+            String timeString = event.startTime.toString();
+            String year = timeString.substring(0, 4);
+            String month = timeString.substring(5, 7);
+            String day = timeString.substring(8, 10);
+            LocalDate date = LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+            CalendarDay calendarDay = CalendarDay.from(date);
+            daysToDecorate.add(calendarDay);
         }
         calendarView.addDecorator(new EventDecorator(Color.RED, daysToDecorate));
     }
 
-    public static LocalDate toLocalDate(DateTime dt) {
-        try {
-            DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'+01:00'");
-            return LocalDate.parse(dt.toStringRfc3339(), f);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }
