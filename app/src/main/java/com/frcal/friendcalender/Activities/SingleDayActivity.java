@@ -31,7 +31,7 @@ public class SingleDayActivity extends AppCompatActivity implements DateListRecy
     }
 
     private void initEvents() {
-        eventManager = new EventManager(this, this);
+        eventManager = new EventManager(getApplicationContext(), this);
     }
 
     private void initUI() {
@@ -60,5 +60,6 @@ public class SingleDayActivity extends AppCompatActivity implements DateListRecy
     @Override
     public void onEventListUpdated() {
         // TODO: DB-Anbindung?
+        dateListAdapter.setEvents(eventManager.getEvents());
     }
 }
