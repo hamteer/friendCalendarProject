@@ -207,10 +207,10 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     // gets called when EventList gets updated
     @Override
     public void onEventListUpdated() {
-        ArrayList <CalenderEvent> calenderArrayList = eventManager.getEvents();
+        ArrayList <CalenderEvent> eventArrayList = eventManager.getEvents();
         Log.d("CalenderActivity", "onEventListUpdated() called");
         ArrayList<CalendarDay> daysToDecorate = new ArrayList<>();
-        for (CalenderEvent event : calenderArrayList) {
+        for (CalenderEvent event : eventArrayList) {
             Log.d("CalenderActivity", event.startTime.toString());
             String timeString = event.startTime.toString();
             String year = timeString.substring(0, 4);
