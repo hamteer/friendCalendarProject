@@ -83,7 +83,6 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         super.onResume();
         calenderManager.requestUpdate();
         eventManager.requestUpdate();
-        onEventListUpdated();
     }
 
     private void initUI() {
@@ -217,6 +216,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
             CalendarDay calendarDay = CalendarDay.from(date);
             daysToDecorate.add(calendarDay);
         }
+        calendarView.removeDecorators();
         calendarView.addDecorator(new EventDecorator(Color.RED, daysToDecorate));
     }
 
