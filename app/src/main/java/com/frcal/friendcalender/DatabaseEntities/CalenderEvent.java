@@ -54,4 +54,9 @@ public class CalenderEvent {
         return calenderID + " | " + eventID + " | " + startTime + " | ";
     }
 
+    // needed to easily compare two events to sort them in the ListView
+    public String getStartTimeToString() {
+        return startTime.toStringRfc3339();
+    }
+
 }

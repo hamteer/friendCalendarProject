@@ -18,6 +18,8 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class SingleDayActivity extends AppCompatActivity implements DateListRecyclerAdapter.DateListAdapterListener, EventManager.EventManagerListener {
@@ -71,6 +73,8 @@ public class SingleDayActivity extends AppCompatActivity implements DateListRecy
                 eventsOfSelectedDay.add(event);
             }
         }
+        eventsOfSelectedDay.sort(Comparator.comparing(CalenderEvent::getStartTimeToString));
+
         dateListAdapter.setEvents(eventsOfSelectedDay);
         //dateListAdapter.setEvents(eventManager.getEvents());
     }
