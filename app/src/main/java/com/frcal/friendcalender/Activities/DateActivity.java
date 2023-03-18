@@ -124,7 +124,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                     // TODO:
                     //  - set Notification for this Event, if it did not already exist beforehand
                 }
-                Toast.makeText(DateActivity.this,"Termin gespeichert", Toast.LENGTH_LONG);
+                Toast.makeText(DateActivity.this,"Termin gespeichert", Toast.LENGTH_LONG).show();
                 finish();
             }
         });
@@ -137,7 +137,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 // TODO:
                 //  - API-Call: delete this event
                 //  - delete the notification for this event, if it exists
-                Toast.makeText(DateActivity.this, "Termin gelöscht", Toast.LENGTH_SHORT);
+                Toast.makeText(DateActivity.this, "Termin gelöscht", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
