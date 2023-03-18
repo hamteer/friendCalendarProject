@@ -3,6 +3,8 @@ package com.frcal.friendcalender.Activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -51,7 +53,40 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
         }
         setContentView(R.layout.activity_add_date);
         initUI();
+        initStartEndTimeAutomatism();
         initButton();
+    }
+
+    private void initStartEndTimeAutomatism() {
+        editTimeFrom.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus) {
+                    String input = editTimeFrom.getText().toString();
+                    String inputHrs;
+                    if (input.length() == 0) { return; }
+                    if (input.length() == 1) {
+                        inputHrs = input.substring(0,1);
+                    } else {
+                        inputHrs = input.substring(0,2);
+                    }
+                    if (inputHrs.contains(":")) {
+                        inputHrs = inputHrs.replace(":", "");
+                    }
+                    if (inputHrs.length() == 0) { return; }
+                    int inputHrsInt = Integer.parseInt(inputHrs);
+                    int outputHrsInt = inputHrsInt + 1;
+                    String outputHrs = String.valueOf(outputHrsInt);
+                    if (outputHrs.length() == 1) {
+                        String outputText = "0" + outputHrs + ":00";
+                        editTimeTo.setText(outputText);
+                    } else {
+                        String outputText = outputHrs + ":00";
+                        editTimeTo.setText(outputText);
+                    }
+                }
+            }
+        });
     }
 
     private void initUI() {
