@@ -157,10 +157,9 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
         String rfcString = "";
         try {
             String[] dayMonthYear = new String[3];
-            String[] dayMonthYearFormat = new String[]{"dd", "mm", "yyyy"};
             dayMonthYear = dateString.split("\\.");
             String[] hrMin = new String[2];
-            hrMin = new String[]{timeString, "00"};
+            hrMin = timeString.split(":");
             TimeZone tz = TimeZone.getDefault();
             String offset = String.valueOf(tz.getRawOffset());
             String rfcOffset;
