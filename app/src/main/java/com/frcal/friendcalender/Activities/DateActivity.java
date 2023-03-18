@@ -4,7 +4,6 @@ import static com.frcal.friendcalender.Activities.AddDateActivity.createRFCStrin
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.metrics.Event;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,9 +19,6 @@ import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 import com.frcal.friendcalender.R;
 import com.google.api.client.util.DateTime;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 // TODO: all
 public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener {
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
@@ -32,7 +28,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
     Button saveBtn, deleteBtn;
 
     EventManager eventManager;
-    CalenderEvent date;
+    CalenderEvent currentEvent;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +69,14 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
     private void loadDateInfo() {
         // TODO:
         //  - load information of the event specified in the intent out of DB
-        date = eventManager.getEventByEventID(getIntent().getStringExtra("SELECTED_EVENT"));
+        currentEvent = eventManager.getEventByEventID(getIntent().getStringExtra("SELECTED_EVENT"));
+        editTitle.setText(currentEvent.summary);
+        // transform to dd.mm.yyyy
+        editDate.setText(null);
+        editTimeFrom.setText(null);
+        editTimeTo.setText(null);
+        editDesc.setText(currentEvent.description);
+        editLoc.setText(currentEvent.location);
     }
 
     private void initButtons() {
@@ -108,7 +111,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 //  - DB-Call: Update Calendar Event with information given here
                 //  - Timestamp for updated needed
 
-                CalenderEvent updatedEvent = new CalenderEvent(date.calenderID,date.eventID,date.googleEventID,from,to,desc,title,loc,date.creator,null);
+                CalenderEvent updatedEvent = new CalenderEvent(currentEvent.calenderID, currentEvent.eventID, currentEvent.googleEventID,from,to,desc,title,loc, currentEvent.creator,null);
                 eventManager.updateEvent(updatedEvent);
                 if (googleSync.isChecked()) {
                     // TODO:
@@ -127,6 +130,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
             public void onClick(View v) {
                 // TODO:
                 //  - DB-Call: delete this event
+                eventManager.deleteEvent(currentEvent);
                 //  - API-Call: delete this event
                 //  - delete the notification for this event, if it exists
             }
