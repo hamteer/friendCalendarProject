@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -89,9 +90,19 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 toString = editTimeTo.getText().toString();
 
                 // create RFC3339-Strings out of start and end time and create DateTime Objects for them:
-                from = DateTime.parseRfc3339(createRFCString(dateString, fromString));
-                to = DateTime.parseRfc3339(createRFCString(dateString, toString));
+                try {
+                    from = DateTime.parseRfc3339(createRFCString(dateString, fromString, getApplicationContext()));
+                    to = DateTime.parseRfc3339(createRFCString(dateString, toString, getApplicationContext()));
+                } catch (Exception e) {
+                    InputFormatException ife = new InputFormatException(getApplicationContext());
+                    ife.notifyUser();
+                }
 
+
+                if (fromString.compareToIgnoreCase(toString) > 0) {
+                    Toast.makeText(DateActivity.this, "Bitte gültige Zeiten angeben!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 // TODO:
                 //  - DB-Call: Update Calendar Event with information given here
