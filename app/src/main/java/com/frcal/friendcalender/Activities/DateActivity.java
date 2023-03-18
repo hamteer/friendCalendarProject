@@ -107,11 +107,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                     return;
                 }
 
-                // TODO:
-                //  - DB-Call: Update Calendar Event with information given here
-                //  - Timestamp for updated needed
-
-                CalenderEvent updatedEvent = new CalenderEvent(currentEvent.calenderID, currentEvent.eventID, currentEvent.googleEventID,from,to,desc,title,loc, currentEvent.creator,null);
+                CalenderEvent updatedEvent = new CalenderEvent(currentEvent.calenderID, currentEvent.eventID, currentEvent.googleEventID,from,to,desc,title,loc, currentEvent.creator,new DateTime(System.currentTimeMillis()));
                 eventManager.updateEvent(updatedEvent);
                 if (googleSync.isChecked()) {
                     // TODO:
@@ -128,9 +124,9 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO:
-                //  - DB-Call: delete this event
+
                 eventManager.deleteEvent(currentEvent);
+                // TODO:
                 //  - API-Call: delete this event
                 //  - delete the notification for this event, if it exists
             }
