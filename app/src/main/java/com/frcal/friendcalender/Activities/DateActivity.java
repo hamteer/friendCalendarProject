@@ -72,9 +72,15 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         currentEvent = eventManager.getEventByEventID(getIntent().getStringExtra("SELECTED_EVENT"));
         editTitle.setText(currentEvent.summary);
         // transform to dd.mm.yyyy
-        editDate.setText(null);
-        editTimeFrom.setText(null);
-        editTimeTo.setText(null);
+        String startTimeString = currentEvent.startTime.toString();
+        String displayDate = startTimeString.substring(8,10) + "." + startTimeString.substring(5,7) + "." + startTimeString.substring(0,4);
+        editDate.setText(displayDate);
+        // transform to hh:mm
+        String displayStartTime = startTimeString.substring(11,13) + ":" + startTimeString.substring(14,16);
+        String endTimeString = currentEvent.endTime.toString();
+        String displayEndTime = endTimeString.substring(11,13) + ":" + endTimeString.substring(14,16);;
+        editTimeFrom.setText(displayStartTime);
+        editTimeTo.setText(displayEndTime);
         editDesc.setText(currentEvent.description);
         editLoc.setText(currentEvent.location);
     }
