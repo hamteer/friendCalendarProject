@@ -47,7 +47,7 @@ public class DateListRecyclerAdapter extends RecyclerView.Adapter<DateListViewHo
         TextView desc = holder.dateView.findViewById(R.id.date_list_item_description);
         TextView loc = holder.dateView.findViewById(R.id.date_list_item_location);
         // Auslesen der Event-Eigenschaften und übertragen in die TextViews:
-        title.setText(event.description);
+        title.setText(event.summary);
         desc.setText(event.description);
         DateTime startTime = event.startTime;
         DateTime endTime = event.endTime;
@@ -67,8 +67,8 @@ public class DateListRecyclerAdapter extends RecyclerView.Adapter<DateListViewHo
         // now extract start and end time:
         String startRFCTimeOnly = startTimeRFCString.substring(startTimeRFCString.indexOf("T"));
         String endRFCTimeOnly = endTimeRFCString.substring(endTimeRFCString.indexOf("T"));
-        String startString = startRFCTimeOnly.substring(0, 5);
-        String endString = endRFCTimeOnly.substring(0, 5);
+        String startString = startRFCTimeOnly.substring(1, 6);
+        String endString = endRFCTimeOnly.substring(1, 6);
         return startString + " - " + endString;
     }
 

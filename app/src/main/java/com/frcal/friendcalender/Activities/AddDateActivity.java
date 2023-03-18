@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -102,6 +103,9 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                     // TODO:
                     //  - set Notification for this Event
                 }
+
+                Toast.makeText(AddDateActivity.this, "Termin gespeichert!", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }

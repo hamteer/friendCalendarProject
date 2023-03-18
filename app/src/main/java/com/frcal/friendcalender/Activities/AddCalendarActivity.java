@@ -60,6 +60,7 @@ public class AddCalendarActivity extends AppCompatActivity implements CalenderMa
                     Log.d("CalenderActivity", "Added Calender to database");
                     addCalendarMail.setText("");
                     Toast.makeText(AddCalendarActivity.this, "Neuer Kalender wurde hinzugefügt!", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
 
             }
