@@ -40,8 +40,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 // TODO:
-//  - DB-Anbindung & API-Anbindung, Aufruf bei Start, um Termine anzuzeigen
-//  - Ausklappbares Menü zum Auswählen der anzuzeigenden Kalender (Burgermenü in ActionBar?)
+//  - API-Anbindung
 
 public class CalendarActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener {
 
@@ -164,8 +163,6 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
 
 
         // Grafische Aufbereitung von Tagen, an denen Termine vorhanden sind
-        // TODO: DB-Aufruf für Termine:
-        // new DBSimulator().executeOnExecutor(Executors.newSingleThreadExecutor());
         calenderManager = new CalenderManager(getApplicationContext(),this);
         eventManager = new EventManager(getApplicationContext(),this);
 
@@ -202,7 +199,6 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     public void onCalenderListUpdated() {
         ArrayList <Calender> calenderArrayList = calenderManager.getCalenders();
         Log.d("CalenderActivity", "onCalenderListUpdated() called");
-        // TODO: Adapter to show Calenders which are stored in calenderArrayList
     }
     // gets called when EventList gets updated
     @Override

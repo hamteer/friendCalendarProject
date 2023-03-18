@@ -1,5 +1,6 @@
 package com.frcal.friendcalender.Activities.RecyclerView;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +9,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.frcal.friendcalender.Activities.DateActivity;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 import com.frcal.friendcalender.R;
 import com.google.api.client.util.DateTime;
 
 import java.util.ArrayList;
 
-public class DateListRecyclerAdapter extends RecyclerView.Adapter<DateListViewHolder>  {
+public class DateListRecyclerAdapter extends RecyclerView.Adapter<DateListViewHolder> implements DateListViewHolder.DateListViewHolderListener {
     private final DateListAdapterListener listener;
     private ArrayList<CalenderEvent> events;
 
@@ -33,7 +35,7 @@ public class DateListRecyclerAdapter extends RecyclerView.Adapter<DateListViewHo
     @Override
     public DateListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.date_list_item, parent, false);
-        DateListViewHolder vh = new DateListViewHolder(v);
+        DateListViewHolder vh = new DateListViewHolder(v, this);
         return vh;
     }
 
@@ -72,7 +74,20 @@ public class DateListRecyclerAdapter extends RecyclerView.Adapter<DateListViewHo
         return startString + " - " + endString;
     }
 
+    String getEventIDbyIndex(int index){
+        return events.get(index).eventID;
+    }
+
+    @Override
+    public void onViewHolderClicked(int position) {
+        String eventID = getEventIDbyIndex(position);
+        if (eventID != null) {
+            listener.onItemSelected(eventID);
+        }
+    }
+
+
     public interface DateListAdapterListener {
-        void onItemSelected(CalenderEvent event);
+        void onItemSelected(String eventID);
     }
 }

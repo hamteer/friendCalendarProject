@@ -50,17 +50,19 @@ public class SingleDayActivity extends AppCompatActivity implements DateListRecy
         eventList.setAdapter(dateListAdapter);
     }
 
-    @Override
-    public void onItemSelected(CalenderEvent event) {
-        Intent intent = new Intent(this, DateActivity.class);
-        intent.putExtra("SELECTED_EVENT", event.eventID);
-        startActivity(intent);
-    }
-
     // get current eventlist and setEvents in adapter
     // TODO: filter events to show only events of selected day
     @Override
     public void onEventListUpdated() {
         dateListAdapter.setEvents(eventManager.getEvents());
     }
+
+    @Override
+    public void onItemSelected(String eventID) {
+        Intent intent = new Intent(this, DateActivity.class);
+        intent.putExtra("SELECTED_EVENT", eventID);
+        startActivity(intent);
+        finish();
+    }
+
 }

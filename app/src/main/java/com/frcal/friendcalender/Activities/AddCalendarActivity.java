@@ -17,7 +17,7 @@ import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.R;
 
 // TODO:
-//  - API-Call & DB-Call
+//  - API-Call
 public class AddCalendarActivity extends AppCompatActivity implements CalenderManager.CalenderManagerListener {
 
     CalenderManager calenderManager;
@@ -53,7 +53,6 @@ public class AddCalendarActivity extends AppCompatActivity implements CalenderMa
                 } else {
                     // TODO:
                     //  - API-Call: hat diese Mailadresse ein Google-Konto? -> diese Mailadresse zur Synchronisation hinzufügen
-                    //  - DB-Call: diese Mailadresse in neuem Kalenderobjekt speichern
 
                     Calender calender = new Calender(null,mail,null);
                     calenderManager.addCalender(calender);
