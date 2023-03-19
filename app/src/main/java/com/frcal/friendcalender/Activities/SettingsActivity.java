@@ -246,7 +246,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     //Schnittstelle zu AsyncTask
     @Override
-    public void respGetCalList(String res) {
+    public void respListCalList(String res) {
         JSONParser parser = new JSONParser();
         JSONArray json = null;
         calenderManager = new CalenderManager(getApplicationContext(),this);
