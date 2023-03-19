@@ -4,8 +4,8 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import DatabaseEntities.Calender;
-import DatabaseEntities.CalenderEvent;
+import com.frcal.friendcalender.DatabaseEntities.Calender;
+import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 
 
 // Klasse als RoomDatenbank markieren und über die Entitäten informieren
