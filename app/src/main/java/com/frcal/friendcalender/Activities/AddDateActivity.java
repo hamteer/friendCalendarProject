@@ -46,7 +46,8 @@ public class AddDateActivity extends AppCompatActivity {
 
     }
 
-    private void addEvent() {
+    private void addEvent()
+    {
         //Woher bekomme ich die Kalender ID bei AddDateActivity?
         //ID ? Bei der Übergabe in die Datenbank benötigt man eine ID, Welche aber von Google automatisch bestimmt wird
         //package DatabaseEntities; wird rot markiert ist es richtig?
@@ -79,9 +80,9 @@ public class AddDateActivity extends AppCompatActivity {
                 DateTime startDateTime= convertDateTime(start,date);
                 DateTime endDateTime= convertDateTime(end,date);
 
-                LinkedList <String> attendees = new LinkedList<>();
-                attendees.add("freundeskalender.kerim@gmail.com");
-                CalendarEvents event3 = new CalendarEvents(3, this, "andoidprojekt1@gmail.com", summary, description, location, startDateTime, endDateTime, attendees);
+               /* LinkedList <String> attendees = new LinkedList<>();
+                attendees.add("freundeskalender.kerim@gmail.com"); */
+                CalendarEvents event3 = new CalendarEvents(3, this, "andoidprojekt1@gmail.com", summary, description, location, startDateTime, endDateTime /*, attendees */);
                 event3.setConfig();
                 event3.execute();
             } catch (Exception e) {
