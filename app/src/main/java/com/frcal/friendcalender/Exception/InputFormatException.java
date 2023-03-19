@@ -1,4 +1,4 @@
-package com.frcal.friendcalender.Activities;
+package com.frcal.friendcalender.Exception;
 
 import android.content.Context;
 import android.widget.Toast;

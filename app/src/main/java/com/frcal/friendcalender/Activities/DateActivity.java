@@ -16,14 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.frcal.friendcalender.DataAccess.EventManager;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
+import com.frcal.friendcalender.Exception.InputFormatException;
 import com.frcal.friendcalender.R;
 import com.google.api.client.util.DateTime;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import com.frcal.friendcalender.RestAPIClient.CalendarEventList;
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
-import com.google.api.client.util.DateTime;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

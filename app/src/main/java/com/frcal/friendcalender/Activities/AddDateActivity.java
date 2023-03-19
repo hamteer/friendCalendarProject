@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.frcal.friendcalender.Exception.InputFormatException;
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
 import android.widget.Button;
 
@@ -30,11 +30,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
-import java.util.LinkedList;
-import com.google.api.client.util.DateTime;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.TimeZone;
 
 // TODO:
