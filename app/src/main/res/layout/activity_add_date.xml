@@ -30,7 +30,6 @@
         android:inputType="text"
         app:layout_constraintTop_toBottomOf="@id/add_date_headline" />
 
-
     <EditText
         android:id="@+id/add_date_day"
         android:layout_width="match_parent"
@@ -59,7 +58,7 @@
             android:layout_marginEnd="15dp"
             android:layout_weight="2"
             android:ems="10"
-            android:hint="@string/add_date_from"
+            android:text="@string/add_date_from"
             android:inputType="time"
             android:textAlignment="center"
             app:layout_constraintRight_toLeftOf="@id/add_date_to" />
@@ -81,7 +80,7 @@
             android:layout_marginEnd="40dp"
             android:layout_weight="2"
             android:ems="10"
-            android:hint="@string/add_date_to"
+            android:text="@string/add_date_to"
             android:inputType="time"
             android:textAlignment="center"
             app:layout_constraintLeft_toRightOf="@id/add_date_from" />
@@ -161,7 +160,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/add_date_submit_button"
+        android:id="@+id/add_date_save_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"

@@ -137,6 +137,8 @@
     <string name="notification_title">Test</string>
     <string name="notification_text">Das ist ein Test</string>
 
+    <!-- Sync Calendars with Google Calendars -->
+    <string name="sync_cal">Sync with GMail</string>
 
     <!-- Strings for Initialization -->
     <string name="notifications_initialization_subtitle">Möchten Sie Benachrichtigungen aktivieren?</string>

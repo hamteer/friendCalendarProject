@@ -10,44 +10,80 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.frcal.friendcalender.DataAccess.CalenderManager;
+import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.R;
+import com.frcal.friendcalender.RestAPIClient.AsyncCalListCl;
+import com.frcal.friendcalender.RestAPIClient.CalendarListCl;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.BeginSignInResult;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-// TODO:
-//  - wenn fingerprintSwitch aktiviert wird, gleich Fingerabdruck-Sensor aktivieren
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Collections;
 
-public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, AsyncCalListCl<String>, CalenderManager.CalenderManagerListener {
 
     private static final String TAG = "FrCal";
-    private static final int RC_GET_TOKEN = 9002;
 
-    private GoogleSignInClient googleSignInClient;
-    private TextView idTokenTextView;
+    private CalenderManager calenderManager;
+
+    private SignInClient oneTapClient;
+    private BeginSignInRequest signUpRequest;
+    private static final int REQ_ONE_TAP = 50;
+    private boolean showOneTapUI = true;
+
+
+    // for verfiy token
+    private static final HttpTransport httpTransport = new NetHttpTransport();
+    private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        findViewById(R.id.sync_calendar).setVisibility(View.GONE);
         //For shared Preferences
         Switch notificationsSwitch = findViewById(R.id.notifications_switch);
         Switch fingerprintSwitch = findViewById(R.id.fingerprintSwitch);
@@ -93,20 +129,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.disconnect_button).setOnClickListener(this);
+        findViewById(R.id.sync_calendar).setOnClickListener(this);
 
 
         // For sample only: make sure there is a valid server client ID.
         validateServerClientID();
 
-        // configure_signin
-        // Request the user's ID token to identify the user to the backend.
-        // This contains the user's basic profile (name, profile picture URL, etc)
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
-                GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(
-                        "764959564302-kk5n95aabkm0sj9eae9n28l1neit61i9.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
 
         // Build GoogleAPIClient with the Google Sign-In API and the above options.
         googleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -139,88 +167,111 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         // Show an account picker to let the user choose a Google account from the device.
         // If the GoogleSignInOptions only asks for IDToken and/or profile and/or email then no
         // consent screen will be shown here.
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_GET_TOKEN);
-    }
-
-    private void refreshIdToken() {
-        // Attempt to silently refresh the GoogleSignInAccount.
-        // If the GoogleSignInAccount already has a valid token this method may complete
-        // immediately.
-        //
-        // If the user has not previously signed in on this device or the sign-in has expired,
-        // this asynchronous branch will attempt to sign in the user silently and get a valid
-        // ID token. Cross-device single sign on will occur in this branch.
-        googleSignInClient.silentSignIn().addOnCompleteListener(this,
-                new OnCompleteListener<GoogleSignInAccount>() {
+        //Intent signInIntent = googleSignInClient.getSignInIntent();
+        //startActivityForResult(signInIntent, RC_GET_TOKEN);
+        oneTapClient = Identity.getSignInClient(this);
+        signUpRequest = BeginSignInRequest.builder()
+                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                        .setSupported(true)
+                        // Your server's client ID, not your Android client ID.
+                        .setServerClientId(getString(R.string.server_client_id))
+                        // Show all accounts on the device.
+                        .setFilterByAuthorizedAccounts(false)
+                        .build())
+                .build();
+        oneTapClient.beginSignIn(signUpRequest)
+                .addOnSuccessListener(this, new OnSuccessListener<BeginSignInResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
-                        handleSignInResult(task);
+                    public void onSuccess(BeginSignInResult result) {
+                        try {
+                            startIntentSenderForResult(
+                                    result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
+                                    null, 0, 0, 0);
+                        } catch (IntentSender.SendIntentException e) {
+                            Log.e(TAG, "Couldn't start One Tap UI: " + e.getLocalizedMessage());
+                        }
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // No Google Accounts found. Just continue presenting the signed-out UI.
+                        Log.d(TAG, e.getLocalizedMessage());
                     }
                 });
-    }
 
-    private void handleSignInResult(@NonNull Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            String idToken = account.getIdToken();
-
-            updateUI(account);
-        } catch (ApiException e) {
-            Log.w(TAG, "handleSignInResult:error", e);
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            updateUI(null);
-        }
     }
 
     private void signOut() {
-        googleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        oneTapClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 updateUI(null);
             }
         });
     }
-
-    private void revokeAccess() {
-        googleSignInClient.revokeAccess().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
-                    }
-                });
+    private void syncCalendar() {
+        SharedPreferences sh_clid = getSharedPreferences("MainCal-ID", MODE_PRIVATE);
+        CalendarListCl calClient = new CalendarListCl(1,this, sh_clid.getString("Cal-ID", ""));
+        calClient.delegate = this;
+        calClient.execute();
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_GET_TOKEN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+        switch (requestCode) {
+            case REQ_ONE_TAP:
+                try {
+                    SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(data);
+                    String idToken = credential.getGoogleIdToken();
+                    if (idToken !=  null) {
+                        // Got an ID token from Google. Use it to authenticate
+                        // with your backend.
+                        Verifier verObj = new Verifier(idToken);
+                        verObj.execute();
+                        Log.d(TAG, "Got ID token.");
+
+                        updateUI(credential);
+                    }
+                } catch (ApiException e) {
+                    switch (e.getStatusCode()) {
+                        case CommonStatusCodes.CANCELED:
+                            Log.d(TAG, "One-tap dialog was closed.");
+                            // Don't re-prompt the user.
+                            showOneTapUI = false;
+                            break;
+                        case CommonStatusCodes.NETWORK_ERROR:
+                            Log.d(TAG, "One-tap encountered a network error.");
+                            // Try again or just ignore.
+                            break;
+                        default:
+                            Log.d(TAG, "Couldn't get credential from result."
+                                    + e.getLocalizedMessage());
+                            break;
+                    }
+                }
+                break;
         }
     }
 
-    private void updateUI(@Nullable GoogleSignInAccount account) {
+
+    private void updateUI(@Nullable SignInCredential account) {
         if (account != null) {
             ((TextView) findViewById(R.id.status)).setText(R.string.signed_in);
 
-            String idToken = account.getIdToken();
 
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+            findViewById(R.id.sync_calendar).setVisibility(View.VISIBLE);
         } else {
             ((TextView) findViewById(R.id.status)).setText(R.string.signed_out);
-            idTokenTextView.setText(getString(R.string.id_token_fmt, "null"));
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+            findViewById(R.id.sync_calendar).setVisibility(View.GONE);
         }
     }
 
-    /**
-     * Validates that there is a reasonable server client ID in strings.xml
-     */
     private void validateServerClientID() {
         String serverClientId = getString(R.string.server_client_id);
         String suffix = ".apps.googleusercontent.com";
@@ -232,7 +283,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    @Override
+        @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
@@ -242,9 +293,103 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 signOut();
                 break;
             case R.id.disconnect_button:
-                revokeAccess();
+                signOut();
+                break;
+            case R.id.sync_calendar:
+                syncCalendar();
                 break;
         }
     }
 
+    //Schnittstelle zu AsyncTask
+    @Override
+    public void respListCalList(String res) {
+        JSONParser parser = new JSONParser();
+        JSONArray json = null;
+        calenderManager = new CalenderManager(getApplicationContext(),this);
+        try {
+            json = (JSONArray) parser.parse(res);
+            for (Object obj : json) {
+                JSONObject jsonObject = (JSONObject) obj;
+                String calendarId = (String) jsonObject.get("id");
+                String calendarName = (String) jsonObject.get("summary");
+                calenderManager.addCalender(new Calender(calendarId,calendarName,"default"));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void respInsertCalList(String res) {
+
+    }
+
+    @Override
+    public void respGetCalList(String res) {
+
+    }
+
+    @Override
+    public void onCalenderListUpdated() {
+        ArrayList <Calender> calenderArrayList = calenderManager.getCalenders();
+        Log.d("CalenderActivity", "onCalenderListUpdated() called");
+        // TODO: Adapter to show Calenders which are stored in calenderArrayList
+    }
+
+    private class Verifier extends AsyncTask<Void,Void,Void> {
+        private String idToken;
+        Verifier (String idToken) {
+            this.idToken = idToken;
+        }
+        public void verifyToken(String idTokenString) {
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(httpTransport, jsonFactory)
+                    // Specify the CLIENT_ID of the app that accesses the backend:
+                    .setAudience(Collections.singletonList(getString(R.string.server_client_id)))
+                    // Or, if multiple clients access the backend:
+                    //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
+                    .build();
+
+            // (Receive idTokenString by HTTPS POST)
+
+            GoogleIdToken idToken = null;
+            try {
+                idToken = verifier.verify(idTokenString);
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (idToken != null) {
+                GoogleIdToken.Payload payload = idToken.getPayload();
+
+                // Print user identifier
+                String userId = payload.getSubject();
+                System.out.println("User ID: " + userId);
+
+                // Get profile information from payload
+                String email = payload.getEmail();
+                boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
+                String name = (String) payload.get("name");
+                String pictureUrl = (String) payload.get("picture");
+                String locale = (String) payload.get("locale");
+                String familyName = (String) payload.get("family_name");
+                String givenName = (String) payload.get("given_name");
+                SharedPreferences sharedPreferences = getSharedPreferences("MainCal-ID", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("Cal-ID", email);
+                editor.apply();
+                // Use or store profile information
+                // ...
+            } else {
+                System.out.println("Invalid ID token.");
+            }
+    }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            verifyToken(idToken);
+            return null;
+        }
+    }
 }

@@ -3,11 +3,12 @@ package com.frcal.friendcalender.DataAccess;
 import android.content.Context;
 import android.util.Log;
 
+import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.room.DatabaseHelper;
 
 import java.util.ArrayList;
 
-import DatabaseEntities.Calender;
+import com.frcal.friendcalender.DatabaseEntities.Calender;
 
 
 /**
@@ -31,7 +32,7 @@ public class CalenderManager {
     /**
      * refreshes CalenderList from database and triggers Listener.onEventListUpdated()
      */
-    void requestUpdate(){
+    public void requestUpdate(){
         getCalenders();
         listener.onCalenderListUpdated();
     }
@@ -40,7 +41,7 @@ public class CalenderManager {
      * Adds calender to database
      * @param calender calender that should be added to the database
      */
-    void addCalender(Calender calender){
+    public void addCalender(Calender calender){
         // Check if calender already exists in database
         for (Calender calenderListElement: this.calenders) {
             if (calenderListElement.calenderID.equals(calender.calenderID)){
@@ -52,32 +53,32 @@ public class CalenderManager {
         }
         Log.d(logTag, "addCalender() Adding new Calender");
         db.addCalender(calender);
-        getCalenders();
+        requestUpdate();
     }
     /**
      * Updates Calender in the database
      * @param calender calender with updated contents
      */
-    void updateCalender(Calender calender){
+    public void updateCalender(Calender calender){
         Log.d(logTag, "updateCalender() Updating existing Event");
         db.updateCalender(calender);
-        getCalenders();
+        requestUpdate();
     }
     /**
      * Deletes Calender in the database
      * @param calender calender that will be removed
      */
-    void deleteCalender(Calender calender){
+    public void deleteCalender(Calender calender){
         Log.d(logTag, "deleteCalender() Deleting Calender");
         db.deleteCalender(calender);
-        getCalenders();
+        requestUpdate();
     }
 
     /**
      * refreshes the Calenders list
      * @return List of Calenders pulled from the database
      */
-    ArrayList<Calender> getCalenders(){
+    public ArrayList<Calender> getCalenders(){
         Log.d(logTag,"getCalenders() getting Calenders");
         calenders = db.getAllCalenders();
         return calenders;
