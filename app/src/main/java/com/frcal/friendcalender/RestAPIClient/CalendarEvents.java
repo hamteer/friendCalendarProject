@@ -210,23 +210,28 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
             return io.toString();
         }
     }
-    /*
-    public String updateEvent(Context context)
+
+    public Void updateEvent(Context context)
     {
 
         try {
-            // Retrieve an event
-            Event event = service.events().get(this.calendarID, this.eventID).execute();
-            if(this.summary)
 
-            Event updatedEvent = service.events().update(calendarID, event.getId(), event).execute();
-            return event.toString();
+        // Retrieve the event from the API
+            Event event = service.events().get("primary", "eventId").execute();
+
+// Make a change
+            event.setSummary("Appointment at Somewhere");
+
+// Update the event
+            Event updatedEvent = service.events().update("primary", event.getId(), event).execute();
         }catch(IOException io)
         {
-            return io.toString();
+          //  return io.toString();
+            return null;
         }
+        return null;
     }
-    */
+
 
 
 }
