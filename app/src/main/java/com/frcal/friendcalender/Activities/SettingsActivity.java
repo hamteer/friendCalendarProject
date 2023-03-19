@@ -265,6 +265,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
+    public void respInsertCalList(String res) {
+
+    }
+
+    @Override
+    public void respGetCalList(String res) {
+
+    }
+
+    @Override
     public void onCalenderListUpdated() {
         ArrayList <Calender> calenderArrayList = calenderManager.getCalenders();
         Log.d("CalenderActivity", "onCalenderListUpdated() called");
