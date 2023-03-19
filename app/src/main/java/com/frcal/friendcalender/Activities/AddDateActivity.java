@@ -139,9 +139,10 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
 
                 // TODO:
-                //  - DB-Call: Change calenderID, creator, googleEventID,updated
-
-                CalenderEvent event = new CalenderEvent(null,null, null,from,to,desc,title,loc,null,from);
+                //  - DB-Call: Change calenderID, creator
+                SharedPreferences sh_clid = getSharedPreferences("MainCal-ID", MODE_PRIVATE);
+                String creator = sh_clid.getString("Cal-ID", "");
+                CalenderEvent event = new CalenderEvent("primary",null, null,from,to,desc,title,loc,creator,from);
                 eventManager.addEvent(event);
                 if (googleSync.isChecked()) {
                     // TODO:
