@@ -3,6 +3,7 @@ package com.frcal.friendcalender.Activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,11 +12,15 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.frcal.friendcalender.DataAccess.CalenderManager;
+import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.R;
 
 // TODO:
-//  - API-Call & DB-Call
-public class AddCalendarActivity extends AppCompatActivity {
+//  - API-Call
+public class AddCalendarActivity extends AppCompatActivity implements CalenderManager.CalenderManagerListener {
+
+    CalenderManager calenderManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,6 +40,7 @@ public class AddCalendarActivity extends AppCompatActivity {
     private void initUI() {
         Button addCalendarButton = findViewById(R.id.add_calendar_save_btn);
         EditText addCalendarMail = findViewById(R.id.add_calendar_mail);
+        calenderManager = new CalenderManager(getApplicationContext(),this);
         addCalendarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,9 +53,13 @@ public class AddCalendarActivity extends AppCompatActivity {
                 } else {
                     // TODO:
                     //  - API-Call: hat diese Mailadresse ein Google-Konto? -> diese Mailadresse zur Synchronisation hinzufügen
-                    //  - DB-Call: diese Mailadresse in neuem Kalenderobjekt speichern
+
+                    Calender calender = new Calender(null,mail,null);
+                    calenderManager.addCalender(calender);
+                    Log.d("CalenderActivity", "Added Calender to database");
                     addCalendarMail.setText("");
                     Toast.makeText(AddCalendarActivity.this, "Neuer Kalender wurde hinzugefügt!", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
 
             }
@@ -59,5 +69,10 @@ public class AddCalendarActivity extends AppCompatActivity {
     private static boolean testMailUsingRegex(String mail) {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         return mail.matches(regexPattern);
+    }
+
+    @Override
+    public void onCalenderListUpdated() {
+
     }
 }

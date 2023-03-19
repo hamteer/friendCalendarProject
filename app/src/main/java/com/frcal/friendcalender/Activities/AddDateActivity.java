@@ -1,12 +1,16 @@
 package com.frcal.friendcalender.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
 import android.widget.Button;
 
@@ -62,7 +66,35 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
         }
         setContentView(R.layout.activity_add_date);
         initUI();
+        initStartEndTimeAutomatism();
         initButton();
+    }
+
+    private void initStartEndTimeAutomatism() {
+        editTimeFrom.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus) {
+                    try {
+                        String input = editTimeFrom.getText().toString();
+                        String inputHrs = input.substring(0,2);
+                        int inputHrsInt = Integer.parseInt(inputHrs);
+                        int outputHrsInt = inputHrsInt + 1;
+                        String outputHrs = String.valueOf(outputHrsInt);
+                        if (outputHrs.length() == 1) {
+                            String outputText = "0" + outputHrs + ":00";
+                            editTimeTo.setText(outputText);
+                        } else {
+                            String outputText = outputHrs + ":00";
+                            editTimeTo.setText(outputText);
+                        }
+                    } catch (Exception e) {
+                        InputFormatException ife = new InputFormatException(getApplicationContext());
+                        ife.notifyUser();
+                    }
+                }
+            }
+        });
     }
 
     private void initUI() {
@@ -96,14 +128,24 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 toString = editTimeTo.getText().toString();
 
                 // create RFC3339-Strings out of start and end time and create DateTime Objects for them:
-                from = DateTime.parseRfc3339(createRFCString(dateString, fromString));
-                to = DateTime.parseRfc3339(createRFCString(dateString, toString));
+                try {
+                    from = DateTime.parseRfc3339(createRFCString(dateString, fromString, getApplicationContext()));
+                    to = DateTime.parseRfc3339(createRFCString(dateString, toString, getApplicationContext()));
+                } catch (Exception e) {
+                    InputFormatException ife = new InputFormatException(getApplicationContext());
+                    ife.notifyUser();
+                }
+
+                if (fromString.compareToIgnoreCase(toString) > 0) {
+                    Toast.makeText(AddDateActivity.this, "Bitte gültige Zeiten angeben!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
 
                 // TODO:
-                //  - DB-Call: Change calenderID, creator, updated
+                //  - DB-Call: Change calenderID, creator, googleEventID,updated
 
-                CalenderEvent event = new CalenderEvent(null,null,from,to,desc,title,loc,null,from);
+                CalenderEvent event = new CalenderEvent(null,null, null,from,to,desc,title,loc,null,from);
                 eventManager.addEvent(event);
                 if (googleSync.isChecked()) {
                     // TODO:
@@ -114,33 +156,43 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                     // TODO:
                     //  - set Notification for this Event
                 }
+
+
+
+                Toast.makeText(AddDateActivity.this, "Termin gespeichert!", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
 
-    static String createRFCString(String dateString, String timeString) {
-        String[] dayMonthYear = new String[3];
-        dayMonthYear = dateString.split("\\.");
-        String[] hrMin = new String[2];
-        hrMin = timeString.split(":");
-
-        TimeZone tz = TimeZone.getDefault();
-        String offset = String.valueOf(tz.getRawOffset());
-        String rfcOffset;
-        if (offset.contains("-")) {
-            if (offset.length() == 2) {
-                rfcOffset = "-0" + offset.charAt(1) + ":00";
+    static String createRFCString(String dateString, String timeString, Context context) {
+        String rfcString = "";
+        try {
+            String[] dayMonthYear = new String[3];
+            dayMonthYear = dateString.split("\\.");
+            String[] hrMin = new String[2];
+            hrMin = timeString.split(":");
+            TimeZone tz = TimeZone.getDefault();
+            String offset = String.valueOf(tz.getRawOffset());
+            String rfcOffset;
+            if (offset.contains("-")) {
+                if (offset.length() == 2) {
+                    rfcOffset = "-0" + offset.charAt(1) + ":00";
+                } else {
+                    rfcOffset = offset + ":00";
+                }
             } else {
-                rfcOffset = offset + ":00";
+                if (offset.length() == 1) {
+                    rfcOffset = "+0" + offset + ":00";
+                } else {
+                    rfcOffset = "+" + offset + ":00";
+                }
             }
-        } else {
-            if (offset.length() == 1) {
-                rfcOffset = "+0" + offset + ":00";
-            } else {
-                rfcOffset = "+" + offset + ":00";
-            }
+            rfcString = dayMonthYear[2] + "-" + dayMonthYear[1] + "-" + dayMonthYear[0] + "T" + hrMin[0] + ":" + hrMin[1] + ":00" ;
+        } catch (Exception e) {
+            InputFormatException ife = new InputFormatException(context);
+            ife.notifyUser();
         }
-        String rfcString = dayMonthYear[2] + "-" + dayMonthYear[1] + "-" + dayMonthYear[0] + "T" + hrMin[0] + ":" + hrMin[1] + ":00" ;
         return rfcString;
     }
 
