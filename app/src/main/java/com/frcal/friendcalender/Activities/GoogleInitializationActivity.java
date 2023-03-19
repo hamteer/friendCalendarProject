@@ -19,7 +19,8 @@ public class GoogleInitializationActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_name),
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                getString(R.string.preference_name),
                 MODE_PRIVATE);
         boolean googleSignedIn = sharedPreferences.getBoolean(
                 getString(R.string.google_preference_name), false);
@@ -40,6 +41,7 @@ public class GoogleInitializationActivity extends AppCompatActivity {
         Button disagreeButton = findViewById(R.id.disagree_button_google_initialization);
 
         agreeButton.setOnClickListener((View v) ->
+                // TODO: Google Login
                 Toast.makeText(this, "TODO: Google Anbindung hier", Toast.LENGTH_SHORT).show());
 
         disagreeButton.setOnClickListener((View v) -> endActivity(sharedPreferences, false));
@@ -52,7 +54,8 @@ public class GoogleInitializationActivity extends AppCompatActivity {
         sharedPreferences.edit().putBoolean(
                 getString(R.string.google_preference_name),
                 loginState).apply();
-        sharedPreferences.edit().putBoolean(getString(R.string.first_run_preference_name), false).apply();
+        sharedPreferences.edit().putBoolean(getString(R.string.first_run_preference_name),
+                false).apply();
         startActivity(new Intent(this, CalendarActivity.class));
         finish();
     }
