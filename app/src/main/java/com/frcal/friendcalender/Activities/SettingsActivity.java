@@ -1,15 +1,22 @@
 package com.frcal.friendcalender.Activities;
 
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -78,9 +85,35 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_settings);
         findViewById(R.id.sync_calendar).setVisibility(View.GONE);
         //For shared Preferences
+        Switch notificationsSwitch = findViewById(R.id.notifications_switch);
         Switch fingerprintSwitch = findViewById(R.id.fingerprintSwitch);
+
         SharedPreferences prefs = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
+        boolean notificationsActive = prefs.getBoolean(
+                getString(R.string.notifications_preference_name), false);
         boolean switchState = prefs.getBoolean("fingerprintSwitchState", false);
+
+        setNotificationsState(notificationsActive);
+        notificationsSwitch.setOnCheckedChangeListener(
+                (buttonView, isChecked) -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                        if (isChecked) {
+                            ActivityResultLauncher<String> permissionRequest =
+                                    registerForActivityResult(
+                                            new ActivityResultContracts.RequestPermission(),
+                                            this::setNotificationsState);
+                            permissionRequest.launch(
+                                    Manifest.permission.POST_NOTIFICATIONS);
+                        } else {
+                            setNotificationsState(false);
+                        }
+                    } else {
+                        setNotificationsState(isChecked);
+                    }
+                });
+
         fingerprintSwitch.setChecked(switchState);
         fingerprintSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -91,6 +124,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 editor.apply();
             }
         });
+
         // Button click listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
@@ -101,8 +135,27 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         // For sample only: make sure there is a valid server client ID.
         validateServerClientID();
 
+    }
 
+    private void setNotificationsState(boolean allowed) {
+        Switch notificationsSwitch = findViewById(R.id.notifications_switch);
+        ImageView notificationImage = findViewById(R.id.notifications_switch_image);
 
+        SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_name),
+                MODE_PRIVATE);
+
+        if (allowed) {
+            notificationImage.setImageDrawable(AppCompatResources.getDrawable(this,
+                    R.drawable.baseline_notifications_active_48));
+        } else {
+            notificationImage.setImageDrawable(
+                    AppCompatResources.getDrawable(this, R.drawable.baseline_notifications_off_48));
+        }
+
+        notificationsSwitch.setChecked(allowed);
+        prefs.edit().putBoolean(getString(
+                        R.string.notifications_preference_name),
+                allowed).apply();
     }
 
     //For Google-Login with Token
