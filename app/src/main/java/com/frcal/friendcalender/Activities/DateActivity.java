@@ -13,11 +13,17 @@ import com.frcal.friendcalender.R;
 import com.frcal.friendcalender.RestAPIClient.CalendarEventList;
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
 import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.EventDateTime;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 // TODO: all
 public class DateActivity extends AppCompatActivity {
@@ -95,8 +101,34 @@ public class DateActivity extends AppCompatActivity {
 
     }
 
-    public void evaluateJsonEventList()
+    public void evaluateJsonEventList(List<String> jsonList)
     {
+
+        List<String> eventIDList = new ArrayList<>();
+        List<String> summaryList = new ArrayList<>();
+        List<String> locationList = new ArrayList<>();
+        List<EventDateTime> startTimeList = new ArrayList<>();
+        List<EventDateTime> endTimeList = new ArrayList<>();
+     //   String calenderID;
+        try {
+            for (String jsonString : jsonList) {
+                JSONObject json = new JSONObject(jsonString);
+               // calenderID = json.getString("id");
+                JSONArray items = json.getJSONArray("items");
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject event = items.getJSONObject(i);
+                    eventIDList.add(event.getString("id"));
+                    summaryList.add( event.getString("summary"));
+                    locationList.add( event.getString("location"));
+
+
+
+                }
+            }
+        }catch(Exception e)
+        {
+
+        }
 
     }
 
