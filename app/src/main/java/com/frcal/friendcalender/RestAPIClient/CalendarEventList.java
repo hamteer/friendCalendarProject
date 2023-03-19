@@ -79,7 +79,8 @@ public class CalendarEventList extends AsyncTask<Void, Void, Void> {
 // Iterate over the events in the specified calendar
         String pageToken = null;
         List<Event> items;
-        List<Event> allEvents = new ArrayList<Event>();
+        List<Event> allEvents = new ArrayList<>();
+        List<String> jsonResponses = new ArrayList<>();
         try {
 
             do {
@@ -87,6 +88,7 @@ public class CalendarEventList extends AsyncTask<Void, Void, Void> {
                 items = events.getItems();
                 allEvents.addAll(items);
                 pageToken = events.getNextPageToken();
+                jsonResponses.add(events.toPrettyString());
             } while (pageToken != null);
             return items.toString();
         } catch (IOException io) {
