@@ -135,10 +135,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         // For sample only: make sure there is a valid server client ID.
         validateServerClientID();
 
-
-        // Build GoogleAPIClient with the Google Sign-In API and the above options.
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
-
     }
 
     private void setNotificationsState(boolean allowed) {
