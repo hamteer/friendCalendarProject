@@ -49,7 +49,7 @@ public class EventManager {
             if (eventListElement.eventID.equals(event.eventID)){
                 // Element already existing => cant add as new Item has to be updated instead
                 Log.d(logTag, "addEvent() Event already existing => updating instead");
-                db.updateEvent(event);
+                updateEvent(event);
                 return;
             }
         }
@@ -76,6 +76,20 @@ public class EventManager {
         Log.d(logTag, "deleteEvent() Deleting Event");
         db.deleteEvent(event);
         getEvents();
+    }
+
+    /**
+     *
+     * @param eventID that should be matched to an event
+     * @return CalenderEvent that matches eventID
+     */
+    public CalenderEvent getEventByEventID(String eventID){
+        for (CalenderEvent event: getEvents()) {
+            if (event.eventID.equals(eventID)){
+                return event;
+            }
+        }
+        return null;
     }
 
     /**

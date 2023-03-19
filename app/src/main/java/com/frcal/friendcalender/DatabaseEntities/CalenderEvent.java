@@ -17,6 +17,7 @@ public class CalenderEvent {
     @PrimaryKey
     @NonNull
     public String eventID;
+    public String googleEventID;
 
     @NonNull
     public DateTime startTime;
@@ -32,12 +33,13 @@ public class CalenderEvent {
     public DateTime updated;
 
 
-    public CalenderEvent(String calenderID, String eventID, DateTime startTime, DateTime endTime, String description, String summary, String location,
+    public CalenderEvent(String calenderID, String eventID, String googleEventID,DateTime startTime, DateTime endTime, String description, String summary, String location,
                          String creator, DateTime updated){
 
         this.calenderID = calenderID;
         // schau ob eine calenderID uebergeben wurde falls ja nimm die, ansonsten erstell eine
         this.eventID = (eventID != null) ? eventID : String.valueOf(UUID.randomUUID());
+        this.googleEventID = googleEventID;
         this.startTime = startTime;
         this.endTime = endTime;
         this.description = description;
@@ -50,6 +52,11 @@ public class CalenderEvent {
     @Override
     public String toString(){
         return calenderID + " | " + eventID + " | " + startTime + " | ";
+    }
+
+    // needed to easily compare two events to sort them in the ListView
+    public String getStartTimeToString() {
+        return startTime.toStringRfc3339();
     }
 
 }

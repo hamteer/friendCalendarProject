@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,8 +21,10 @@ import com.frcal.friendcalender.DataAccess.CalenderManager;
 import com.frcal.friendcalender.DataAccess.EventManager;
 import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
+import com.frcal.friendcalender.Decorators.EventDecorator;
 import com.frcal.friendcalender.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.api.client.util.DateTime;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
@@ -30,11 +33,14 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import com.frcal.friendcalender.Decorators.OneDayDecorator;
 
+import org.checkerframework.checker.units.qual.A;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 
 // TODO:
-//  - DB-Anbindung & API-Anbindung, Aufruf bei Start, um Termine anzuzeigen
-//  - Ausklappbares Menü zum Auswählen der anzuzeigenden Kalender (Burgermenü in ActionBar?)
+//  - API-Anbindung
 
 public class CalendarActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener {
 
@@ -70,7 +76,6 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         initCalendarView();
         initUI();
         initActionBar();
-
     }
 
     @Override
@@ -158,8 +163,6 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
 
 
         // Grafische Aufbereitung von Tagen, an denen Termine vorhanden sind
-        // TODO: DB-Aufruf für Termine:
-        // new DBSimulator().executeOnExecutor(Executors.newSingleThreadExecutor());
         calenderManager = new CalenderManager(getApplicationContext(),this);
         eventManager = new EventManager(getApplicationContext(),this);
 
@@ -170,8 +173,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
             public void onDateSelected(@NonNull MaterialCalendarView widget,
                                        @NonNull CalendarDay date, boolean selected) {
                 // create Intent, put date in extras, start SingleDateActivity
-                Log.d("FrCal",
-                        "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
+                Log.d("FrCal", "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
                 Intent intent = new Intent(getApplicationContext(), SingleDayActivity.class);
                 intent.putExtra("SELECTED_DATE", date);
                 startActivity(intent);
@@ -197,13 +199,25 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     public void onCalenderListUpdated() {
         ArrayList <Calender> calenderArrayList = calenderManager.getCalenders();
         Log.d("CalenderActivity", "onCalenderListUpdated() called");
-        // TODO: Adapter to show Calenders which are stored in calenderArrayList
     }
     // gets called when EventList gets updated
     @Override
     public void onEventListUpdated() {
-        ArrayList <CalenderEvent> calenderArrayList = eventManager.getEvents();
+        ArrayList <CalenderEvent> eventArrayList = eventManager.getEvents();
         Log.d("CalenderActivity", "onEventListUpdated() called");
-        // TODO: Adapter to show events which are stored in calenderArrayList
+        ArrayList<CalendarDay> daysToDecorate = new ArrayList<>();
+        for (CalenderEvent event : eventArrayList) {
+            Log.d("CalenderActivity", event.startTime.toString());
+            String timeString = event.startTime.toString();
+            String year = timeString.substring(0, 4);
+            String month = timeString.substring(5, 7);
+            String day = timeString.substring(8, 10);
+            LocalDate date = LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+            CalendarDay calendarDay = CalendarDay.from(date);
+            daysToDecorate.add(calendarDay);
+        }
+        calendarView.removeDecorators();
+        calendarView.addDecorator(new EventDecorator(Color.RED, daysToDecorate));
     }
+
 }

@@ -13,6 +13,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.CalendarListEntry;
@@ -21,13 +22,14 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class CalendarCl extends AsyncTask<Void, Void, Void> {
-
+public class CalendarCl extends AsyncTask<Void, Void, String> {
+   // Schnittstelle zu AsyncTask
+   public AsyncCalCl delegate = null;
    private static final HttpTransport httpTransport = new NetHttpTransport();
    private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
    ;
    private static final String application_name = "My Calendar App";
-   private String tokenStr, calendarId;
+   private String calendarId;
 
    private Context context;
 
@@ -36,6 +38,10 @@ public class CalendarCl extends AsyncTask<Void, Void, Void> {
    private static final int REQUEST_AUTHORIZATION = 1;
    private static final int REQUEST_CALENDAR = 2;
    private  Calendar service;
+   public CalendarCl(int mtdNr, Context context) {
+      this.context = context;
+      this.mtdNr = mtdNr;
+   }
 
    public CalendarCl(int mtdNr, Context context, String calendarId) {
       this.context = context;
@@ -52,52 +58,67 @@ public class CalendarCl extends AsyncTask<Void, Void, Void> {
        this.service = service;
     }
    @Override
-   protected Void doInBackground(Void... voids) {
+   protected String doInBackground(Void... voids) {
       switch (mtdNr) {
          case 1:
-            getCalendar(context, calendarId);
+            return getCalendar(context, calendarId);
+         case 2:
+            return insertSecCalendar(context, calendarId);
       }
       return null;
    }
 
-   public void getCalendar(Context context, String calendarId) {
+   public String getCalendar(Context context, String calendarId) {
 
       setService();
-
+      JsonFactory jsonFactory = new JacksonFactory();
       try {
          com.google.api.services.calendar.model.Calendar calendar = service.calendars().get(calendarId).execute();
-         JsonFactory jsonCal = calendar.getFactory();
-         Intent jsonIntent = null;
-         jsonIntent.putExtra("Calendar", jsonCal.toString());
-         ((Activity) context).startActivityForResult(jsonIntent, REQUEST_CALENDAR); //to-do handle response in add_calendar (debug)
+         // Konvertiere das Calendar-Objekt in ein JSON-String
+         String jsonString = jsonFactory.toPrettyString(calendar);
+         // Konvertiere den JSON-String in ein Calendar-Objekt
+         // com.google.api.services.calendar.model.Calendar calendarFromJson = jsonFactory.fromString(jsonString, com.google.api.services.calendar.model.Calendar.class);
+
+         return jsonString;
+
+
       } catch (UserRecoverableAuthIOException e) {
          ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
       } catch (IOException io) {
          io.printStackTrace();
-
       }
-
+      return "";
    }
 
-   public JsonFactory insertSecCalendar() {
-      if (calendarId==null) {
-         return jsonFactory;
+   public String insertSecCalendar(Context context, String calendarName) {
+      if (calendarName==null) {
+         return "";
       }
       setService();
       // Create a new calendar
       com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
-      calendar.setSummary("calendarSummary");
+      calendar.setSummary(calendarName);
       calendar.setTimeZone("Europe/Berlin");
       // Insert the new calendar
       com.google.api.services.calendar.model.Calendar createdCalendar = null;
       try {
          createdCalendar = service.calendars().insert(calendar).execute();
+         // Konvertiere das Calendar-Objekt in ein JSON-String
+         String jsonString = jsonFactory.toPrettyString(createdCalendar);
+         return jsonString;
+
       } catch (IOException e) {
-         throw new RuntimeException(e);
+         return  e.toString();
       }
 
-      System.out.println(createdCalendar.getId());
-      return  jsonFactory;
    }
-
+   @Override
+   protected void onPostExecute(String json) {
+      switch (mtdNr) {
+         case 1:
+            delegate.respCalendar(json);
+         case 2:
+            delegate.respInsertCal(json);
+      }
+   }
 }
