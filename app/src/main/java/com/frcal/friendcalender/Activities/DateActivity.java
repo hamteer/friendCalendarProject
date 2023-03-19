@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,13 @@ import com.google.api.client.util.DateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
+import com.google.api.client.util.DateTime;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 // TODO: all
 public class DateActivity extends AppCompatActivity {
@@ -79,8 +88,6 @@ public class DateActivity extends AppCompatActivity {
                 // create RFC3339-Strings out of start and end time and create DateTime Objects for them:
                 from = DateTime.parseRfc3339(createRFCString(dateString, fromString));
                 to = DateTime.parseRfc3339(createRFCString(dateString, toString));
-
-
                 // TODO:
                 //  - DB-Call: Update Calendar Event with information given here
 
@@ -105,5 +112,72 @@ public class DateActivity extends AppCompatActivity {
                 //  - delete the notification for this event, if it exists
             }
         });
+    }
+    public void updateEvent()
+    {
+        CheckBox checkBox = findViewById(R.id.add_date_google_sync_check);
+        boolean isChecked = checkBox.isChecked();
+
+        EditText editText = findViewById(R.id.edit_date_title);
+        String summary = editText.getText().toString();
+
+        editText = findViewById(R.id.edit_date_day);
+        String date = editText.getText().toString();
+
+        editText = findViewById(R.id.edit_date_from);
+        String start = editText.getText().toString();
+
+        editText = findViewById(R.id.edit_date_to);
+        String end = editText.getText().toString();
+
+        editText = findViewById(R.id.edit_date_description);
+        String description = editText.getText().toString();
+
+        editText = findViewById(R.id.edit_date_location);
+        String location = editText.getText().toString();
+
+
+        if (isChecked == true) {
+            try {
+
+                DateTime startDateTime= convertDateTime(start,date);
+                DateTime endDateTime= convertDateTime(end,date);
+
+               /* LinkedList <String> attendees = new LinkedList<>();
+                attendees.add("freundeskalender.kerim@gmail.com"); */
+                CalendarEvents event5 = new CalendarEvents(5, this, "andoidprojekt1@gmail.com", summary, description, location, startDateTime, endDateTime /*, attendees */);
+                event5.setConfig();
+                event5.execute();
+            } catch (Exception e) {
+
+            }
+            //Datenbank Speicherung aber woher EventId vlt erstmal alles mit eventlist holen?
+
+
+        }
+
+    }
+
+    public void deleteEvent()
+    {
+
+
+
+    }
+
+    public DateTime convertDateTime(String time, String date)
+    {
+        String DateTimeString = date + "" + time;
+        LocalDateTime DateTime = LocalDateTime.parse(DateTimeString);
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zonedDateTime = DateTime.atZone(zoneId);
+        // Konvertieren Sie das ZonedDateTime-Objekt in ein Instant-Objekt
+        Instant instant = zonedDateTime.toInstant();
+
+        // Konvertieren Sie das Instant-Objekt in ein DateTime-Objekt mit der Default-Zeitzone
+        DateTime dateTime = new DateTime(instant.toEpochMilli());
+
+        return dateTime;
+
     }
 }

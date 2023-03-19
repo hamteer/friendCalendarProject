@@ -3,12 +3,16 @@ plugins {
 }
 
 android {
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
+
     namespace 'com.frcal.friendcalender'
     compileSdk 33
 
     defaultConfig {
         applicationId "com.example.friendcalender"
-        minSdk 24
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -26,6 +30,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -34,16 +39,18 @@ android {
 dependencies {
 
     // benötigte Dependencies zur Nutzung der Room Persistence Library
-    implementation "androidx.room:room-runtime:2.3.0"
+    implementation "androidx.room:room-runtime:2.5.0"
     implementation 'com.google.firebase:protolite-well-known-types:18.0.0'
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    annotationProcessor "androidx.room:room-compiler:2.3.0"
+    annotationProcessor "androidx.room:room-compiler:2.5.0"
     // Google Calender API
     implementation 'com.google.api-client:google-api-client:2.2.0'
 
     // Notifications
     implementation 'androidx.core:core:1.9.0'
+    //benötigte Dependencies zur Nutzung der DateTime
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -63,7 +70,7 @@ dependencies {
     implementation 'com.google.auth:google-auth-library-oauth2-http:1.3.0'
     implementation 'com.google.http-client:google-http-client-jackson2:1.39.2'
     implementation 'com.google.api-client:google-api-client-android:1.23.0' exclude module: 'httpclient'
+    implementation 'com.android.tools.build:gradle:7.0.3' // Set the plugin version here
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-
 
 }
