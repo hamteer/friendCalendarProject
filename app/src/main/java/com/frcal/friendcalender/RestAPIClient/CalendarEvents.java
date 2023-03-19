@@ -32,7 +32,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
     private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
     private static final String application_name = "My Calendar App";
     private Context context;
-// <editor-fold desc="Attributes">
+    // <editor-fold desc="Attributes">
     private String calendarID;
     private String eventID;
     private String summary; // Titel des Termins
@@ -52,51 +52,45 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
     Integer mtdNr;
 
 
-
     //private ArrayList<String> attendees2 = new ArrayList<String>();
 // </editor-fold>
 
     // <editor-fold desc="Konstruktoren">
     //For insert
-    public CalendarEvents(Integer mtdNr, Context context, String calendarID ,/*, String eventID,*/ String summary, String description, String location, DateTime startTime, DateTime endTime /*, List<String> attendees */)
-    {
+    public CalendarEvents(Integer mtdNr, Context context, String calendarID,/*, String eventID,*/ String summary, String description, String location, DateTime startTime, DateTime endTime /*, List<String> attendees */) {
         this.mtdNr = mtdNr;
-        this.context=context;
-        this.calendarID= calendarID;
+        this.context = context;
+        this.calendarID = calendarID;
         //this.eventID= eventID;
-        this.summary=summary;
-        this.description=description;
-        this.location=location;
+        this.summary = summary;
+        this.description = description;
+        this.location = location;
 
 
-        this.startTime=startTime;
-        this.endTime=endTime;
+        this.startTime = startTime;
+        this.endTime = endTime;
 
 
-       /* this.attendees = attendees; */
+        /* this.attendees = attendees; */
 
 
     }
 
 
     //For delete and list
-    public CalendarEvents(Integer mtdNr, Context context, String calendarID, String eventID)
-    {
+    public CalendarEvents(Integer mtdNr, Context context, String calendarID, String eventID) {
         this.mtdNr = mtdNr;
         this.context = context;
-        this.calendarID= calendarID;
-        this.eventID= eventID;
-
+        this.calendarID = calendarID;
+        this.eventID = eventID;
 
 
     }
+
     //For get
-    public CalendarEvents(Integer mtdNr, Context context , String calendarID)
-    {
+    public CalendarEvents(Integer mtdNr, Context context, String calendarID) {
         this.mtdNr = mtdNr;
-        this.calendarID= calendarID;
-
-
+        this.calendarID = calendarID;
 
 
     }
@@ -104,36 +98,39 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        switch (mtdNr) {
+        switch (this.mtdNr) {
             case 1:
-                 getEvent();
-            case 2:
-                 getEventList();
+                getEvent();
+                break;
             case 3:
-                 setEvent();
+                setEvent();
+                break;
             case 4:
                 deleteEvent();
             case 5:
                 updateEvent();
+                break;
+
 
         }
-     return null;
+        return null;
 
     }
-    public  void setConfig() {
-        String [] SCOPES = {"https://www.googleapis.com/auth/calendar"};
+
+    public void setConfig() {
+        String[] SCOPES = {"https://www.googleapis.com/auth/calendar"};
         //SharedPreferences settings = getSharedPreferences(Context.MODE_PRIVATE);
-            GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(context, Arrays.asList(SCOPES)).setSelectedAccount(new Account("andoidprojekt1@gmail.com ", "klaus"));
-            // Calender client
-            Calendar service = new Calendar.Builder(httpTransport, jsonFactory, credential)
-                    .setApplicationName(application_name).build();
+        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(context, Arrays.asList(SCOPES)).setSelectedAccount(new Account("andoidprojekt1@gmail.com ", "klaus"));
+        // Calender client
+        Calendar service = new Calendar.Builder(httpTransport, jsonFactory, credential)
+                .setApplicationName(application_name).build();
 
-            this.service = service;
+        this.service = service;
 
 
     }
-    public void getEvent()
-    {
+
+    public void getEvent() {
 
         try {
             // Retrieve an event
@@ -146,13 +143,12 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
         } catch (UserRecoverableAuthIOException e) {
             ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
 
-        } catch(IOException io)
-        {
+        } catch (IOException io) {
             io.printStackTrace();
         }
     }
 
-    public String getEventList(){
+    public String getEventList() {
 
 // Iterate over the events in the specified calendar
         String pageToken = null;
@@ -166,13 +162,12 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
                 pageToken = events.getNextPageToken();
             } while (pageToken != null);
             return items.toString();
-        }catch(IOException io)
-        {
+        } catch (IOException io) {
             return io.toString();
         }
     }
-    public String setEvent()
-    {
+
+    public String setEvent() {
         Event event = new Event()
                 .setSummary(this.summary)
                 .setLocation(this.location)
@@ -194,21 +189,19 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
             event = this.service.events().insert(this.calendarID, event).execute();
             JsonFactory jsonSetEvent = event.getFactory();
             return event.toString();
-        }catch(IOException io)
-        {
+        } catch (IOException io) {
             return io.toString();
 
         }
 
     }
-    public String deleteEvent( )
-    {
+
+    public String deleteEvent() {
         try {
             // Retrieve an event
             Event event = this.service.events().get(this.calendarID, this.eventID).execute();
             return event.toString();
-        }catch(IOException io)
-        {
+        } catch (IOException io) {
             return io.toString();
         }
     }
@@ -240,7 +233,6 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
         }
         return null;
     }
-
 
 
 }
