@@ -46,7 +46,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
 
 
 
-    private List<String> attendees = new LinkedList<>();
+    /*private List<String> attendees = new LinkedList<>(); */
 
     Calendar service;
     Integer mtdNr;
@@ -58,7 +58,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
 
     // <editor-fold desc="Konstruktoren">
     //For insert
-    public CalendarEvents(Integer mtdNr, Context context, String calendarID ,/*, String eventID,*/ String summary, String description, String location, DateTime startTime, DateTime endTime, List<String> attendees)
+    public CalendarEvents(Integer mtdNr, Context context, String calendarID ,/*, String eventID,*/ String summary, String description, String location, DateTime startTime, DateTime endTime /*, List<String> attendees */)
     {
         this.mtdNr = mtdNr;
         this.context=context;
@@ -73,10 +73,12 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
         this.endTime=endTime;
 
 
-        this.attendees = attendees;
+       /* this.attendees = attendees; */
 
 
     }
+
+
     //For delete and list
     public CalendarEvents(Integer mtdNr, Context context, String calendarID, String eventID)
     {
@@ -111,6 +113,8 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
                  setEvent();
             case 4:
                 deleteEvent();
+            case 5:
+                updateEvent();
 
         }
      return null;
@@ -175,19 +179,17 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
                 .setDescription(this.description);
 
         EventDateTime start = new EventDateTime()
-                .setDateTime(this.startTime)
-                .setTimeZone("Europe/Berlin");
+                .setDateTime(this.startTime);
         event.setStart(start);
         EventDateTime end = new EventDateTime()
-                .setDateTime(this.endTime)
-                .setTimeZone("Europe/Berlin");
+                .setDateTime(this.endTime);
         event.setEnd(end);
 
-        EventAttendee[] attendees = new EventAttendee[this.attendees.size()];
+       /* EventAttendee[] attendees = new EventAttendee[this.attendees.size()];
         for (String i : this.attendees) {
             new EventAttendee().setEmail(i);
         }
-        event.setAttendees(Arrays.asList(attendees));
+        event.setAttendees(Arrays.asList(attendees)); */
         try {
             event = this.service.events().insert(this.calendarID, event).execute();
             JsonFactory jsonSetEvent = event.getFactory();
@@ -211,22 +213,29 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    public Void updateEvent(Context context)
-    {
+    public Void updateEvent() {
 
         try {
 
-        // Retrieve the event from the API
-            Event event = service.events().get("primary", "eventId").execute();
+            // Retrieve the event from the API
+            Event event = service.events().get(this.calendarID, this.eventID).execute();
 
-// Make a change
-            event.setSummary("Appointment at Somewhere");
+            // Make a change
+            event.setSummary(this.summary)
+                    .setLocation(this.location)
+                    .setDescription(this.description);
 
-// Update the event
-            Event updatedEvent = service.events().update("primary", event.getId(), event).execute();
-        }catch(IOException io)
-        {
-          //  return io.toString();
+            EventDateTime start = new EventDateTime()
+                    .setDateTime(this.startTime);
+            event.setStart(start);
+            EventDateTime end = new EventDateTime()
+                    .setDateTime(this.endTime);
+            event.setEnd(end);
+
+            // Update the event
+            Event updatedEvent = service.events().update(this.calendarID, event.getId(), event).execute();
+        } catch (IOException io) {
+            //  return io.toString();
             return null;
         }
         return null;
