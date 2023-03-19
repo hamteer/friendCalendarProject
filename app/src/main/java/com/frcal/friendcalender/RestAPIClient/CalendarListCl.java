@@ -4,7 +4,6 @@ package com.frcal.friendcalender.RestAPIClient;
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -16,13 +15,16 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.CalendarListEntry;
+import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CalendarListCl extends AsyncTask<Void, Void, Void> {
+public class CalendarListCl extends AsyncTask<Void, Void, String> {
 
+   public AsyncCalListCl delegate = null;
    private static final HttpTransport httpTransport = new NetHttpTransport();
    private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
    ;
@@ -34,8 +36,11 @@ public class CalendarListCl extends AsyncTask<Void, Void, Void> {
    // Funktion auswählen 1=getCalender
    private int mtdNr; //1=listCalender;
    private static final int REQUEST_AUTHORIZATION = 1;
-   private static final int REQUEST_CALENDAR = 2;
    private  Calendar service;
+   public CalendarListCl(int mtdNr, Context context) {
+      this.context = context;
+      this.mtdNr = mtdNr;
+   }
    public CalendarListCl(int mtdNr, Context context, String calendarId) {
       this.context = context;
       this.mtdNr = mtdNr;
@@ -51,63 +56,62 @@ public class CalendarListCl extends AsyncTask<Void, Void, Void> {
        this.service = service;
     }
    @Override
-   protected Void doInBackground(Void... voids) {
+   protected String doInBackground(Void... voids) {
       switch (mtdNr) {
          case 1:
-            listCalendar(context);
+            return listCalendar(context);
          case 2:
-            insertCalendar(context, "Hans Peter Klausens");
+            // in diesem Fall Calendar-ID=new Calendar Name
+            return insertCalendar(context, calendarId);
          case 3:
-            getCalendar(context, calendarId);
+            return getCalendar(context, calendarId);
       }
       return null;
    }
 
-   public JsonFactory listCalendar(Context context) {
+   public String listCalendar(Context context) {
 
       setService(context);
+      List<CalendarListEntry> result = new ArrayList<>();
       // Iterate through entries in calendar list
       String pageToken = null;
       do {
          CalendarList calendarList = null;
          try {
             calendarList = service.calendarList().list().setPageToken(pageToken).execute();
+            List<CalendarListEntry> items = calendarList.getItems();
+            for (CalendarListEntry calendarListEntry : items) {
+               result.add(calendarListEntry);
+            }
+            pageToken = calendarList.getNextPageToken();
+         } catch (UserRecoverableAuthIOException e) {
+            ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
          } catch (IOException e) {
             throw new RuntimeException(e);
          }
-
-         List<CalendarListEntry> items = calendarList.getItems();
-
-         for (CalendarListEntry calendarListEntry : items) {
-            System.out.println(calendarListEntry.getSummary());
-         }
-         pageToken = calendarList.getNextPageToken();
       } while (pageToken != null);
-      return null;
+      String json = new Gson().toJson(result);
+      return json;
    }
-   public JsonFactory getCalendar(Context context, String calendarId) {
+   public String getCalendar(Context context, String calendarId) {
 
       setService(context);
       // Retrieve a specific calendar list entry
       CalendarListEntry calendarListEntry = null;
       try {
          calendarListEntry = service.calendarList().get(calendarId).execute();
-         JsonFactory jsonCal = calendarListEntry.getFactory();
-         Intent jsonIntent = new Intent(context, context.getClass());
-         jsonIntent.putExtra("CalendarList", jsonCal.toString());
+         String json = new Gson().toJson(calendarListEntry);
+         return json;
       } catch (UserRecoverableAuthIOException e) {
          ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
-         return jsonFactory;
       } catch (IOException e) {
-         throw new RuntimeException(e);
+         e.printStackTrace();
       }
-
-      return jsonFactory;
-
+      return "";
    }
-   public JsonFactory insertCalendar(Context context, String newCalendarID) {
+   public String insertCalendar(Context context, String newCalendarID) {
       if (calendarId==null) {
-         return jsonFactory;
+         return "";
       }
       setService(context);
       // Create a new calendar list entry
@@ -118,12 +122,23 @@ public class CalendarListCl extends AsyncTask<Void, Void, Void> {
       CalendarListEntry createdCalendarListEntry = null;
       try {
          createdCalendarListEntry = service.calendarList().insert(calendarListEntry).execute();
+         String json = new Gson().toJson(createdCalendarListEntry);
+         return json;
       } catch (IOException e) {
-         throw new RuntimeException(e);
+         e.printStackTrace();
       }
-
-      System.out.println(createdCalendarListEntry.getSummary());
-      return jsonFactory;
+      return "";
    }
-
+   // After asynctask
+   @Override
+   protected void onPostExecute(String json) {
+      switch (mtdNr) {
+         case 1:
+            delegate.respListCalList(json);
+         case 2:
+            delegate.respInsertCalList(json);
+         case 3:
+            delegate.respGetCalList(json);
+      }
+   }
 }
