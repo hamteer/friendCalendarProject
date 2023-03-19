@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/icon_finalthicc"
         android:supportsRtl="true"
         android:theme="@style/Theme.FriendCalendar"
-        tools:targetApi="31">
+        android:enableOnBackInvokedCallback="true"
+        tools:targetApi="33">
         <activity
             android:name=".Activities.AddCalendarActivity"
             android:exported="false"
@@ -24,17 +25,7 @@
             android:parentActivityName=".Activities.CalendarActivity" />
         <activity
             android:name=".Activities.CalendarActivity"
-            android:exported="true"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".Activities.DateActivity"
             android:exported="false"
@@ -49,17 +40,25 @@
             android:parentActivityName=".Activities.CalendarActivity" />
         <activity
             android:name=".Activities.FingerprintActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+        <activity
+            android:name=".Activities.NotificationInitializationActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.FingerprintInitializationActivity"
-            android:exported="false"
-            android:parentActivityName=".Activities.NotificationInitializationActivity" />
+            android:exported="false" />
         <activity
             android:name=".Activities.GoogleInitializationActivity"
-            android:exported="false"
-            android:parentActivityName=".Activities.FingerprintInitializationActivity" />
-        <activity
-            android:name=".Activities.NotificationInitializationActivity"
             android:exported="false" />
 
     </application>

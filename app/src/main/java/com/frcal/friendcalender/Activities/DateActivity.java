@@ -14,10 +14,13 @@ public class DateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs",
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                getString(R.string.preference_name),
                 MODE_PRIVATE);
-        boolean fingerprintActive = sharedPreferences.getBoolean("fingerprintSwitchState", false);
-        if (getIntent().getAction() != null && fingerprintActive) {
+        boolean fingerprintActive = sharedPreferences.getBoolean(
+                getString(R.string.fingerprint_preference_name), false);
+        if ((getIntent().getAction() != null && getIntent().getAction().equals(
+                "android.intent.action.VIEW_LOCUS")) && fingerprintActive) {
             startActivity(new Intent(this, FingerprintActivity.class).putExtra(
                     getString(R.string.intent_key), this.getClass().getCanonicalName()));
             finish();

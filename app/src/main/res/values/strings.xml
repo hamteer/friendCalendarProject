@@ -3,9 +3,20 @@
     <string name="mode_switch">Ansicht wechseln</string>
     <string name="dates_of_day">Termine am xx.yy.zzzz</string>
     <string name="title_text">Google Sign-In\nQuickstart</string>
-    <string name="settings_headline">Einstellungen</string>
     <string name="google_login_icon">Login mit Google</string>
-    <string name="fingerprint_switch_text">Fingerabdruck-Login       </string>
+    <string name="fingerprint_switch_text">Fingerabdruck-Login</string>
+
+    <!-- Strings for Settings -->
+    <string name="settings_headline">Einstellungen</string>
+
+    <string name="settings_notifications_switch">Benachrichtigungen</string>
+    <string name="settings_notifications_image_description">Bild einer Benachrichtigungsglocke</string>
+
+    <string name="preference_name">frcalSharedPrefs</string>
+    <string name="first_run_preference_name">firstRun</string>
+    <string name="notifications_preference_name">notificationsAllowed</string>
+    <string name="fingerprint_preference_name">fingerprintSwitchState</string>
+    <string name="google_preference_name">googleSignedIn</string>
 
     <!-- Sign-in status messages -->
     <string name="signed_in_fmt">Signed in as: %s</string>
@@ -98,6 +109,8 @@
     <string name="intent_key">class</string>
 
     <string name="subtitle_fingerprint_activity">Öffnen der %1$s</string>
+    <string name="subtitle_fingerprint_activity_class_not_found">App</string>
+    <string name="subtitle_fingerprint_activity_no_intent_extra">CalendarActivity</string>
 
     <string name="fingerprint_image_description">Bild eines Fingerabdrucks</string>
     <string name="action_description_fingerprint">Drücken, zum Einloggen</string>
@@ -109,7 +122,12 @@
 
     <string name="fingerprint_error">Ein Fehler ist aufgetreten</string>
     <string name="fingerprint_redirection">Erfolgreicher Login, aber aufgrund eines Fehlers Umleitung zum Kalender</string>
-    <string name="fingerprint_no_authentification_method">Keine Authentifizierungsmethode eingerichtet</string>
+    <string name="fingerprint_no_authentification_method_toast">Keine Authentifizierungsmethode eingerichtet</string>
+
+    <string name="fingerprint_no_authentification_method_alert_dialog">Leider ist auf Ihrem Gerät keine Authentifizierungsmethode eingerichtet\nOhne diese können Sie die App nicht öffnen</string>
+    <string name="fingerprint_no_authentification_method_alert_dialog_positive">Einrichten</string>
+    <string name="fingerprint_no_authentification_method_alert_dialog_negative">Abbrechen</string>
+
 
     <!-- Strings for Notifications -->
     <string name="channel_id">default</string>
@@ -119,5 +137,26 @@
     <string name="notification_title">Test</string>
     <string name="notification_text">Das ist ein Test</string>
 
+
+    <!-- Strings for Initialization -->
+    <string name="notifications_initialization_subtitle">Möchten Sie Benachrichtigungen aktivieren?</string>
+    <string name="notifications_initialization_description">Über Benachrichtigungen können Sie sich 15 Minuten vor einem Termin an diesen erinnern lassen\nSie können Ihre Wahl jederzeit in den Einstellungen ändern</string>
+    <string name="notifications_initialization_image_description">Bild einer Glocke als Symbol von Benachrichtigungen</string>
+    <string name="notifications_initialization_agree_button">Benachrichtigungen aktivieren</string>
+    <string name="notifications_initialization_disagree_button">Ohne Benachrichtigungen fortfahren</string>
+    <string name="notifications_initialization_alert_dialog">Ohne Benachrichtigungen fehlen der App einige elementare Eigenschaften\nMöchten Sie dennoch fortfahren?</string>
+    <string name="notifications_initialization_alert_dialog_positive">Ohne Benachrichtigungen fortfahren</string>
+    <string name="notifications_initialization_alert_dialog_negative">Benachrichtigungen einrichten</string>
+
+    <string name="fingerprint_initialization_subtitle">Möchten Sie eine Fingerabdrucksperre einrichten</string>
+    <string name="fingerprint_initialization_description">Mithilfe der Fingerabdrucksperre können Sie Ihre Daten vor unerwünschten fremden Eingriffen schützen\nSie können Ihre Wahl jederzeit in den Einstellungen ändern</string>
+    <string name="fingerprint_initialization_image_description">Bild eines Fingerabdrucks</string>
+    <string name="fingerprint_initialization_agree_button">Fingerabdrucksperre einrichten</string>
+    <string name="fingerprint_initialization_disagree_button">Keine Fingerabdrucksperre einrichten</string>
+
+    <string name="google_initialization_subtitle">Möchten Sie Ihr Google-Konto verknüpfen?</string>
+    <string name="google_initialization_description">Wenn Sie Ihr Google-Konto verknüpfen, können Sie leichter Ihre Termine synchronisieren und mit Freunden teilen\nSie können Ihre Wahl jederzeit in den Einstellungen ändern</string>
+    <string name="google_initialization_agree_button">Bei Google anmelden</string>
+    <string name="google_initialization_disagree_button">Nicht mit Google-Konto verknüpfen</string>
 
 </resources>

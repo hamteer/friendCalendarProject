@@ -1,5 +1,7 @@
 package com.frcal.friendcalender.Notifications;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,6 +10,7 @@ import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
@@ -28,21 +31,25 @@ public class NotificationPublisher extends BroadcastReceiver {
         notificationId = id;
     }
 
-    private void buildNotification(Context context) {
+    public void buildNotification() {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(
-                context);
-        if (ActivityCompat.checkSelfPermission(context,
+                activityContext);
+        SharedPreferences sharedPreferences = activityContext.getSharedPreferences(
+                activityContext.getString(R.string.preference_name), MODE_PRIVATE);
+        boolean notificationsActive = sharedPreferences.getBoolean(
+                activityContext.getString(R.string.notifications_preference_name), false);
+        if (notificationsActive && ActivityCompat.checkSelfPermission(activityContext,
                 Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            Intent resultIntent = new Intent(context, DateActivity.class);
-            resultIntent.setAction("android.intent.action.VIEW");
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+            Intent resultIntent = new Intent(activityContext, DateActivity.class);
+            resultIntent.setAction("android.intent.action.VIEW_LOCUS");
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(activityContext);
             stackBuilder.addNextIntentWithParentStack(resultIntent);
             PendingIntent resultPendingIntent =
                     stackBuilder.getPendingIntent(0,
                             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
-                    context.getString(R.string.channel_id))
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(activityContext,
+                    activityContext.getString(R.string.channel_id))
                     .setSmallIcon(R.drawable.baseline_calendar_month_black_24)
                     .setContentTitle(activityContext.getString(R.string.notification_title))
                     .setContentText(activityContext.getString(R.string.notification_text))
@@ -73,6 +80,6 @@ public class NotificationPublisher extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        buildNotification(context);
+        buildNotification();
     }
 }

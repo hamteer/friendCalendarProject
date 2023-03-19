@@ -1,16 +1,24 @@
 package com.frcal.friendcalender.Activities;
 
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,9 +49,35 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_settings);
 
         //For shared Preferences
+        Switch notificationsSwitch = findViewById(R.id.notifications_switch);
         Switch fingerprintSwitch = findViewById(R.id.fingerprintSwitch);
+
         SharedPreferences prefs = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
+        boolean notificationsActive = prefs.getBoolean(
+                getString(R.string.notifications_preference_name), false);
         boolean switchState = prefs.getBoolean("fingerprintSwitchState", false);
+
+        setNotificationsState(notificationsActive);
+        notificationsSwitch.setOnCheckedChangeListener(
+                (buttonView, isChecked) -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                        if (isChecked) {
+                            ActivityResultLauncher<String> permissionRequest =
+                                    registerForActivityResult(
+                                            new ActivityResultContracts.RequestPermission(),
+                                            this::setNotificationsState);
+                            permissionRequest.launch(
+                                    Manifest.permission.POST_NOTIFICATIONS);
+                        } else {
+                            setNotificationsState(false);
+                        }
+                    } else {
+                        setNotificationsState(isChecked);
+                    }
+                });
+
         fingerprintSwitch.setChecked(switchState);
         fingerprintSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -67,14 +101,37 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         // configure_signin
         // Request the user's ID token to identify the user to the backend.
         // This contains the user's basic profile (name, profile picture URL, etc)
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("764959564302-kk5n95aabkm0sj9eae9n28l1neit61i9.apps.googleusercontent.com")
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(
+                        "764959564302-kk5n95aabkm0sj9eae9n28l1neit61i9.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
         // Build GoogleAPIClient with the Google Sign-In API and the above options.
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
+    }
+
+    private void setNotificationsState(boolean allowed) {
+        Switch notificationsSwitch = findViewById(R.id.notifications_switch);
+        ImageView notificationImage = findViewById(R.id.notifications_switch_image);
+
+        SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_name),
+                MODE_PRIVATE);
+
+        if (allowed) {
+            notificationImage.setImageDrawable(AppCompatResources.getDrawable(this,
+                    R.drawable.baseline_notifications_active_48));
+        } else {
+            notificationImage.setImageDrawable(
+                    AppCompatResources.getDrawable(this, R.drawable.baseline_notifications_off_48));
+        }
+
+        notificationsSwitch.setChecked(allowed);
+        prefs.edit().putBoolean(getString(
+                        R.string.notifications_preference_name),
+                allowed).apply();
     }
 
     //For Google-Login with Token
@@ -88,17 +145,19 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void refreshIdToken() {
         // Attempt to silently refresh the GoogleSignInAccount.
-        // If the GoogleSignInAccount already has a valid token this method may complete immediately.
+        // If the GoogleSignInAccount already has a valid token this method may complete
+        // immediately.
         //
         // If the user has not previously signed in on this device or the sign-in has expired,
         // this asynchronous branch will attempt to sign in the user silently and get a valid
         // ID token. Cross-device single sign on will occur in this branch.
-        googleSignInClient.silentSignIn().addOnCompleteListener(this, new OnCompleteListener<GoogleSignInAccount>() {
-            @Override
-            public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
-                handleSignInResult(task);
-            }
-        });
+        googleSignInClient.silentSignIn().addOnCompleteListener(this,
+                new OnCompleteListener<GoogleSignInAccount>() {
+                    @Override
+                    public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                        handleSignInResult(task);
+                    }
+                });
     }
 
     private void handleSignInResult(@NonNull Task<GoogleSignInAccount> completedTask) {
@@ -124,12 +183,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void revokeAccess() {
-        googleSignInClient.revokeAccess().addOnCompleteListener(this, new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                updateUI(null);
-            }
-        });
+        googleSignInClient.revokeAccess().addOnCompleteListener(this,
+                new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        updateUI(null);
+                    }
+                });
     }
 
     @Override
