@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class CalendarEventList extends AsyncTask<Void, Void, String> {
+public class CalendarEventList extends AsyncTask<Void, Void, List<String>> {
     private static final HttpTransport httpTransport = new NetHttpTransport();
     private static final int REQUEST_AUTHORIZATION = 1;
     private static final int REQUEST_CALENDAR = 2;
@@ -43,7 +43,7 @@ public class CalendarEventList extends AsyncTask<Void, Void, String> {
 
 
     @Override
-    protected String doInBackground(Void... voids) {
+    protected List<String> doInBackground(Void... voids) {
         switch (this.mtdNr) {
             case 2:
                 getEventList();
@@ -75,7 +75,7 @@ public class CalendarEventList extends AsyncTask<Void, Void, String> {
     }
 
 
-    public String getEventList() {
+    public List<String> getEventList() {
 
 // Iterate over the events in the specified calendar
         String pageToken = null;
@@ -91,19 +91,19 @@ public class CalendarEventList extends AsyncTask<Void, Void, String> {
                 pageToken = events.getNextPageToken();
                 jsonResponses.add(events.toPrettyString());
             } while (pageToken != null);
-            return jsonResponses.toString();
+            return jsonResponses;
         } catch (UserRecoverableAuthIOException e) {
             ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException io) {
             io.printStackTrace();
         }
-        return "";
+        return null;
     }
     @Override
-    protected void onPostExecute(String json) {
+    protected void onPostExecute(List<String> json) {
         switch (mtdNr) {
             case 2:
-                delegate.respInsertCalList(json);
+                delegate.respGetEventList(json);
 
         }
     }

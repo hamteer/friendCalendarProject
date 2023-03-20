@@ -108,6 +108,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> {
                 break;
             case 4:
                 deleteEvent();
+                break;
             case 5:
                 updateEvent();
                 break;
@@ -186,6 +187,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> {
         try {
             event = this.service.events().insert(this.calendarID, event).execute();
             JsonFactory jsonSetEvent = event.getFactory();
+
             return jsonSetEvent.toString();
         } catch (UserRecoverableAuthIOException e) {
             ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);

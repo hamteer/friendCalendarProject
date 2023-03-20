@@ -1,5 +1,6 @@
 package com.frcal.friendcalender.Activities;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.frcal.friendcalender.RestAPIClient.AsyncCalEvent;
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
 
 import android.widget.Button;
@@ -46,7 +48,7 @@ import java.util.TimeZone;
 //  - Notification
 
 
-public class AddDateActivity extends AppCompatActivity implements EventManager.EventManagerListener {
+public class AddDateActivity extends AppCompatActivity implements EventManager.EventManagerListener, AsyncCalEvent<String> {
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
     String title, desc, loc, dateString, fromString, toString;
     DateTime from, to;
@@ -217,6 +219,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                /* LinkedList <String> attendees = new LinkedList<>();
                 attendees.add("freundeskalender.kerim@gmail.com"); */
             CalendarEvents event3 = new CalendarEvents(mtdNr, this, calendarID, summary, description, location, startTime, endTime /*, attendees */);
+            event3.delegate=this;
             event3.setConfig();
             event3.execute();
         } catch (Exception e) {
@@ -259,4 +262,23 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
     }
 
 
+    @Override
+    public void respGetEvent(String res) {
+
+    }
+
+    @Override
+    public void respInsertEvent(String res) {
+
+    }
+
+    @Override
+    public void respDeleteEvent(String res) {
+
+    }
+
+    @Override
+    public void respUpdateEvent(String res) {
+
+    }
 }

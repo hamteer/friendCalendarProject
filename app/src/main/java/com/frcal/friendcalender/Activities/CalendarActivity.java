@@ -1,7 +1,5 @@
 package com.frcal.friendcalender.Activities;
 
-import static java.security.AccessController.getContext;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +20,8 @@ import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 import com.frcal.friendcalender.Decorators.EventDecorator;
 import com.frcal.friendcalender.R;
+import com.frcal.friendcalender.RestAPIClient.AsyncCalLEventList;
+import com.frcal.friendcalender.RestAPIClient.CalendarEventList;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.api.client.util.DateTime;
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -33,16 +32,21 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import com.frcal.friendcalender.Decorators.OneDayDecorator;
 
-import org.checkerframework.checker.units.qual.A;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 // TODO:
 //  - API-Anbindung
 
-public class CalendarActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener {
+public class CalendarActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener, AsyncCalLEventList {
 
     FloatingActionButton addButton, addCalButton, addDateButton;
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator(this);
@@ -220,5 +224,110 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         calendarView.removeDecorators();
         calendarView.addDecorator(new EventDecorator(Color.RED, daysToDecorate));
     }
+    public void evaluateJsonEventList(List<String> jsonList) {
 
+        List<String> eventIDList = new ArrayList<>();
+        List<String> summaryList = new ArrayList<>();
+        List<String> locationList = new ArrayList<>();
+        List<DateTime> startTimeList = new ArrayList<>();
+        List<DateTime> endTimeList = new ArrayList<>();
+        //   String calenderID;
+        try {
+            for (String jsonString : jsonList) {
+                JSONObject json = new JSONObject(jsonString);
+                // calenderID = json.getString("id");
+                JSONArray items = json.getJSONArray("items");
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject event = items.getJSONObject(i);
+                    eventIDList.add(event.getString("id"));
+                    summaryList.add(event.getString("summary"));
+                    locationList.add(event.getString("location"));
+
+                    JSONObject startObj = event.getJSONObject("start");
+                    String startDateTime = startObj.getString("dateTime");
+                    String[] parts = startDateTime.split("T");
+                    String startDate = parts[0];
+                    String startTime = parts[1].substring(0, 8);
+                    startTimeList.add(convertDateTime(startTime, startDate));
+
+                    JSONObject endObj = event.getJSONObject("ends");
+                    String endDateTime = endObj.getString("dateTime");
+                    String endDate = parts[0];
+                    String endTime = parts[1].substring(0, 8);
+                    endTimeList.add(convertDateTime(endTime, endDate));
+
+
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    public void getEventList() {
+        CalendarEventList event2 = new CalendarEventList(2, this, "primary");
+        event2.delegate=this;
+        event2.setConfig();
+        event2.execute();
+
+
+    }
+
+    public DateTime convertDateTime(String time, String date) {
+        String DateTimeString = date + "" + time;
+        LocalDateTime DateTime = LocalDateTime.parse(DateTimeString);
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zonedDateTime = DateTime.atZone(zoneId);
+        // Konvertieren Sie das ZonedDateTime-Objekt in ein Instant-Objekt
+        Instant instant = zonedDateTime.toInstant();
+
+        // Konvertieren Sie das Instant-Objekt in ein DateTime-Objekt mit der Default-Zeitzone
+        DateTime dateTime = new DateTime(instant.toEpochMilli());
+
+        return dateTime;
+
+    }
+
+
+    @Override
+    public void respGetEventList(List res) {
+        List<String> eventIDList = new ArrayList<>();
+        List<String> summaryList = new ArrayList<>();
+        List<String> locationList = new ArrayList<>();
+        List<DateTime> startTimeList = new ArrayList<>();
+        List<DateTime> endTimeList = new ArrayList<>();
+        //   String calenderID;
+        try {
+            for (Object jsonString : res) {
+                JSONObject json = new JSONObject(jsonString.toString());
+                // calenderID = json.getString("id");
+                JSONArray items = json.getJSONArray("items");
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject event = items.getJSONObject(i);
+                    eventIDList.add(event.getString("id"));
+                    summaryList.add(event.getString("summary"));
+                    locationList.add(event.getString("location"));
+
+                    JSONObject startObj = event.getJSONObject("start");
+                    String startDateTime = startObj.getString("dateTime");
+                    String[] parts = startDateTime.split("T");
+                    String startDate = parts[0];
+                    String startTime = parts[1].substring(0, 8);
+                    startTimeList.add(convertDateTime(startTime, startDate));
+
+                    JSONObject endObj = event.getJSONObject("ends");
+                    String endDateTime = endObj.getString("dateTime");
+                    String endDate = parts[0];
+                    String endTime = parts[1].substring(0, 8);
+                    endTimeList.add(convertDateTime(endTime, endDate));
+
+
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+    }
 }

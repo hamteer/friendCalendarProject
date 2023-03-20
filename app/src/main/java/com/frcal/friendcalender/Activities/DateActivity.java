@@ -2,6 +2,7 @@ package com.frcal.friendcalender.Activities;
 
 import static com.frcal.friendcalender.Activities.AddDateActivity.createRFCString;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.frcal.friendcalender.DataAccess.EventManager;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 import com.frcal.friendcalender.R;
+import com.frcal.friendcalender.RestAPIClient.AsyncCalEvent;
 import com.google.api.client.util.DateTime;
 
 import java.text.SimpleDateFormat;
@@ -38,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // TODO: all
-public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener {
+public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener, AsyncCalEvent {
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
     String title, desc, loc, dateString, fromString, toString;
     DateTime from, to;
@@ -158,7 +160,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 eventManager.deleteEvent(currentEvent);
                 // TODO:
                 //  - API-Call: delete this event
-                deleteEvent();
+                deleteEvent(4,"primary",currentEvent.googleEventID);
                 //  - delete the notification for this event, if it exists
                 Toast.makeText(DateActivity.this, "Termin gelöscht", Toast.LENGTH_SHORT).show();
                 finish();
@@ -183,6 +185,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                /* LinkedList <String> attendees = new LinkedList<>();
                 attendees.add("freundeskalender.kerim@gmail.com"); */
             CalendarEvents event5 = new CalendarEvents(5, this, "andoidprojekt1@gmail.com", summary, description, location, startTime, endTime /*, attendees */);
+            event5.delegate=this;
             event5.setConfig();
             event5.execute();
         } catch (Exception e) {
@@ -193,76 +196,33 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     }
 
-    public void deleteEvent() {
+    public void deleteEvent(Integer mtdNr,  String calendarID, String eventID) {
         CalendarEvents event4 = new CalendarEvents(4, this, "Hier KalenderID", "Hier Event ID");
+        event4.delegate=this;
         event4.setConfig();
         event4.execute();
 
 
-    }
-
-    public void getEventList() {
-        CalendarEventList event2 = new CalendarEventList(2, this, "Hier KalenderID");
-        event2.setConfig();
-        event2.execute();
-
 
     }
 
-    public void evaluateJsonEventList(List<String> jsonList) {
-
-        List<String> eventIDList = new ArrayList<>();
-        List<String> summaryList = new ArrayList<>();
-        List<String> locationList = new ArrayList<>();
-        List<DateTime> startTimeList = new ArrayList<>();
-        List<DateTime> endTimeList = new ArrayList<>();
-        //   String calenderID;
-        try {
-            for (String jsonString : jsonList) {
-                JSONObject json = new JSONObject(jsonString);
-                // calenderID = json.getString("id");
-                JSONArray items = json.getJSONArray("items");
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject event = items.getJSONObject(i);
-                    eventIDList.add(event.getString("id"));
-                    summaryList.add(event.getString("summary"));
-                    locationList.add(event.getString("location"));
-
-                    JSONObject startObj = event.getJSONObject("start");
-                    String startDateTime = startObj.getString("dateTime");
-                    String[] parts = startDateTime.split("T");
-                    String startDate = parts[0];
-                    String startTime = parts[1].substring(0, 8);
-                    startTimeList.add(convertDateTime(startTime, startDate));
-
-                    JSONObject endObj = event.getJSONObject("ends");
-                    String endDateTime = endObj.getString("dateTime");
-                    String endDate = parts[0];
-                    String endTime = parts[1].substring(0, 8);
-                    endTimeList.add(convertDateTime(endTime, endDate));
-
-
-                }
-            }
-        } catch (Exception e) {
-
-        }
+    @Override
+    public void respGetEvent(Object res) {
 
     }
 
+    @Override
+    public void respInsertEvent(Object res) {
 
-    public DateTime convertDateTime(String time, String date) {
-        String DateTimeString = date + "" + time;
-        LocalDateTime DateTime = LocalDateTime.parse(DateTimeString);
-        ZoneId zoneId = ZoneId.systemDefault();
-        ZonedDateTime zonedDateTime = DateTime.atZone(zoneId);
-        // Konvertieren Sie das ZonedDateTime-Objekt in ein Instant-Objekt
-        Instant instant = zonedDateTime.toInstant();
+    }
 
-        // Konvertieren Sie das Instant-Objekt in ein DateTime-Objekt mit der Default-Zeitzone
-        DateTime dateTime = new DateTime(instant.toEpochMilli());
+    @Override
+    public void respDeleteEvent(Object res) {
 
-        return dateTime;
+    }
+
+    @Override
+    public void respUpdateEvent(Object res) {
 
     }
 }

@@ -1,7 +1,9 @@
 package com.frcal.friendcalender.RestAPIClient;
 
+import java.util.List;
+
 public interface AsyncCalLEventList<T> {
 
-    void respInsertCalList(T res);
+    void respGetEventList(List<T> res);
 
 }
