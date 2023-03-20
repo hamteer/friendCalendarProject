@@ -62,18 +62,14 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs",
-                MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
         boolean fingerprintActive = sharedPreferences.getBoolean("fingerprintSwitchState", false);
 //        boolean firstRunOfApp = sharedPreferences.getBoolean("firstRun", true);
 //        if (firstRunOfApp) {
 //            startActivity(new Intent(this, NotificationInitializationActivity.class));
 //        } else
-        if ((getIntent().getAction() != null && (getIntent().getAction().equals(
-                "android.intent.action.MAIN") || getIntent().getAction().equals(
-                "android.intent.action.VIEW_LOCUS"))) && fingerprintActive) {
-            startActivity(new Intent(this, FingerprintActivity.class).putExtra(
-                    getString(R.string.intent_key), this.getClass().getCanonicalName()));
+        if ((getIntent().getAction() != null && (getIntent().getAction().equals("android.intent.action.MAIN") || getIntent().getAction().equals("android.intent.action.VIEW_LOCUS"))) && fingerprintActive) {
+            startActivity(new Intent(this, FingerprintActivity.class).putExtra(getString(R.string.intent_key), this.getClass().getCanonicalName()));
             finish();
         }
         setContentView(R.layout.activity_calendar);
@@ -85,9 +81,8 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     @Override
     protected void onResume() {
         super.onResume();
-        //Hier APi Aufruf liste
-        calenderManager.requestUpdate();
-        eventManager.requestUpdate();
+        getEventList();
+
     }
 
     private void initUI() {
@@ -129,9 +124,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         // initialer Setup des CalendarView
         AndroidThreeTen.init(this);
         calendarView = (MaterialCalendarView) findViewById(R.id.calendarView);
-        calendarView.state().edit()
-                .setCalendarDisplayMode(CalendarMode.MONTHS)
-                .commit();
+        calendarView.state().edit().setCalendarDisplayMode(CalendarMode.MONTHS).commit();
         // set calendar arrows to white if darkmode is enabled:
         int nightModeFlags = getApplicationContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         switch (nightModeFlags) {
@@ -153,8 +146,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
             @Override
             public void onClick(View v) {
                 if (calendarView.getCalendarMode() == CalendarMode.WEEKS) {
-                    calendarView.state().edit().setCalendarDisplayMode(
-                            CalendarMode.MONTHS).commit();
+                    calendarView.state().edit().setCalendarDisplayMode(CalendarMode.MONTHS).commit();
                 } else {
                     calendarView.state().edit().setCalendarDisplayMode(CalendarMode.WEEKS).commit();
                 }
@@ -168,15 +160,14 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
 
 
         // Grafische Aufbereitung von Tagen, an denen Termine vorhanden sind
-        calenderManager = new CalenderManager(getApplicationContext(),this);
-        eventManager = new EventManager(getApplicationContext(),this);
+        calenderManager = new CalenderManager(getApplicationContext(), this);
+        eventManager = new EventManager(getApplicationContext(), this);
 
 
         // OnClickListener für Tage
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget,
-                                       @NonNull CalendarDay date, boolean selected) {
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 // create Intent, put date in extras, start SingleDateActivity
                 Log.d("FrCal", "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
                 Intent intent = new Intent(getApplicationContext(), SingleDayActivity.class);
@@ -202,13 +193,14 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     // gets called when CalenderList gets updated
     @Override
     public void onCalenderListUpdated() {
-        ArrayList <Calender> calenderArrayList = calenderManager.getCalenders();
+        ArrayList<Calender> calenderArrayList = calenderManager.getCalenders();
         Log.d("CalenderActivity", "onCalenderListUpdated() called");
     }
+
     // gets called when EventList gets updated
     @Override
     public void onEventListUpdated() {
-        ArrayList <CalenderEvent> eventArrayList = eventManager.getEvents();
+        ArrayList<CalenderEvent> eventArrayList = eventManager.getEvents();
         Log.d("CalenderActivity", "onEventListUpdated() called");
         ArrayList<CalendarDay> daysToDecorate = new ArrayList<>();
         for (CalenderEvent event : eventArrayList) {
@@ -224,6 +216,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         calendarView.removeDecorators();
         calendarView.addDecorator(new EventDecorator(Color.RED, daysToDecorate));
     }
+
     public void evaluateJsonEventList(List<String> jsonList) {
 
         List<String> eventIDList = new ArrayList<>();
@@ -267,7 +260,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
 
     public void getEventList() {
         CalendarEventList event2 = new CalendarEventList(2, this, "primary");
-        event2.delegate=this;
+        event2.delegate = this;
         event2.setConfig();
         event2.execute();
 
@@ -295,6 +288,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         List<String> eventIDList = new ArrayList<>();
         List<String> summaryList = new ArrayList<>();
         List<String> locationList = new ArrayList<>();
+        List<String> descriptionList = new ArrayList<>();
         List<DateTime> startTimeList = new ArrayList<>();
         List<DateTime> endTimeList = new ArrayList<>();
         //   String calenderID;
@@ -308,6 +302,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
                     eventIDList.add(event.getString("id"));
                     summaryList.add(event.getString("summary"));
                     locationList.add(event.getString("location"));
+                    descriptionList.add(event.getString("description"));
 
                     JSONObject startObj = event.getJSONObject("start");
                     String startDateTime = startObj.getString("dateTime");
@@ -322,9 +317,14 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
                     String endTime = parts[1].substring(0, 8);
                     endTimeList.add(convertDateTime(endTime, endDate));
 
+                    CalenderEvent eventDB = new CalenderEvent("primary", event.getString("id"), event.getString("id"), convertDateTime(startTime, startDate), convertDateTime(endTime, endDate), event.getString("description"), event.getString("summary"), event.getString("location"), null, null);
+                    eventManager.addEvent(eventDB);
+
+                    calenderManager.requestUpdate();
+
 
                 }
-            }
+            } eventManager.requestUpdate();
         } catch (Exception e) {
 
         }

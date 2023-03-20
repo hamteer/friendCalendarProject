@@ -184,7 +184,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
                /* LinkedList <String> attendees = new LinkedList<>();
                 attendees.add("freundeskalender.kerim@gmail.com"); */
-            CalendarEvents event5 = new CalendarEvents(mtdNr, this, "primary", summary, description, location, startTime, endTime /*, attendees */);
+            CalendarEvents event5 = new CalendarEvents(mtdNr, this, calendarID, summary, description, location, startTime, endTime /*, attendees */);
             event5.delegate=this;
             event5.setConfig();
             event5.execute();

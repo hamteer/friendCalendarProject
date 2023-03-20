@@ -1,9 +1,12 @@
 package com.frcal.friendcalender.RestAPIClient;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -64,8 +67,10 @@ public class CalendarEventList extends AsyncTask<Void, Void, List<String>> {
 
     public void setConfig() {
         String[] SCOPES = {"https://www.googleapis.com/auth/calendar"};
-        //SharedPreferences settings = getSharedPreferences(Context.MODE_PRIVATE);
-        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(context, Arrays.asList(SCOPES)).setSelectedAccount(new Account("andoidprojekt1@gmail.com ", "klaus"));
+        SharedPreferences sh_clid = context.getSharedPreferences("MainCal-ID", MODE_PRIVATE);
+        sh_clid.getString("Cal-ID", "");
+
+        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(context, Arrays.asList(SCOPES)).setSelectedAccount(new Account(sh_clid.getString("Cal-ID", ""), "klaus"));
         // Calender client
         Calendar service = new Calendar.Builder(httpTransport, jsonFactory, credential).setApplicationName(application_name).build();
 
