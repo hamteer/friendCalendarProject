@@ -26,12 +26,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class CalendarEventList extends AsyncTask<Void, Void, Void> {
+public class CalendarEventList extends AsyncTask<Void, Void, String> {
     private static final HttpTransport httpTransport = new NetHttpTransport();
     private static final int REQUEST_AUTHORIZATION = 1;
     private static final int REQUEST_CALENDAR = 2;
     private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
     private static final String application_name = "My Calendar App";
+
+    public AsyncCalLEventList delegate = null;
     private Context context;
     // <editor-fold desc="Attributes">
     private String calendarID;
@@ -41,7 +43,7 @@ public class CalendarEventList extends AsyncTask<Void, Void, Void> {
 
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected String doInBackground(Void... voids) {
         switch (this.mtdNr) {
             case 2:
                 getEventList();
@@ -51,11 +53,11 @@ public class CalendarEventList extends AsyncTask<Void, Void, Void> {
         }
         return null;
     }
+
     public CalendarEventList(Integer mtdNr, Context context, String calendarID) {
         this.mtdNr = mtdNr;
         this.context = context;
         this.calendarID = calendarID;
-
 
 
     }
@@ -65,8 +67,7 @@ public class CalendarEventList extends AsyncTask<Void, Void, Void> {
         //SharedPreferences settings = getSharedPreferences(Context.MODE_PRIVATE);
         GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(context, Arrays.asList(SCOPES)).setSelectedAccount(new Account("andoidprojekt1@gmail.com ", "klaus"));
         // Calender client
-        Calendar service = new Calendar.Builder(httpTransport, jsonFactory, credential)
-                .setApplicationName(application_name).build();
+        Calendar service = new Calendar.Builder(httpTransport, jsonFactory, credential).setApplicationName(application_name).build();
 
         this.service = service;
 
@@ -97,5 +98,13 @@ public class CalendarEventList extends AsyncTask<Void, Void, Void> {
             io.printStackTrace();
         }
         return "";
+    }
+    @Override
+    protected void onPostExecute(String json) {
+        switch (mtdNr) {
+            case 2:
+                delegate.respInsertCalList(json);
+
+        }
     }
 }

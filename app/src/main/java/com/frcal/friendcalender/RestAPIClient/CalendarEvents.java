@@ -25,10 +25,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class CalendarEvents extends AsyncTask<Void, Void, Void> {
+public class CalendarEvents extends AsyncTask<Void, Void, String> {
     private static final HttpTransport httpTransport = new NetHttpTransport();
     private static final int REQUEST_AUTHORIZATION = 1;
     private static final int REQUEST_CALENDAR = 2;
+    public AsyncCalEvent delegate = null;
     private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
     private static final String application_name = "My Calendar App";
     private Context context;
@@ -122,8 +123,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
         //SharedPreferences settings = getSharedPreferences(Context.MODE_PRIVATE);
         GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(context, Arrays.asList(SCOPES)).setSelectedAccount(new Account("andoidprojekt1@gmail.com ", "klaus"));
         // Calender client
-        Calendar service = new Calendar.Builder(httpTransport, jsonFactory, credential)
-                .setApplicationName(application_name).build();
+        Calendar service = new Calendar.Builder(httpTransport, jsonFactory, credential).setApplicationName(application_name).build();
 
         this.service = service;
 
@@ -147,7 +147,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
             io.printStackTrace();
         }
     }
-
+/*
     public String getEventList() {
 
 // Iterate over the events in the specified calendar
@@ -168,19 +168,14 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
             io.printStackTrace();
         }
         return "";
-    }
+    } */
 
     public String setEvent() {
-        Event event = new Event()
-                .setSummary(this.summary)
-                .setLocation(this.location)
-                .setDescription(this.description);
+        Event event = new Event().setSummary(this.summary).setLocation(this.location).setDescription(this.description);
 
-        EventDateTime start = new EventDateTime()
-                .setDateTime(this.startTime);
+        EventDateTime start = new EventDateTime().setDateTime(this.startTime);
         event.setStart(start);
-        EventDateTime end = new EventDateTime()
-                .setDateTime(this.endTime);
+        EventDateTime end = new EventDateTime().setDateTime(this.endTime);
         event.setEnd(end);
 
        /* EventAttendee[] attendees = new EventAttendee[this.attendees.size()];
@@ -191,7 +186,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
         try {
             event = this.service.events().insert(this.calendarID, event).execute();
             JsonFactory jsonSetEvent = event.getFactory();
-            return event.toString();
+            return jsonSetEvent.toString();
         } catch (UserRecoverableAuthIOException e) {
             ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException io) {
@@ -205,7 +200,8 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
         try {
             // Retrieve an event
             Event event = this.service.events().get(this.calendarID, this.eventID).execute();
-            return event.toString();
+            JsonFactory jsonSetEvent = event.getFactory();
+            return jsonSetEvent.toString();
         } catch (UserRecoverableAuthIOException e) {
             ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException io) {
@@ -222,19 +218,17 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
             Event event = service.events().get(this.calendarID, this.eventID).execute();
 
             // Make a change
-            event.setSummary(this.summary)
-                    .setLocation(this.location)
-                    .setDescription(this.description);
+            event.setSummary(this.summary).setLocation(this.location).setDescription(this.description);
 
-            EventDateTime start = new EventDateTime()
-                    .setDateTime(this.startTime);
+            EventDateTime start = new EventDateTime().setDateTime(this.startTime);
             event.setStart(start);
-            EventDateTime end = new EventDateTime()
-                    .setDateTime(this.endTime);
+            EventDateTime end = new EventDateTime().setDateTime(this.endTime);
             event.setEnd(end);
 
             // Update the event
             Event updatedEvent = service.events().update(this.calendarID, event.getId(), event).execute();
+            JsonFactory jsonSetEvent = event.getFactory();
+            return jsonSetEvent.toString();
         } catch (UserRecoverableAuthIOException e) {
             ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException io) {
@@ -242,6 +236,18 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
         }
         return "";
     }
-
+    @Override
+    protected void onPostExecute(String json) {
+        switch (mtdNr) {
+            case 1:
+                delegate.respGetEvent(json);
+            case 3:
+                delegate.respInsertEvent(json);
+            case 4:
+                delegate.respDeleteEvent(json);
+            case 5:
+                delegate.respUpdateEvent(json);
+        }
+    }
 
 }
