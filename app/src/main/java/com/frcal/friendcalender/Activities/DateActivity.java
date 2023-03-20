@@ -21,6 +21,7 @@ import com.google.api.client.util.DateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import com.frcal.friendcalender.RestAPIClient.CalendarEventList;
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
 import com.google.api.client.util.DateTime;
@@ -46,6 +47,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     EventManager eventManager;
     CalenderEvent currentEvent;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +79,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         saveBtn = findViewById(R.id.edit_date_save_btn);
         deleteBtn = findViewById(R.id.edit_date_delete_btn);
 
-        eventManager = new EventManager(getApplicationContext(),this);
+        eventManager = new EventManager(getApplicationContext(), this);
     }
 
     /**
@@ -90,12 +92,13 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         editTitle.setText(currentEvent.summary);
         // transform to dd.mm.yyyy
         String startTimeString = currentEvent.startTime.toString();
-        String displayDate = startTimeString.substring(8,10) + "." + startTimeString.substring(5,7) + "." + startTimeString.substring(0,4);
+        String displayDate = startTimeString.substring(8, 10) + "." + startTimeString.substring(5, 7) + "." + startTimeString.substring(0, 4);
         editDate.setText(displayDate);
         // transform to hh:mm
-        String displayStartTime = startTimeString.substring(11,13) + ":" + startTimeString.substring(14,16);
+        String displayStartTime = startTimeString.substring(11, 13) + ":" + startTimeString.substring(14, 16);
         String endTimeString = currentEvent.endTime.toString();
-        String displayEndTime = endTimeString.substring(11,13) + ":" + endTimeString.substring(14,16);;
+        String displayEndTime = endTimeString.substring(11, 13) + ":" + endTimeString.substring(14, 16);
+        ;
         editTimeFrom.setText(displayStartTime);
         editTimeTo.setText(displayEndTime);
         editDesc.setText(currentEvent.description);
@@ -111,7 +114,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 if (title.equals("")) title = "Mein Termin";
                 desc = editDesc.getText().toString();
                 loc = editLoc.getText().toString();
-                dateString =  editDate.getText().toString();
+                dateString = editDate.getText().toString();
                 fromString = editTimeFrom.getText().toString();
                 toString = editTimeTo.getText().toString();
 
@@ -130,18 +133,20 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                     return;
                 }
 
-                CalenderEvent updatedEvent = new CalenderEvent(currentEvent.calenderID, currentEvent.eventID, currentEvent.googleEventID,from,to,desc,title,loc, currentEvent.creator,new DateTime(System.currentTimeMillis()));
+                CalenderEvent updatedEvent = new CalenderEvent(currentEvent.calenderID, currentEvent.eventID, currentEvent.googleEventID, from, to, desc, title, loc, currentEvent.creator, new DateTime(System.currentTimeMillis()));
                 eventManager.updateEvent(updatedEvent);
                 if (googleSync.isChecked()) {
                     // TODO:
                     //  - API-Call: use previously created CalenderEvent object to also update the event in the user's Google Calendar
+                    updateEvent(5, "primary", title, desc, loc, from, to);
+
                 }
 
                 if (notif.isChecked()) {
                     // TODO:
                     //  - set Notification for this Event, if it did not already exist beforehand
                 }
-                Toast.makeText(DateActivity.this,"Termin gespeichert", Toast.LENGTH_LONG).show();
+                Toast.makeText(DateActivity.this, "Termin gespeichert", Toast.LENGTH_LONG).show();
                 finish();
             }
         });
@@ -153,6 +158,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 eventManager.deleteEvent(currentEvent);
                 // TODO:
                 //  - API-Call: delete this event
+                deleteEvent();
                 //  - delete the notification for this event, if it exists
                 Toast.makeText(DateActivity.this, "Termin gelöscht", Toast.LENGTH_SHORT).show();
                 finish();
@@ -166,38 +172,17 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     }
 
-    public void updateEvent() {
-        //Woher bekomme ich die Kalender ID bei AddDateActivity?
-        //ID ? Bei der Übergabe in die Datenbank benötigt man eine ID, Welche aber von Google automatisch bestimmt wird
-        //package DatabaseEntities; wird rot markiert ist es richtig?
-        //Woher attendees
-        EditText editText = findViewById(R.id.edit_date_title);
-        String summary = editText.getText().toString();
-
-        editText = findViewById(R.id.edit_date_day);
-        String date = editText.getText().toString();
-
-        editText = findViewById(R.id.edit_date_from);
-        String start = editText.getText().toString();
-
-        editText = findViewById(R.id.edit_date_to);
-        String end = editText.getText().toString();
-
-        editText = findViewById(R.id.edit_date_description);
-        String description = editText.getText().toString();
-
-        editText = findViewById(R.id.edit_date_location);
-        String location = editText.getText().toString();
+    public void updateEvent(Integer mtdNr, String calendarID, String summary, String description, String location, DateTime startTime, DateTime endTime /*, List<String> attendees */) {
 
 
         try {
 
-            DateTime startDateTime = convertDateTime(start, date);
-            DateTime endDateTime = convertDateTime(end, date);
+           /* DateTime startDateTime = convertDateTime(start, date);
+            DateTime endDateTime = convertDateTime(end, date); */
 
                /* LinkedList <String> attendees = new LinkedList<>();
                 attendees.add("freundeskalender.kerim@gmail.com"); */
-            CalendarEvents event5 = new CalendarEvents(5, this, "andoidprojekt1@gmail.com", summary, description, location, startDateTime, endDateTime /*, attendees */);
+            CalendarEvents event5 = new CalendarEvents(5, this, "andoidprojekt1@gmail.com", summary, description, location, startTime, endTime /*, attendees */);
             event5.setConfig();
             event5.execute();
         } catch (Exception e) {
@@ -216,8 +201,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     }
 
-    public void getEventList()
-    {
+    public void getEventList() {
         CalendarEventList event2 = new CalendarEventList(2, this, "Hier KalenderID");
         event2.setConfig();
         event2.execute();
@@ -225,36 +209,47 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     }
 
-    public void evaluateJsonEventList(List<String> jsonList)
-    {
+    public void evaluateJsonEventList(List<String> jsonList) {
 
         List<String> eventIDList = new ArrayList<>();
         List<String> summaryList = new ArrayList<>();
         List<String> locationList = new ArrayList<>();
-        List<EventDateTime> startTimeList = new ArrayList<>();
-        List<EventDateTime> endTimeList = new ArrayList<>();
-     //   String calenderID;
+        List<DateTime> startTimeList = new ArrayList<>();
+        List<DateTime> endTimeList = new ArrayList<>();
+        //   String calenderID;
         try {
             for (String jsonString : jsonList) {
                 JSONObject json = new JSONObject(jsonString);
-               // calenderID = json.getString("id");
+                // calenderID = json.getString("id");
                 JSONArray items = json.getJSONArray("items");
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject event = items.getJSONObject(i);
                     eventIDList.add(event.getString("id"));
-                    summaryList.add( event.getString("summary"));
-                    locationList.add( event.getString("location"));
+                    summaryList.add(event.getString("summary"));
+                    locationList.add(event.getString("location"));
 
+                    JSONObject startObj = event.getJSONObject("start");
+                    String startDateTime = startObj.getString("dateTime");
+                    String[] parts = startDateTime.split("T");
+                    String startDate = parts[0];
+                    String startTime = parts[1].substring(0, 8);
+                    startTimeList.add(convertDateTime(startTime, startDate));
+
+                    JSONObject endObj = event.getJSONObject("ends");
+                    String endDateTime = endObj.getString("dateTime");
+                    String endDate = parts[0];
+                    String endTime = parts[1].substring(0, 8);
+                    endTimeList.add(convertDateTime(endTime, endDate));
 
 
                 }
             }
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
 
         }
 
     }
+
 
     public DateTime convertDateTime(String time, String date) {
         String DateTimeString = date + "" + time;
