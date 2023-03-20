@@ -81,6 +81,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     @Override
     protected void onResume() {
         super.onResume();
+        //Hier APi Aufruf liste
         calenderManager.requestUpdate();
         eventManager.requestUpdate();
     }
