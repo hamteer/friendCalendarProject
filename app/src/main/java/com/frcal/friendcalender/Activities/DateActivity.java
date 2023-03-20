@@ -184,7 +184,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
                /* LinkedList <String> attendees = new LinkedList<>();
                 attendees.add("freundeskalender.kerim@gmail.com"); */
-            CalendarEvents event5 = new CalendarEvents(5, this, "andoidprojekt1@gmail.com", summary, description, location, startTime, endTime /*, attendees */);
+            CalendarEvents event5 = new CalendarEvents(mtdNr, this, "primary", summary, description, location, startTime, endTime /*, attendees */);
             event5.delegate=this;
             event5.setConfig();
             event5.execute();
@@ -197,7 +197,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
     }
 
     public void deleteEvent(Integer mtdNr,  String calendarID, String eventID) {
-        CalendarEvents event4 = new CalendarEvents(4, this, "Hier KalenderID", "Hier Event ID");
+        CalendarEvents event4 = new CalendarEvents(4, this, "Hier KalenderID", currentEvent.googleEventID);
         event4.delegate=this;
         event4.setConfig();
         event4.execute();
