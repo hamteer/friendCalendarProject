@@ -162,9 +162,12 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
                 pageToken = events.getNextPageToken();
             } while (pageToken != null);
             return items.toString();
+        } catch (UserRecoverableAuthIOException e) {
+            ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException io) {
-            return io.toString();
+            io.printStackTrace();
         }
+        return "";
     }
 
     public String setEvent() {
@@ -189,10 +192,12 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
             event = this.service.events().insert(this.calendarID, event).execute();
             JsonFactory jsonSetEvent = event.getFactory();
             return event.toString();
+        } catch (UserRecoverableAuthIOException e) {
+            ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException io) {
-            return io.toString();
-
+            io.printStackTrace();
         }
+        return "";
 
     }
 
@@ -201,12 +206,15 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
             // Retrieve an event
             Event event = this.service.events().get(this.calendarID, this.eventID).execute();
             return event.toString();
+        } catch (UserRecoverableAuthIOException e) {
+            ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException io) {
-            return io.toString();
+            io.printStackTrace();
         }
+        return "";
     }
 
-    public Void updateEvent() {
+    public String updateEvent() {
 
         try {
 
@@ -227,11 +235,12 @@ public class CalendarEvents extends AsyncTask<Void, Void, Void> {
 
             // Update the event
             Event updatedEvent = service.events().update(this.calendarID, event.getId(), event).execute();
+        } catch (UserRecoverableAuthIOException e) {
+            ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException io) {
-            //  return io.toString();
-            return null;
+            io.printStackTrace();
         }
-        return null;
+        return "";
     }
 
 

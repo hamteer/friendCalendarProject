@@ -86,13 +86,16 @@ public class CalendarEventList extends AsyncTask<Void, Void, Void> {
             do {
                 Events events = this.service.events().list(this.calendarID).setPageToken(pageToken).execute();
                 items = events.getItems();
-                allEvents.addAll(items);
+                //allEvents.addAll(items);
                 pageToken = events.getNextPageToken();
                 jsonResponses.add(events.toPrettyString());
             } while (pageToken != null);
-            return items.toString();
+            return jsonResponses.toString();
+        } catch (UserRecoverableAuthIOException e) {
+            ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException io) {
-            return io.toString();
+            io.printStackTrace();
         }
+        return "";
     }
 }
