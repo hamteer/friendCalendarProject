@@ -98,7 +98,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> {
 // </editor-fold>
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected String doInBackground(Void... voids) {
         switch (this.mtdNr) {
             case 1:
                 getEvent();
