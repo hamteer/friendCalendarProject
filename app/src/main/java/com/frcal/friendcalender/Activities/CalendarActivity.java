@@ -316,11 +316,12 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
                     String endDate = parts[0];
                     String endTime = parts[1].substring(0, 8);
                     endTimeList.add(convertDateTime(endTime, endDate));
+                    //CalenederActivity wo bekomme ich die event id aus der Datenbank her
 
-                    CalenderEvent eventDB = new CalenderEvent("primary", event.getString("id"), event.getString("id"), convertDateTime(startTime, startDate), convertDateTime(endTime, endDate), event.getString("description"), event.getString("summary"), event.getString("location"), null, null);
+                    CalenderEvent eventDB = new CalenderEvent("primary", null, event.getString("id"), convertDateTime(startTime, startDate), convertDateTime(endTime, endDate), event.getString("description"), event.getString("summary"), event.getString("location"), null, null);
                     eventManager.addEvent(eventDB);
 
-                    calenderManager.requestUpdate();
+
 
 
                 }
