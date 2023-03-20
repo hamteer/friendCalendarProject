@@ -113,6 +113,12 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
         googleSync = findViewById(R.id.add_date_google_sync_check);
         notif = findViewById(R.id.add_date_set_notif_check);
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                getString(R.string.preference_name), MODE_PRIVATE);
+        boolean notificationsActive = sharedPreferences.getBoolean(
+                getString(R.string.notifications_preference_name), false);
+        notif.setEnabled(notificationsActive);
+        notif.setChecked(notificationsActive);
 
         saveBtn = findViewById(R.id.add_date_save_btn);
 
