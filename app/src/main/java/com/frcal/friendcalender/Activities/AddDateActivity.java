@@ -11,7 +11,10 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.frcal.friendcalender.Notifications.NotificationPublisher;
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
+
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -31,6 +34,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.LinkedList;
+
 import com.google.api.client.util.DateTime;
 
 import java.text.SimpleDateFormat;
@@ -67,7 +71,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
         setContentView(R.layout.activity_add_date);
         initUI();
         initStartEndTimeAutomatism();
-        initButton();
+        initButton(this);
     }
 
     private void initStartEndTimeAutomatism() {
@@ -77,7 +81,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 if (!hasFocus) {
                     try {
                         String input = editTimeFrom.getText().toString();
-                        String inputHrs = input.substring(0,2);
+                        String inputHrs = input.substring(0, 2);
                         int inputHrsInt = Integer.parseInt(inputHrs);
                         int outputHrsInt = inputHrsInt + 1;
                         String outputHrs = String.valueOf(outputHrsInt);
@@ -89,7 +93,8 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                             editTimeTo.setText(outputText);
                         }
                     } catch (Exception e) {
-                        InputFormatException ife = new InputFormatException(getApplicationContext());
+                        InputFormatException ife = new InputFormatException(
+                                getApplicationContext());
                         ife.notifyUser();
                     }
                 }
@@ -111,10 +116,10 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
         saveBtn = findViewById(R.id.add_date_save_btn);
 
-        eventManager = new EventManager(getApplicationContext(),this);
+        eventManager = new EventManager(getApplicationContext(), this);
     }
 
-    private void initButton() {
+    private void initButton(Context context) {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,21 +128,25 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 if (title.equals("")) title = "Mein Termin";
                 desc = editDesc.getText().toString();
                 loc = editLoc.getText().toString();
-                dateString =  editDate.getText().toString();
+                dateString = editDate.getText().toString();
                 fromString = editTimeFrom.getText().toString();
                 toString = editTimeTo.getText().toString();
 
-                // create RFC3339-Strings out of start and end time and create DateTime Objects for them:
+                // create RFC3339-Strings out of start and end time and create DateTime Objects
+                // for them:
                 try {
-                    from = DateTime.parseRfc3339(createRFCString(dateString, fromString, getApplicationContext()));
-                    to = DateTime.parseRfc3339(createRFCString(dateString, toString, getApplicationContext()));
+                    from = DateTime.parseRfc3339(
+                            createRFCString(dateString, fromString, getApplicationContext()));
+                    to = DateTime.parseRfc3339(
+                            createRFCString(dateString, toString, getApplicationContext()));
                 } catch (Exception e) {
                     InputFormatException ife = new InputFormatException(getApplicationContext());
                     ife.notifyUser();
                 }
 
                 if (fromString.compareToIgnoreCase(toString) > 0) {
-                    Toast.makeText(AddDateActivity.this, "Bitte gültige Zeiten angeben!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddDateActivity.this, "Bitte gültige Zeiten angeben!",
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -145,21 +154,26 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 // TODO:
                 //  - DB-Call: Change calenderID, creator, googleEventID,updated
 
-                CalenderEvent event = new CalenderEvent(null,null, null,from,to,desc,title,loc,null,from);
+                CalenderEvent event = new CalenderEvent(null, null, null, from, to, desc, title,
+                        loc, null, from);
                 eventManager.addEvent(event);
                 if (googleSync.isChecked()) {
                     // TODO:
-                    //  - API-Call: use previously created CalenderEvent object to also create a event in the user's Google Calendar
+                    //  - API-Call: use previously created CalenderEvent object to also create a
+                    //  event in the user's Google Calendar
                 }
 
                 if (notif.isChecked()) {
                     // TODO:
                     //  - set Notification for this Event
+                    NotificationPublisher publisher = new NotificationPublisher();
+                    publisher.scheduleNotification(context, event.eventID, title,
+                            event.notificationID, from.getValue(), 15);
                 }
 
 
-
-                Toast.makeText(AddDateActivity.this, "Termin gespeichert!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddDateActivity.this, "Termin gespeichert!",
+                        Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -188,7 +202,8 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                     rfcOffset = "+" + offset + ":00";
                 }
             }
-            rfcString = dayMonthYear[2] + "-" + dayMonthYear[1] + "-" + dayMonthYear[0] + "T" + hrMin[0] + ":" + hrMin[1] + ":00" ;
+            rfcString =
+                    dayMonthYear[2] + "-" + dayMonthYear[1] + "-" + dayMonthYear[0] + "T" + hrMin[0] + ":" + hrMin[1] + ":00";
         } catch (Exception e) {
             InputFormatException ife = new InputFormatException(context);
             ife.notifyUser();
@@ -201,10 +216,10 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
     }
 
-    private void addEvent()
-    {
+    private void addEvent() {
         //Woher bekomme ich die Kalender ID bei AddDateActivity?
-        //ID ? Bei der Übergabe in die Datenbank benötigt man eine ID, Welche aber von Google automatisch bestimmt wird
+        //ID ? Bei der Übergabe in die Datenbank benötigt man eine ID, Welche aber von Google
+        // automatisch bestimmt wird
         //package DatabaseEntities; wird rot markiert ist es richtig?
         //Woher attendees
         CheckBox checkBox = findViewById(R.id.add_date_google_sync_check);
@@ -232,12 +247,14 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
         if (isChecked == true) {
             try {
 
-                DateTime startDateTime= convertDateTime(start,date);
-                DateTime endDateTime= convertDateTime(end,date);
+                DateTime startDateTime = convertDateTime(start, date);
+                DateTime endDateTime = convertDateTime(end, date);
 
                /* LinkedList <String> attendees = new LinkedList<>();
                 attendees.add("freundeskalender.kerim@gmail.com"); */
-                CalendarEvents event3 = new CalendarEvents(3, this, "andoidprojekt1@gmail.com", summary, description, location, startDateTime, endDateTime /*, attendees */);
+                CalendarEvents event3 = new CalendarEvents(3, this, "andoidprojekt1@gmail.com",
+                        summary, description, location, startDateTime,
+                        endDateTime /*, attendees */);
                 event3.setConfig();
                 event3.execute();
             } catch (Exception e) {
@@ -249,8 +266,8 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
         }
 
     }
-    public DateTime convertDateTime(String time, String date)
-    {
+
+    public DateTime convertDateTime(String time, String date) {
         String DateTimeString = date + "" + time;
         LocalDateTime DateTime = LocalDateTime.parse(DateTimeString);
         ZoneId zoneId = ZoneId.systemDefault();
@@ -275,8 +292,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
             String startDateTime = startObject.getString("dateTime");
             String summary = eventData.getString("summary");
             String location = eventData.getString("location");
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             Log.w("", "handleSignInResult:error", e);
 
         }

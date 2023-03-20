@@ -128,14 +128,16 @@
     <string name="fingerprint_no_authentification_method_alert_dialog_positive">Einrichten</string>
     <string name="fingerprint_no_authentification_method_alert_dialog_negative">Abbrechen</string>
 
-
     <!-- Strings for Notifications -->
     <string name="channel_id">default</string>
     <string name="channel_name">Standard Channel</string>
     <string name="channel_description">Dieser Channel ist der Standard für alle Benachrichtigungen bezüglich Kalenderereignissen</string>
 
-    <string name="notification_title">Test</string>
-    <string name="notification_text">Das ist ein Test</string>
+    <string name="notifications_id_key">ID</string>
+    <string name="notifications_notification_key">Notification</string>
+
+    <string name="notification_description_15">In 15 Minuten</string>
+    <string name="notification_description_5">In 5 Minuten</string>
 
     <!-- Sync Calendars with Google Calendars -->
     <string name="sync_cal">Sync with GMail</string>

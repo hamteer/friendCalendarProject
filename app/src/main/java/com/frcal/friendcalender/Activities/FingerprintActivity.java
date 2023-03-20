@@ -3,13 +3,6 @@ package com.frcal.friendcalender.Activities;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.biometric.BiometricPrompt;
-import androidx.core.content.ContextCompat;
-
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +12,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 
 import com.frcal.friendcalender.Authentication.AuthenticationManager;
 import com.frcal.friendcalender.Notifications.NotificationPublisher;
@@ -40,23 +39,21 @@ public class FingerprintActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Falls die App erstmalig nach ihrer Installation geöffnet wird, wird ein gesonderter
+        // 1. Um Benachrichtigungen empfangen zu können, wird der Standard-Channel eingerichtet,
+        // sofern er nicht bereits existiert
+        // 2. Falls die App erstmalig nach ihrer Installation geöffnet wird, wird ein gesonderter
         // Workflow geöffnet
-        // 2. Falls Fingerprint als Main Activity gelauncht wurde, muss überprüft werden, ob die
+        // 3. Falls Fingerprint als Main Activity gelauncht wurde, muss überprüft werden, ob die
         // Eingabe des Fingerabdrucks überhaupt ist, sonst wird sofort die CalendarActivity, bzw.
         // die Ursprungsactivity aufgerufen
-        // 3. Ermitteln der zu nutzenden Authentifizierungsmethode
-        // 4. Initialisierung der Methoden des BiometricPrompt, die nach Eingabe der
+        // 4. Ermitteln der zu nutzenden Authentifizierungsmethode
+        // 5. Initialisierung der Methoden des BiometricPrompt, die nach Eingabe der
         // Authentifizierungsmethode ausgeführt werden
-        // 5. Initialisierung des AlertDialogs, der angezeigt wird, sofern keine
+        // 6. Initialisierung des AlertDialogs, der angezeigt wird, sofern keine
         // Authentifizierungsmethode existiert
-        // 6. Initialisierung der UI anhand der möglichen Authentifizierungsmethode
-
-        // TODO: Delete
-        NotificationPublisher n = new NotificationPublisher(this, 1);
-        n.createNotificationChannel();
-        n.buildNotification();
-
+        // 7. Initialisierung der UI anhand der möglichen Authentifizierungsmethode
+        NotificationPublisher publisher = new NotificationPublisher();
+        publisher.createNotificationChannel(this);
 
         SharedPreferences sharedPreferences = getSharedPreferences(
                 getString(R.string.preference_name),

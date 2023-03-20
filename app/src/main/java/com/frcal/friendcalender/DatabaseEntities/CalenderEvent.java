@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.frcal.friendcalender.Notifications.NotificationPublisher;
 import com.google.api.client.util.DateTime;
 
 import java.util.UUID;
@@ -32,9 +33,14 @@ public class CalenderEvent {
     public String creator;
     public DateTime updated;
 
+    public boolean notificationActive;
+    public int notificationID;
 
-    public CalenderEvent(String calenderID, String eventID, String googleEventID,DateTime startTime, DateTime endTime, String description, String summary, String location,
-                         String creator, DateTime updated){
+
+    public CalenderEvent(String calenderID, String eventID, String googleEventID,
+                         DateTime startTime, DateTime endTime, String description, String summary
+            , String location,
+                         String creator, DateTime updated) {
 
         this.calenderID = calenderID;
         // schau ob eine calenderID uebergeben wurde falls ja nimm die, ansonsten erstell eine
@@ -47,10 +53,12 @@ public class CalenderEvent {
         this.location = location;
         this.creator = creator;
         this.updated = updated;
+        this.notificationID = NotificationPublisher.getUniqueNotificationId();
     }
+
     @Ignore
     @Override
-    public String toString(){
+    public String toString() {
         return calenderID + " | " + eventID + " | " + startTime + " | ";
     }
 
