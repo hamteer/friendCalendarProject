@@ -274,11 +274,25 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
                 // create RFC3339-Strings out of start and end time and create DateTime Objects
                 // for them:
+                DateTime fromWithOffset = null;
+                DateTime toWithOffset = null;
+
                 try {
                     from = DateTime.parseRfc3339(
                             getRFC3339FormattedString(dateString, fromString));
                     to = DateTime.parseRfc3339(
                             getRFC3339FormattedString(dateString, toString));
+
+                    TimeZone timeZone = TimeZone.getDefault();
+                    int fromOffset = timeZone.getOffset(from.getValue());
+                    long fromDeviceTime = from.getValue() - fromOffset;
+                    fromWithOffset = new DateTime(fromDeviceTime);
+
+                    int toOffset = timeZone.getOffset(to.getValue());
+                    long toDeviceTime = to.getValue() - toOffset;
+                    toWithOffset = new DateTime(toDeviceTime);
+
+
                 } catch (Exception e) {
                     InputFormatException ife = new InputFormatException(getApplicationContext());
                     ife.notifyUser();
@@ -302,7 +316,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 //  - DB-Call: Change calenderID, creator
                 SharedPreferences sh_clid = getSharedPreferences("MainCal-ID", MODE_PRIVATE);
                 String creator = sh_clid.getString("Cal-ID", "");
-                CalenderEvent event = new CalenderEvent("primary",null, null,from,to,desc,title,loc,creator,from, id);
+                CalenderEvent event = new CalenderEvent("primary", null, null, fromWithOffset, toWithOffset, desc, title, loc, creator, from, id);
                 eventManager.addEvent(event);
                 if (googleSync.isChecked()) {
                     // TODO:
@@ -325,7 +339,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
         });
     }
 
-    public static String getRFC3339FormattedString(String time, String dateString) {
+    public static String getRFC3339FormattedString(String dateString, String time) {
 
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
