@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.frcal.friendcalender.DataAccess.CalenderManager;
+import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.Exception.InputFormatException;
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
 import android.widget.Button;
@@ -44,7 +46,7 @@ import java.util.TimeZone;
 //  - Notification
 
 
-public class AddDateActivity extends AppCompatActivity implements EventManager.EventManagerListener {
+public class AddDateActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener {
     // UI variables
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
     TextView chooseFriends;
@@ -55,12 +57,13 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
     // variables for DB integration
     EventManager eventManager;
+    CalenderManager calenderManager;
 
     // variables for friend selection dialogue
     boolean[] selectedFriends;
     ArrayList<String> listOfFriends = new ArrayList<>();
     ArrayList<Integer> listOfSelectedFriends = new ArrayList<>();
-
+    ArrayList<Calender> calenderList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,18 +88,16 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
         // first, add the always needed options to add either all or no friends:
         listOfFriends.add("privater Termin");
         listOfFriends.add("öffentlicher Termin");
-        // now fill in the listOfFriends with all Friends saved in the DB (or the API):
-        // TODO!
-        // we use a few example friends so the code still works, but this is still todo!
-        listOfFriends.add("Achim");
-        listOfFriends.add("Emma");
-        listOfFriends.add("Sebastian");
-        // usw., with DB/API this is probably done in a for-/foreach-loop
-
+        // now fill in the listOfFriends with all Friends saved in the DB:
+        calenderManager.requestUpdate();
+        for (Calender friend: calenderList) {
+            listOfFriends.add(friend.name);
+            Log.d("initFriendsDialogue", "added " + friend.name);
+        }
         // CAUTION:
         // this list has to have a specific order:
         // the first two items are already declared (private and public)
-        // after that, the user's friends have to be listed IN ALPHABETICAL ORDER!
+        // after that, the user's friends have to be listed!
 
         // we initialize the boolean Array that shows us which options are selected:
         selectedFriends = new boolean[listOfFriends.size()];
@@ -244,6 +245,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
         saveBtn = findViewById(R.id.add_date_save_btn);
 
         eventManager = new EventManager(getApplicationContext(),this);
+        calenderManager = new CalenderManager(getApplicationContext(),this);
     }
 
     private void initButton() {
@@ -417,4 +419,8 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
     }
 
 
+    @Override
+    public void onCalenderListUpdated() {
+        calenderList = calenderManager.getCalenders();
+    }
 }
