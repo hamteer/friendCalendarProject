@@ -1,6 +1,6 @@
 package com.frcal.friendcalender.Activities;
 
-import static com.frcal.friendcalender.Activities.AddDateActivity.AddDateActivity.createRFCString;
+import static com.frcal.friendcalender.Activities.AddDateActivity.createRFCString;
 
 
 import android.content.Context;
@@ -333,7 +333,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
     }
 
     public void deleteEvent(Integer mtdNr,  String calendarID, String eventID) {
-        CalendarEvents event4 = new CalendarEvents(4, this, "Hier KalenderID", currentEvent.googleEventID);
+        CalendarEvents event4 = new CalendarEvents(4, this, "primary", currentEvent.googleEventID);
         event4.delegate=this;
         event4.setConfig();
         event4.execute();
