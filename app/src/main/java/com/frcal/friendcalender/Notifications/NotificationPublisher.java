@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -23,6 +22,8 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.frcal.friendcalender.Activities.DateActivity;
 import com.frcal.friendcalender.R;
+
+import java.util.TimeZone;
 
 public class NotificationPublisher extends BroadcastReceiver {
     public int getUniqueNotificationId(Context context) {
@@ -72,8 +73,12 @@ public class NotificationPublisher extends BroadcastReceiver {
             PendingIntent sender = PendingIntent.getBroadcast(context, id, intent,
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
+            TimeZone timeZone = TimeZone.getDefault();
+            int offset = timeZone.getOffset(time);
+            long deviceTime = time - offset;
+
             AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            am.set(AlarmManager.RTC_WAKEUP, time - (long) (minutes) * 60 * 1000, sender);
+            am.set(AlarmManager.RTC_WAKEUP, deviceTime - (long) (minutes) * 60 * 1000, sender);
         }
     }
 
@@ -166,7 +171,6 @@ public class NotificationPublisher extends BroadcastReceiver {
                     intent.getIntExtra(context.getString(R.string.notifications_id_key), 0));
         } else if (ActivityCompat.checkSelfPermission(context,
                 Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(context, "Juhu", Toast.LENGTH_SHORT).show();
             Notification notification = intent.getParcelableExtra(
                     context.getString(R.string.notifications_notification_key));
             int id = intent.getIntExtra(context.getString(R.string.notifications_id_key), 0);
