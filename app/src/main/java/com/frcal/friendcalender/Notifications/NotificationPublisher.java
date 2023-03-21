@@ -26,15 +26,18 @@ import com.frcal.friendcalender.R;
 
 public class NotificationPublisher extends BroadcastReceiver {
     public int getUniqueNotificationId(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preference_name),MODE_PRIVATE );
-        int previousId = sharedPreferences.getInt("id_preference_name", 0);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                context.getString(R.string.preference_name), MODE_PRIVATE);
+        int previousId = sharedPreferences.getInt(context.getString(R.string.id_preference_name),
+                0);
         int newId;
-        if (previousId == 0 || previousId == 2147483647) {
+        if (previousId == 0 || previousId == 536870911) {
             newId = 1;
         } else {
             newId = previousId + 1;
         }
-        sharedPreferences.edit().putInt("id_preference_name", newId).apply();
+        sharedPreferences.edit().putInt(context.getString(R.string.id_preference_name),
+                newId).apply();
         return newId;
     }
 
@@ -66,7 +69,7 @@ public class NotificationPublisher extends BroadcastReceiver {
             intent.putExtra(context.getString(R.string.notifications_notification_key),
                     buildNotification(context, eventId, title, id, time, minutes));
             intent.putExtra(context.getString(R.string.notifications_id_key), id);
-            PendingIntent sender = PendingIntent.getBroadcast(context, 192837, intent,
+            PendingIntent sender = PendingIntent.getBroadcast(context, id, intent,
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -74,57 +77,70 @@ public class NotificationPublisher extends BroadcastReceiver {
         }
     }
 
+    public void cancelNotification(Context context, int notificationId) {
+        Intent intent = new Intent(context, NotificationPublisher.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        pendingIntent.cancel();
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        am.cancel(pendingIntent);
+    }
+
     private Notification buildNotification(Context context, String eventId, String title, int id,
                                            long time, int minutes) {
         Intent resultIntent = new Intent(context, DateActivity.class);
-        resultIntent.setAction("android.intent.action.VIEW_LOCUS");
-        resultIntent.putExtra("SELECTED_EVENT", eventId);
+        resultIntent.setAction(context.getString(R.string.newly_opened_action));
+        resultIntent.putExtra(context.getString(R.string.extra_event_key), eventId);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntentWithParentStack(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(1610612733 - id,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         Intent closeIntent = new Intent(context, NotificationPublisher.class);
         closeIntent.putExtra(context.getString(R.string.notifications_id_key), id);
-        closeIntent.putExtra("notifications_close_key", true);
-        PendingIntent closePendingIntent = PendingIntent.getBroadcast(context, 1, closeIntent,
+        closeIntent.putExtra(context.getString(R.string.notifications_close_key), true);
+        PendingIntent closePendingIntent = PendingIntent.getBroadcast(context, 2147483647 - id,
+                closeIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder;
 
         if (minutes == 15) {
             Intent snoozeIntent = new Intent(context, NotificationPublisher.class);
-            snoozeIntent.putExtra("notifications_event_id_key", eventId);
-            snoozeIntent.putExtra("notifications_title_key", title);
+            snoozeIntent.putExtra(context.getString(R.string.notifications_event_id_key), eventId);
+            snoozeIntent.putExtra(context.getString(R.string.notifications_title_key), title);
             snoozeIntent.putExtra(context.getString(R.string.notifications_id_key), id);
-            snoozeIntent.putExtra("notifications_time_key", time);
-            snoozeIntent.putExtra("notifications_minutes_key", 5);
+            snoozeIntent.putExtra(context.getString(R.string.notifications_time_key), time);
+            snoozeIntent.putExtra(context.getString(R.string.notifications_minutes_key), 5);
             PendingIntent snoozePendingIntent =
-                    PendingIntent.getBroadcast(context, 0, snoozeIntent,
+                    PendingIntent.getBroadcast(context, 173741823 - id, snoozeIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             builder = new NotificationCompat.Builder(context,
                     context.getString(R.string.channel_id))
                     .setSmallIcon(R.drawable.baseline_calendar_month_black_24)
                     .setContentTitle(title)
-                    .setContentText(context.getString(R.string.notification_description_15))
+                    .setContentText(context.getString(R.string.notification_description))
                     .setWhen(time).setShowWhen(true)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT).setContentIntent(
                             resultPendingIntent).setAutoCancel(true).addAction(
                             R.drawable.baseline_notifications_active_48,
-                            "5 Minuten vorher nochmal erinnern", snoozePendingIntent).addAction(
-                            R.drawable.baseline_notifications_off_48, "Schließen",
+                            context.getString(R.string.notification_action_5),
+                            snoozePendingIntent).addAction(
+                            R.drawable.baseline_notifications_off_48,
+                            context.getString(R.string.notification_action_close),
                             closePendingIntent);
         } else {
             builder = new NotificationCompat.Builder(context,
                     context.getString(R.string.channel_id))
                     .setSmallIcon(R.drawable.baseline_calendar_month_black_24)
                     .setContentTitle(title)
-                    .setContentText(context.getString(R.string.notification_description_5))
+                    .setContentText(context.getString(R.string.notification_description))
                     .setWhen(time).setShowWhen(true)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT).setContentIntent(
                             resultPendingIntent).setAutoCancel(true).addAction(
-                            R.drawable.baseline_notifications_off_48, "Schließen",
+                            R.drawable.baseline_notifications_off_48,
+                            context.getString(R.string.notification_action_close),
                             closePendingIntent);
         }
         return builder.build();
@@ -132,17 +148,18 @@ public class NotificationPublisher extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.hasExtra("notifications_minutes_key")) {
+        if (intent.hasExtra(context.getString(R.string.notifications_minutes_key))) {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(
                     context);
             notificationManager.cancel(
                     intent.getIntExtra(context.getString(R.string.notifications_id_key), 0));
-            scheduleNotification(context, intent.getStringExtra("notifications_event_id_key"),
-                    intent.getStringExtra("notifications_title_key"),
+            scheduleNotification(context,
+                    intent.getStringExtra(context.getString(R.string.notifications_event_id_key)),
+                    intent.getStringExtra(context.getString(R.string.notifications_title_key)),
                     intent.getIntExtra(context.getString(R.string.notifications_id_key), 0),
-                    intent.getLongExtra("notifications_time_key", 0),
-                    intent.getIntExtra("notifications_minutes_key", 5));
-        } else if (intent.hasExtra("notifications_close_key")) {
+                    intent.getLongExtra(context.getString(R.string.notifications_time_key), 0),
+                    intent.getIntExtra(context.getString(R.string.notifications_minutes_key), 5));
+        } else if (intent.hasExtra(context.getString(R.string.notifications_close_key))) {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(
                     context);
             notificationManager.cancel(

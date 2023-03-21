@@ -157,12 +157,18 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 }
 
                 NotificationPublisher publisher = new NotificationPublisher();
+                int id;
+                if (notif.isChecked()) {
+                    id = publisher.getUniqueNotificationId(context);
+                } else {
+                    id = 0;
+                }
 
                 // TODO:
                 //  - DB-Call: Change calenderID, creator, googleEventID,updated
 
                 CalenderEvent event = new CalenderEvent(null, null, null, from, to, desc, title,
-                        loc, null, from, publisher.getUniqueNotificationId(context));
+                        loc, null, from, id);
                 eventManager.addEvent(event);
                 if (googleSync.isChecked()) {
                     // TODO:
