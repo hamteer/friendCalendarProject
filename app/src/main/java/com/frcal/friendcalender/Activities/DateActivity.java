@@ -3,6 +3,7 @@ package com.frcal.friendcalender.Activities;
 import static com.frcal.friendcalender.Activities.AddDateActivity.createRFCString;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,9 +11,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.frcal.friendcalender.DataAccess.EventManager;
@@ -24,25 +27,38 @@ import com.google.api.client.util.DateTime;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.frcal.friendcalender.Exception.InputFormatException;
+import com.frcal.friendcalender.R;
+import com.google.api.client.util.DateTime;
+
 import com.frcal.friendcalender.RestAPIClient.CalendarEventList;
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
-import com.google.api.client.util.DateTime;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 
-// TODO: all
+// TODO: API-Call
 public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener {
+    // UI variables
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
+    TextView chooseFriends;
     String title, desc, loc, dateString, fromString, toString;
     DateTime from, to;
     CheckBox googleSync, notif;
     Button saveBtn, deleteBtn;
 
+    // Variables for DB integration
     EventManager eventManager;
     CalenderEvent currentEvent;
+
+    // Variables for Friend selection dialogue
+    boolean[] selectedFriends;
+    ArrayList<String> listOfFriends = new ArrayList<>();
+    ArrayList<Integer> listOfSelectedFriends = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,10 +77,132 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         setContentView(R.layout.activity_date);
         initUI();
         loadDateInfo();
+        initFriendsDialogue();
         initButtons(this);
     }
 
+    private void initFriendsDialogue() {
+        // first, add the always needed options to add either all or no friends:
+        listOfFriends.add("privater Termin");
+        listOfFriends.add("öffentlicher Termin");
+        // now fill in the listOfFriends with all Friends saved in the DB (or the API):
+        // TODO!
+        // we use a few example friends so the code still works, but this is still todo!
+        listOfFriends.add("Achim");
+        listOfFriends.add("Emma");
+        listOfFriends.add("Sebastian");
+        // usw., with DB/API this is probably done in a for-/foreach-loop
+
+        // CAUTION:
+        // this list has to have a specific order:
+        // the first two items are already declared (private and public)
+        // after that, the user's friends have to be listed IN ALPHABETICAL ORDER!
+
+        // we initialize the boolean Array that shows us which options are selected:
+        selectedFriends = new boolean[listOfFriends.size()];
+
+        // now we handle the user interaction with the TextView
+        chooseFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Initialize alert dialog and set it non cancelable
+                AlertDialog.Builder builder = new AlertDialog.Builder(DateActivity.this);
+                builder.setTitle("Termin teilen");
+                builder.setCancelable(false);
+
+                // as setMultiChoiceItems, the method used to initialize the dropdown menu, needs an Array,
+                // we need to transform our ArrayList into an Array:
+                String[] arrayOfFriends = new String[listOfFriends.size()];
+                for (int i = 0; i < listOfFriends.size(); i++) {
+                    arrayOfFriends[i] = listOfFriends.get(i);
+                }
+
+                builder.setMultiChoiceItems(arrayOfFriends, selectedFriends, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        // check condition
+                        if (isChecked) {
+                            listOfSelectedFriends.add(which);
+                            Collections.sort(listOfSelectedFriends);
+                        } else {
+                            listOfSelectedFriends.remove(Integer.valueOf(which));
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // test if event is made private, if yes, set text of TextView accordingly
+                        if (listOfSelectedFriends.contains(0)) {
+                            chooseFriends.setText(getResources().getString(R.string.private_date_set));
+                            // as the event is not shared, no API call is necessary here.
+                            if (listOfSelectedFriends.contains(1)) {
+                                Toast.makeText(DateActivity.this, "Termin kann nicht öffentlich UND privat sein!", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            // event is not private, next, we need to check if event is public
+                            if (listOfSelectedFriends.contains(1)) {
+                                chooseFriends.setText(getResources().getString(R.string.public_date_set));
+                                // TODO: API call, sync this event with all Friends this user has added to his account
+                            } else {
+                                // event is neither private nor public, but shared with a few specific friends
+                                // TODO: API call:
+                                //  either in for loop for each selected friend,
+                                //  or using the existing for loop to build another list to transfer to the API
+                                //  depending on what methods the API has
+
+                                StringBuilder stringBuilder = new StringBuilder();
+
+                                for (int j = 0; j < listOfSelectedFriends.size(); j++) {
+                                    // concat array value
+                                    stringBuilder.append(arrayOfFriends[listOfSelectedFriends.get(j)]);
+                                    // check condition
+                                    if (j != listOfSelectedFriends.size() - 1) {
+                                        // When j value  not equal
+                                        // to lang list size - 1
+                                        // add comma
+                                        stringBuilder.append(", ");
+                                    }
+                                }
+                                // set text on textView
+                                chooseFriends.setText(stringBuilder.toString());
+                            }
+                        }
+                    }
+                });
+
+                builder.setNegativeButton("Zurück", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // dismiss dialog
+                        dialogInterface.dismiss();
+                    }
+                });
+
+                builder.setNeutralButton("Alle löschen", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // use for loop
+                        for (int j = 0; j < selectedFriends.length; j++) {
+                            // remove all selection
+                            selectedFriends[j] = false;
+                            // clear language list
+                            listOfSelectedFriends.clear();
+                            // clear text view value
+                            chooseFriends.setText("");
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
+
+    }
+
     private void initUI() {
+        chooseFriends = findViewById(R.id.edit_date_choose_friends_multiselect);
+
         editTitle = findViewById(R.id.edit_date_title);
         editDate = findViewById(R.id.edit_date_day);
         editTimeFrom = findViewById(R.id.edit_date_from);

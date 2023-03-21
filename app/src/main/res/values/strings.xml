@@ -68,7 +68,7 @@
 
     <string name="server_client_id">764959564302-kk5n95aabkm0sj9eae9n28l1neit61i9.apps.googleusercontent.com</string>
     <string name="calendar_headline">Mein Kalender</string>
-    <string name="add_calendar_headline">Neuen Kalender\nhinzufügen</string>
+    <string name="add_calendar_headline">Neuen Freund\nhinzufügen</string>
     <string name="add_calendar_mail_hint">E-Mail</string>
     <string name="add_date_btn">Speichern</string>
     <string name="add_date_headline">Neuer Termin</string>
@@ -169,6 +169,9 @@
     <string name="google_initialization_description">Wenn Sie Ihr Google-Konto verknüpfen, können Sie leichter Ihre Termine synchronisieren und mit Freunden teilen\nSie können Ihre Wahl jederzeit in den Einstellungen ändern</string>
     <string name="google_initialization_agree_button">Bei Google anmelden</string>
     <string name="google_initialization_disagree_button">Nicht mit Google-Konto verknüpfen</string>
+    <string name="choose_friends_hint">Teilen mit …</string>
+    <string name="private_date_set">privater Termin</string>
+    <string name="public_date_set">öffentlicher Termin</string>
 
     <!-- Strings for DateActivity -->
     <string name="extra_event_key">SELECTED_EVENT</string>

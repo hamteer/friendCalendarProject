@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="40dp"
         android:ems="10"
         android:hint="@string/add_date_name_hint"
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="40dp"
         android:ems="10"
         android:hint="@string/add_date_name_day"
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
             android:layout_weight="2"
             android:ems="10"
@@ -66,7 +66,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:scaleX="2"
             android:scaleY="2"
             android:text="@string/add_date_duration_dash" />
@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="40dp"
             android:layout_weight="2"
             android:ems="10"
@@ -91,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="40dp"
         android:ems="10"
         android:hint="@string/add_date_description"
@@ -103,25 +103,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="40dp"
         android:ems="10"
         android:hint="@string/add_date_location"
         android:inputType="text"
         app:layout_constraintTop_toBottomOf="@id/edit_date_description" />
 
+    <TextView
+        android:id="@+id/edit_date_choose_friends_multiselect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/choose_friends_background"
+        android:drawablePadding="16dp"
+        android:hint="@string/choose_friends_hint"
+        android:padding="12dp"
+        app:drawableRightCompat="@android:drawable/arrow_down_float"
+        app:layout_constraintTop_toBottomOf="@id/edit_date_location" />
+
     <LinearLayout
         android:id="@+id/edit_date_sync_check"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/edit_date_location">
+        app:layout_constraintTop_toBottomOf="@id/edit_date_choose_friends_multiselect">
 
         <CheckBox
             android:id="@+id/edit_date_google_sync_check"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_weight="1"
             android:checked="true"
             android:ems="10" />
@@ -129,7 +144,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_weight="2"
             android:text="@string/add_date_google_sync_text" />
     </LinearLayout>
@@ -145,7 +160,7 @@
             android:id="@+id/edit_date_set_notif_check"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_weight="1"
             android:checked="true"
             android:ems="10" />
@@ -153,7 +168,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="50dp"
             android:layout_weight="1.64"
             android:text="@string/add_date_set_notif_text" />

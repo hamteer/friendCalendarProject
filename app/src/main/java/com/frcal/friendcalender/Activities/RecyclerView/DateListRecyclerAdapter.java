@@ -1,6 +1,7 @@
 package com.frcal.friendcalender.Activities.RecyclerView;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,20 +30,25 @@ public class DateListRecyclerAdapter extends RecyclerView.Adapter<DateListViewHo
     public void setEvents(ArrayList<CalenderEvent> events) {
         this.events = events;
         this.notifyDataSetChanged();
+        Log.d("recyclerView", events.toString());
     }
 
     @NonNull
     @Override
     public DateListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.date_list_item, parent, false);
+        Log.d("recycler", "LayoutInflater called");
         DateListViewHolder vh = new DateListViewHolder(v, this);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull DateListViewHolder holder, int position) {
+        Log.d("recycler", String.valueOf(position));
         // Identifiziere zu aktualisierenden Datensatz:
         CalenderEvent event = events.get(position);
+        Log.d("recycler", event.toString());
+
         // Referenziere die einzelnen TextViews im übergebenen View:
         TextView title = holder.dateView.findViewById(R.id.date_list_item_title);
         TextView time = holder.dateView.findViewById(R.id.date_list_item_time);
