@@ -1,15 +1,9 @@
 package com.frcal.friendcalender.RestAPIClient;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.frcal.friendcalender.R;
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.SignInClient;
 
-import java.io.Serializable;
+
 
 public class SharedOneTabClient {
     private static SharedOneTabClient instance = null;
