@@ -2,6 +2,7 @@ package com.frcal.friendcalender.Activities;
 
 import static com.frcal.friendcalender.Activities.AddDateActivity.createRFCString;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.frcal.friendcalender.DataAccess.EventManager;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
+import com.frcal.friendcalender.Notifications.NotificationPublisher;
 import com.frcal.friendcalender.R;
 import com.google.api.client.util.DateTime;
 
@@ -59,7 +61,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         setContentView(R.layout.activity_date);
         initUI();
         loadDateInfo();
-        initButtons();
+        initButtons(this);
     }
 
     private void initUI() {
@@ -72,6 +74,13 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
         googleSync = findViewById(R.id.edit_date_google_sync_check);
         notif = findViewById(R.id.edit_date_set_notif_check);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                getString(R.string.preference_name), MODE_PRIVATE);
+        boolean notificationsActive = sharedPreferences.getBoolean(
+                getString(R.string.notifications_preference_name), false);
+        notif.setEnabled(notificationsActive);
+        notif.setChecked(notificationsActive);
 
         saveBtn = findViewById(R.id.edit_date_save_btn);
         deleteBtn = findViewById(R.id.edit_date_delete_btn);
@@ -98,14 +107,15 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         String endTimeString = currentEvent.endTime.toString();
         String displayEndTime = endTimeString.substring(11, 13) + ":" + endTimeString.substring(14,
                 16);
-        ;
         editTimeFrom.setText(displayStartTime);
         editTimeTo.setText(displayEndTime);
         editDesc.setText(currentEvent.description);
         editLoc.setText(currentEvent.location);
+
+        notif.setChecked(currentEvent.notificationID != 0);
     }
 
-    private void initButtons() {
+    private void initButtons(Context context) {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,9 +147,18 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                     return;
                 }
 
+                NotificationPublisher publisher = new NotificationPublisher();
+                int id = 0;
+                if (currentEvent.notificationID != 0) {
+                    publisher.cancelNotification(context, currentEvent.notificationID);
+                    id = currentEvent.notificationID;
+                } else if (notif.isChecked()) {
+                    id = publisher.getUniqueNotificationId(context);
+                }
+
                 CalenderEvent updatedEvent = new CalenderEvent(currentEvent.calenderID,
                         currentEvent.eventID, currentEvent.googleEventID, from, to, desc, title,
-                        loc, currentEvent.creator, new DateTime(System.currentTimeMillis()), 0);
+                        loc, currentEvent.creator, new DateTime(System.currentTimeMillis()), id);
                 eventManager.updateEvent(updatedEvent);
                 if (googleSync.isChecked()) {
                     // TODO:
@@ -147,9 +166,13 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                     //  the event in the user's Google Calendar
                 }
 
+
                 if (notif.isChecked()) {
                     // TODO:
                     //  - set Notification for this Event, if it did not already exist beforehand
+                    publisher.scheduleNotification(context, updatedEvent.eventID, title,
+                            updatedEvent.notificationID, from.getValue(), 15);
+
                 }
                 Toast.makeText(DateActivity.this, "Termin gespeichert", Toast.LENGTH_LONG).show();
                 finish();
@@ -164,6 +187,11 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 // TODO:
                 //  - API-Call: delete this event
                 //  - delete the notification for this event, if it exists
+                NotificationPublisher publisher = new NotificationPublisher();
+                if (currentEvent.notificationID != 0) {
+                    publisher.cancelNotification(context, currentEvent.notificationID);
+                }
+
                 Toast.makeText(DateActivity.this, "Termin gelöscht", Toast.LENGTH_SHORT).show();
                 finish();
             }
