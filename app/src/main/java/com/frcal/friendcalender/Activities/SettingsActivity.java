@@ -32,6 +32,7 @@ import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.R;
 import com.frcal.friendcalender.RestAPIClient.AsyncCalListCl;
 import com.frcal.friendcalender.RestAPIClient.CalendarListCl;
+import com.frcal.friendcalender.RestAPIClient.SharedOneTabClient;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.BeginSignInResult;
 import com.google.android.gms.auth.api.identity.Identity;
@@ -63,7 +64,7 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, AsyncCalListCl<String>, CalenderManager.CalenderManagerListener {
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, CalenderManager.CalenderManagerListener {
 
     private static final String TAG = "FrCal";
 
@@ -83,12 +84,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        findViewById(R.id.sync_calendar).setVisibility(View.GONE);
         //For shared Preferences
         Switch notificationsSwitch = findViewById(R.id.notifications_switch);
         Switch fingerprintSwitch = findViewById(R.id.fingerprintSwitch);
-
+        // Check for active one tap client
         SharedPreferences prefs = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
+        SharedOneTabClient shOneTab = SharedOneTabClient.getInstance();
+        if(shOneTab.getSignInClient()==null){
+            prefs.edit().putBoolean(getString(R.string.google_preference_name), false).apply();
+        }
         boolean notificationsActive = prefs.getBoolean(
                 getString(R.string.notifications_preference_name), false);
         boolean switchState = prefs.getBoolean("fingerprintSwitchState", false);
@@ -129,12 +133,22 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.disconnect_button).setOnClickListener(this);
-        findViewById(R.id.sync_calendar).setOnClickListener(this);
 
 
         // For sample only: make sure there is a valid server client ID.
         validateServerClientID();
 
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                getString(R.string.preference_name),
+                MODE_PRIVATE);
+        boolean googleSignedIn = sharedPreferences.getBoolean(
+                getString(R.string.google_preference_name), false);
+        if(googleSignedIn == true){
+            isUserLogged(true);
+        }
+        else {
+            isUserLogged(false);
+        }
     }
 
     private void setNotificationsState(boolean allowed) {
@@ -165,7 +179,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         // consent screen will be shown here.
         //Intent signInIntent = googleSignInClient.getSignInIntent();
         //startActivityForResult(signInIntent, RC_GET_TOKEN);
-        oneTapClient = Identity.getSignInClient(this);
+        SharedOneTabClient shOneTab = SharedOneTabClient.getInstance();
+        shOneTab.setSignInClient(Identity.getSignInClient(this));
+        oneTapClient = shOneTab.getSignInClient();
         signUpRequest = BeginSignInRequest.builder()
                 .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                         .setSupported(true)
@@ -180,6 +196,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onSuccess(BeginSignInResult result) {
                         try {
+                            SharedPreferences sharedPreferences = getSharedPreferences(
+                                    getString(R.string.preference_name),
+                                    MODE_PRIVATE);
+                            sharedPreferences.edit().putBoolean(getString(R.string.google_preference_name), true).apply();
                             startIntentSenderForResult(
                                     result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
                                     null, 0, 0, 0);
@@ -199,18 +219,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void signOut() {
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                getString(R.string.preference_name),
+                MODE_PRIVATE);
+        SharedOneTabClient shOneTab = SharedOneTabClient.getInstance();
+        if(shOneTab.getSignInClient()!=null)
+            oneTapClient = shOneTab.getSignInClient();
         oneTapClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                updateUI(null);
+
+                isUserLogged(false);
+                sharedPreferences.edit().putBoolean(getString(R.string.google_preference_name), false).apply();
+
             }
         });
-    }
-    private void syncCalendar() {
-        SharedPreferences sh_clid = getSharedPreferences("MainCal-ID", MODE_PRIVATE);
-        CalendarListCl calClient = new CalendarListCl(1,this, sh_clid.getString("Cal-ID", ""));
-        calClient.delegate = this;
-        calClient.execute();
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -228,7 +251,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         verObj.execute();
                         Log.d(TAG, "Got ID token.");
 
-                        updateUI(credential);
+                        isUserLogged(true);
                     }
                 } catch (ApiException e) {
                     switch (e.getStatusCode()) {
@@ -252,19 +275,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    private void updateUI(@Nullable SignInCredential account) {
-        if (account != null) {
+    private void isUserLogged(boolean acc) {
+        if (acc == true) {
             ((TextView) findViewById(R.id.status)).setText(R.string.signed_in);
-
-
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
-            findViewById(R.id.sync_calendar).setVisibility(View.VISIBLE);
         } else {
             ((TextView) findViewById(R.id.status)).setText(R.string.signed_out);
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
-            findViewById(R.id.sync_calendar).setVisibility(View.GONE);
         }
     }
 
@@ -276,6 +295,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
             Log.w(TAG, message);
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                getString(R.string.preference_name),
+                MODE_PRIVATE);
+        boolean googleSignedIn = sharedPreferences.getBoolean(
+                getString(R.string.google_preference_name), false);
+        if(googleSignedIn == true){
+            isUserLogged(true);
+        }
+        else {
+            isUserLogged(false);
         }
     }
 
@@ -291,41 +325,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.disconnect_button:
                 signOut();
                 break;
-            case R.id.sync_calendar:
-                syncCalendar();
-                break;
         }
     }
 
-    //Schnittstelle zu AsyncTask
-    @Override
-    public void respListCalList(String res) {
-        JSONParser parser = new JSONParser();
-        JSONArray json = null;
-        calenderManager = new CalenderManager(getApplicationContext(),this);
-        try {
-            json = (JSONArray) parser.parse(res);
-            for (Object obj : json) {
-                JSONObject jsonObject = (JSONObject) obj;
-                String calendarId = (String) jsonObject.get("id");
-                String calendarName = (String) jsonObject.get("summary");
-                calenderManager.addCalender(new Calender(calendarId,calendarName,"default"));
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void respInsertCalList(String res) {
-
-    }
-
-    @Override
-    public void respGetCalList(String res) {
-
-    }
 
     @Override
     public void onCalenderListUpdated() {
