@@ -140,7 +140,8 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 if (googleSync.isChecked()) {
                     // TODO:
                     //  - API-Call: use previously created CalenderEvent object to also update the event in the user's Google Calendar
-                    updateEvent(5, "primary", title, desc, loc, from, to);
+
+                    updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc, from, to);
 
                 }
 
@@ -174,7 +175,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     }
 
-    public void updateEvent(Integer mtdNr, String calendarID, String summary, String description, String location, DateTime startTime, DateTime endTime /*, List<String> attendees */) {
+    public void updateEvent(Integer mtdNr, String calendarID, String eventID,String summary, String description, String location, DateTime startTime, DateTime endTime /*, List<String> attendees */) {
 
 
         try {
@@ -184,7 +185,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
                /* LinkedList <String> attendees = new LinkedList<>();
                 attendees.add("freundeskalender.kerim@gmail.com"); */
-            CalendarEvents event5 = new CalendarEvents(mtdNr, this, calendarID, summary, description, location, startTime, endTime /*, attendees */);
+            CalendarEvents event5 = new CalendarEvents(mtdNr, this, calendarID,eventID ,summary, description, location, startTime, endTime /*, attendees */);
             event5.delegate=this;
             event5.setConfig();
             event5.execute();

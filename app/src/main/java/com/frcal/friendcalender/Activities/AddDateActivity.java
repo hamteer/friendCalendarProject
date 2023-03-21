@@ -155,8 +155,9 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 if (googleSync.isChecked()) {
                     // TODO:
                     //  - API-Call: use previously created CalenderEvent object to also create a event in the user's Google Calendar
+                    String eventID =event.eventID;
 
-                    addEvent(3, "primary", title, desc, loc, from, to);
+                    addEvent(3, "primary",eventID ,title, desc, loc, from, to);
 
                 }
 
@@ -208,17 +209,11 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
     }
 
-    private void addEvent(Integer mtdNr, String calendarID, String summary, String description, String location, DateTime startTime, DateTime endTime /*, List<String> attendees */) {
+    private void addEvent(Integer mtdNr, String calendarID, String eventID,String summary, String description, String location, DateTime startTime, DateTime endTime /*, List<String> attendees */) {
 
 
         try {
-
-               /* DateTime startDateTime = convertDateTime(start, date);
-                DateTime endDateTime = convertDateTime(end, date); */
-
-               /* LinkedList <String> attendees = new LinkedList<>();
-                attendees.add("freundeskalender.kerim@gmail.com"); */
-            CalendarEvents event3 = new CalendarEvents(mtdNr, this, calendarID, summary, description, location, startTime, endTime /*, attendees */);
+            CalendarEvents event3 = new CalendarEvents(mtdNr, this, calendarID,eventID ,summary, description, location, startTime, endTime /*, attendees */);
             event3.delegate=this;
             event3.setConfig();
             event3.execute();
@@ -229,20 +224,6 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
     }
 
-    public DateTime convertDateTime(String time, String date) {
-        String DateTimeString = date + "" + time;
-        LocalDateTime DateTime = LocalDateTime.parse(DateTimeString);
-        ZoneId zoneId = ZoneId.systemDefault();
-        ZonedDateTime zonedDateTime = DateTime.atZone(zoneId);
-        // Konvertieren Sie das ZonedDateTime-Objekt in ein Instant-Objekt
-        Instant instant = zonedDateTime.toInstant();
-
-        // Konvertieren Sie das Instant-Objekt in ein DateTime-Objekt mit der Default-Zeitzone
-        DateTime dateTime = new DateTime(instant.toEpochMilli());
-
-        return dateTime;
-
-    }
 
     public void readEventData(JSONObject eventData) {
         try {

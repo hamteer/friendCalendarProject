@@ -291,6 +291,10 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         List<String> descriptionList = new ArrayList<>();
         List<DateTime> startTimeList = new ArrayList<>();
         List<DateTime> endTimeList = new ArrayList<>();
+        EventManager eventManager1 = new EventManager(getApplicationContext(), this);
+        ArrayList<CalenderEvent> liste = new ArrayList<>(eventManager1.getEvents());
+
+
         //   String calenderID;
         try {
             for (Object jsonString : res) {
@@ -298,6 +302,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
                 // calenderID = json.getString("id");
                 JSONArray items = json.getJSONArray("items");
                 for (int i = 0; i < items.length(); i++) {
+                    boolean compare = false;
                     JSONObject event = items.getJSONObject(i);
                     eventIDList.add(event.getString("id"));
                     summaryList.add(event.getString("summary"));
@@ -317,15 +322,20 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
                     String endTime = parts[1].substring(0, 8);
                     endTimeList.add(convertDateTime(endTime, endDate));
                     //CalenederActivity wo bekomme ich die event id aus der Datenbank her
-
-                    CalenderEvent eventDB = new CalenderEvent("primary", null, event.getString("id"), convertDateTime(startTime, startDate), convertDateTime(endTime, endDate), event.getString("description"), event.getString("summary"), event.getString("location"), null, null);
-                    eventManager.addEvent(eventDB);
-
-
+                    for (CalenderEvent eventDB : liste) {
+                        if (eventDB.googleEventID.equals(event.getString("id"))) {
+                            compare = true;
+                        }
+                    }
+                    if (compare == false) {
+                        CalenderEvent eventDB = new CalenderEvent("primary", null, event.getString("id"), convertDateTime(startTime, startDate), convertDateTime(endTime, endDate), event.getString("description"), event.getString("summary"), event.getString("location"), null, null);
+                        eventManager.addEvent(eventDB);
+                    }
 
 
                 }
-            } eventManager.requestUpdate();
+            }
+            eventManager.requestUpdate();
         } catch (Exception e) {
 
         }
