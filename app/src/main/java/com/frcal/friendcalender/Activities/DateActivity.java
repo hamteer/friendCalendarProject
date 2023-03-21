@@ -19,7 +19,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.frcal.friendcalender.DataAccess.CalenderManager;
 import com.frcal.friendcalender.DataAccess.EventManager;
+import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 import com.frcal.friendcalender.Exception.InputFormatException;
 import com.frcal.friendcalender.R;
@@ -44,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 // TODO: all
-public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener, AsyncCalEvent {
+public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener, AsyncCalEvent,CalenderManager.CalenderManagerListener {
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
     TextView chooseFriends;
     String title, desc, loc, dateString, fromString, toString;
@@ -54,7 +56,10 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     // Variables for DB integration
     EventManager eventManager;
+
     CalenderEvent currentEvent;
+
+    DateActivity context = this;
 
     // Variables for Friend selection dialogue
     boolean[] selectedFriends;
@@ -275,8 +280,22 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 if (googleSync.isChecked()) {
                     // TODO:
                     //  - API-Call: use previously created CalenderEvent object to also update the event in the user's Google Calendar
+                    CalenderManager cM1 = new CalenderManager(getApplicationContext(),context);
+                    List<Calender> mailList = new ArrayList<>(cM1.getCalenders());
+                    List<String> attendes = new ArrayList<>();
 
-                    updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc, from, to);
+
+                    if(listOfSelectedFriends.contains(1))
+                    {
+                        for(Calender cal : mailList)
+                        {
+                            attendes.add(cal.calenderID);
+                        }
+                    }
+
+
+
+                    updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc, from, to,attendes);
 
                 }
 
@@ -310,7 +329,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     }
 
-    public void updateEvent(Integer mtdNr, String calendarID, String eventID,String summary, String description, String location, DateTime startTime, DateTime endTime /*, List<String> attendees */) {
+    public void updateEvent(Integer mtdNr, String calendarID, String eventID,String summary, String description, String location, DateTime startTime, DateTime endTime , List<String> attendees ) {
 
 
         try {
@@ -320,7 +339,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
                /* LinkedList <String> attendees = new LinkedList<>();
                 attendees.add("freundeskalender.kerim@gmail.com"); */
-            CalendarEvents event5 = new CalendarEvents(mtdNr, this, calendarID,eventID ,summary, description, location, startTime, endTime /*, attendees */);
+            CalendarEvents event5 = new CalendarEvents(mtdNr, this, calendarID,eventID ,summary, description, location, startTime, endTime , attendees );
             event5.delegate=this;
             event5.setConfig();
             event5.execute();
@@ -360,6 +379,11 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     @Override
     public void respUpdateEvent(Object res) {
+
+    }
+
+    @Override
+    public void onCalenderListUpdated() {
 
     }
 }

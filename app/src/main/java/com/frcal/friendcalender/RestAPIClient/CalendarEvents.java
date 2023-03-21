@@ -38,8 +38,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-
-
 public class CalendarEvents extends AsyncTask<Void, Void, String> implements EventManager.EventManagerListener {
     private static final HttpTransport httpTransport = new NetHttpTransport();
     private static final int REQUEST_AUTHORIZATION = 1;
@@ -60,6 +58,8 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
     private DateTime startTime;
     private DateTime endTime;
 
+    private List<String> attendees = new ArrayList<>();
+
 
 
     /*private List<String> attendees = new LinkedList<>(); */
@@ -73,11 +73,11 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
 
     // <editor-fold desc="Konstruktoren">
     //For insert
-    public CalendarEvents(Integer mtdNr, Context context, String calendarID, String eventID,String summary, String description, String location, DateTime startTime, DateTime endTime /*, List<String> attendees */) {
+    public CalendarEvents(Integer mtdNr, Context context, String calendarID, String eventID, String summary, String description, String location, DateTime startTime, DateTime endTime, List<String> attendees) {
         this.mtdNr = mtdNr;
         this.context = context;
         this.calendarID = calendarID;
-        this.eventID= eventID;
+        this.eventID = eventID;
         this.summary = summary;
         this.description = description;
         this.location = location;
@@ -87,7 +87,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
         this.endTime = endTime;
 
 
-        /* this.attendees = attendees; */
+        this.attendees = attendees;
 
 
     }
@@ -176,12 +176,13 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
         EventDateTime end = new EventDateTime().setDateTime(this.endTime);
         event.setEnd(end);
 
-
-       /* EventAttendee[] attendees = new EventAttendee[this.attendees.size()];
-        for (String i : this.attendees) {
-            new EventAttendee().setEmail(i);
+        if (attendees != null) {
+            List<EventAttendee> attendeesToSET = new ArrayList<>();
+            for (String i : this.attendees) {
+                attendeesToSET.add( new EventAttendee().setEmail(i));
+            }
+            event.setAttendees((attendeesToSET));
         }
-        event.setAttendees(Arrays.asList(attendees)); */
         try {
             event = this.service.events().insert(this.calendarID, event).execute();
             JsonFactory jsonSetEvent = event.getFactory();
@@ -227,8 +228,17 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
             EventDateTime end = new EventDateTime().setDateTime(this.endTime);
             event.setEnd(end);
 
+            if (attendees != null) {
+                List<EventAttendee> attendeesToSET = new ArrayList<>();
+                for (String i : this.attendees) {
+                    attendeesToSET.add( new EventAttendee().setEmail(i));
+                }
+                event.setAttendees((attendeesToSET));
+            }
+
             // Update the event
             Event updatedEvent = service.events().update(this.calendarID, event.getId(), event).execute();
+
             CalenderEvent eventDB = new CalenderEvent(this.calendarID, this.eventID, updatedEvent.getId(), this.startTime, this.endTime, this.description, this.summary, this.location, null, this.endTime);
             eventManager.addEvent(eventDB);
 

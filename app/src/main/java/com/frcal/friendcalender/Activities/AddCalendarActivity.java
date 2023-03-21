@@ -57,7 +57,7 @@ public class AddCalendarActivity extends AppCompatActivity implements CalenderMa
                     // TODO:
                     //  - API-Call: hat diese Mailadresse ein Google-Konto? -> diese Mailadresse zur Synchronisation hinzufügen
 
-                    Calender calender = new Calender(null,mail,null);
+                    Calender calender = new Calender(mail,mail,null);
                     calenderManager.addCalender(calender);
                     Log.d("CalenderActivity", "Added Calender to database");
                     addCalendarMail.setText("");

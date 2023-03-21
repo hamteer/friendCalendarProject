@@ -49,6 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 // TODO:
@@ -75,6 +76,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
     ArrayList<Integer> listOfSelectedFriends = new ArrayList<>();
     ArrayList<Calender> calenderList = new ArrayList<>();
 
+    AddDateActivity context = this;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -295,9 +297,20 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 if (googleSync.isChecked()) {
                     // TODO:
                     //  - API-Call: use previously created CalenderEvent object to also create a event in the user's Google Calendar
-                    String eventID =event.eventID;
+                    CalenderManager cM1 = new CalenderManager(getApplicationContext(),context);
+                    List<Calender> mailList = new ArrayList<>(cM1.getCalenders());
+                    List<String> attendes = new ArrayList<>();
 
-                    addEvent(3, "primary",eventID ,title, desc, loc, from, to);
+
+                    if(listOfSelectedFriends.contains(1))
+                    {
+                       for(Calender cal : mailList)
+                       {
+                           attendes.add(cal.calenderID);
+                       }
+                    }
+
+                    addEvent(3, "primary",event.eventID ,title, desc, loc, from, to,attendes);
 
                 }
 
@@ -350,11 +363,11 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
     }
 
-    private void addEvent(Integer mtdNr, String calendarID, String eventID,String summary, String description, String location, DateTime startTime, DateTime endTime /*, List<String> attendees */) {
+    private void addEvent(Integer mtdNr, String calendarID, String eventID,String summary, String description, String location, DateTime startTime, DateTime endTime , List<String> attendees ) {
 
 
         try {
-            CalendarEvents event3 = new CalendarEvents(mtdNr, this, calendarID,eventID ,summary, description, location, startTime, endTime /*, attendees */);
+            CalendarEvents event3 = new CalendarEvents(mtdNr, this, calendarID,eventID ,summary, description, location, startTime, endTime , attendees );
             event3.delegate=this;
             event3.setConfig();
             event3.execute();
