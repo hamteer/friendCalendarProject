@@ -276,9 +276,9 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 // for them:
                 try {
                     from = DateTime.parseRfc3339(
-                            createRFCString(dateString, fromString, getApplicationContext()));
+                            getRFC3339FormattedString(dateString, fromString));
                     to = DateTime.parseRfc3339(
-                            createRFCString(dateString, toString, getApplicationContext()));
+                            getRFC3339FormattedString(dateString, toString));
                 } catch (Exception e) {
                     InputFormatException ife = new InputFormatException(getApplicationContext());
                     ife.notifyUser();
@@ -325,37 +325,46 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
         });
     }
 
-    static String createRFCString(String dateString, String timeString, Context context) {
-        String rfcString = "";
+    public static String getRFC3339FormattedString(String time, String dateString) {
+
         try {
-            String[] dayMonthYear = new String[3];
-            dayMonthYear = dateString.split("\\.");
-            String[] hrMin = new String[2];
-            hrMin = timeString.split(":");
-            TimeZone tz = TimeZone.getDefault();
-            String offset = String.valueOf(tz.getRawOffset());
-            String rfcOffset;
-            if (offset.contains("-")) {
-                if (offset.length() == 2) {
-                    rfcOffset = "-0" + offset.charAt(1) + ":00";
-                } else {
-                    rfcOffset = offset + ":00";
-                }
+            SimpleDateFormat inputFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+            Date date = null;
+
+            // Validate dateString
+            if (dateString == null || dateString.isEmpty()) {
+                throw new IllegalArgumentException("dateString cannot be null or empty");
+            }
+
+            // Validate time
+            if (time == null || time.isEmpty()) {
+                throw new IllegalArgumentException("time cannot be null or empty");
             } else {
-                if (offset.length() == 1) {
-                    rfcOffset = "+0" + offset + ":00";
-                } else {
-                    rfcOffset = "+" + offset + ":00";
+                String[] timeParts = time.split(":");
+                if (timeParts.length != 2) {
+                    throw new IllegalArgumentException("Invalid time format: " + time);
+                }
+                int hours = Integer.parseInt(timeParts[0]);
+                int minutes = Integer.parseInt(timeParts[1]);
+                if (hours < 0 || hours > 23) {
+                    throw new IllegalArgumentException("Invalid hour value: " + hours);
+                }
+                if (minutes < 0 || minutes > 59) {
+                    throw new IllegalArgumentException("Invalid minute value: " + minutes);
                 }
             }
-            rfcString =
-                    dayMonthYear[2] + "-" + dayMonthYear[1] + "-" + dayMonthYear[0] + "T" + hrMin[0] + ":" + hrMin[1] + ":00";
+
+            date = inputFormat.parse(dateString + " " + time);
+
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            outputFormat.setTimeZone(TimeZone.getDefault());
+            return outputFormat.format(date);
         } catch (Exception e) {
-            InputFormatException ife = new InputFormatException(context);
-            ife.notifyUser();
+            e.printStackTrace();
         }
-        return rfcString;
+        return null;
     }
+
 
     @Override
     public void onEventListUpdated() {

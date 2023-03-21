@@ -1,12 +1,13 @@
 package com.frcal.friendcalender.Activities;
 
-import static com.frcal.friendcalender.Activities.AddDateActivity.createRFCString;
+import static com.frcal.friendcalender.Activities.AddDateActivity.getRFC3339FormattedString;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,7 +19,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.frcal.friendcalender.DataAccess.CalenderManager;
 import com.frcal.friendcalender.DataAccess.EventManager;
+import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 import com.frcal.friendcalender.Notifications.NotificationPublisher;
 import com.frcal.friendcalender.R;
@@ -42,7 +45,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 // TODO: API-Call
-public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener {
+public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener {
     // UI variables
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
     TextView chooseFriends;
@@ -59,6 +62,8 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
     boolean[] selectedFriends;
     ArrayList<String> listOfFriends = new ArrayList<>();
     ArrayList<Integer> listOfSelectedFriends = new ArrayList<>();
+    CalenderManager calenderManager;
+    ArrayList<Calender> calenderList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,11 +91,11 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         listOfFriends.add("privater Termin");
         listOfFriends.add("öffentlicher Termin");
         // now fill in the listOfFriends with all Friends saved in the DB (or the API):
-        // TODO!
-        // we use a few example friends so the code still works, but this is still todo!
-        listOfFriends.add("Achim");
-        listOfFriends.add("Emma");
-        listOfFriends.add("Sebastian");
+        calenderManager.requestUpdate();
+        for (Calender friend: calenderList) {
+            listOfFriends.add(friend.name);
+            Log.d("initFriendsDialogue", "added " + friend.name);
+        }
         // usw., with DB/API this is probably done in a for-/foreach-loop
 
         // CAUTION:
@@ -224,6 +229,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         deleteBtn = findViewById(R.id.edit_date_delete_btn);
 
         eventManager = new EventManager(getApplicationContext(), this);
+        calenderManager = new CalenderManager(getApplicationContext(),this);
     }
 
     /**
@@ -270,9 +276,9 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 // for them:
                 try {
                     from = DateTime.parseRfc3339(
-                            createRFCString(dateString, fromString, getApplicationContext()));
+                            getRFC3339FormattedString(dateString, fromString));
                     to = DateTime.parseRfc3339(
-                            createRFCString(dateString, toString, getApplicationContext()));
+                            getRFC3339FormattedString(dateString, toString));
                 } catch (Exception e) {
                     InputFormatException ife = new InputFormatException(getApplicationContext());
                     ife.notifyUser();
@@ -419,5 +425,10 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
         return dateTime;
 
+    }
+
+    @Override
+    public void onCalenderListUpdated() {
+        calenderList = calenderManager.getCalenders();
     }
 }
