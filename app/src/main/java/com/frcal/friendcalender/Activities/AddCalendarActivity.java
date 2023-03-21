@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.frcal.friendcalender.DataAccess.CalenderManager;
 import com.frcal.friendcalender.DatabaseEntities.Calender;
+import com.frcal.friendcalender.Notifications.NotificationPublisher;
 import com.frcal.friendcalender.R;
 
 // TODO:
@@ -25,6 +26,10 @@ public class AddCalendarActivity extends AppCompatActivity implements CalenderMa
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        NotificationPublisher publisher = new NotificationPublisher();
+        publisher.createNotificationChannel(this);
+
         SharedPreferences sharedPreferences = getSharedPreferences(
                 getString(R.string.preference_name),
                 MODE_PRIVATE);

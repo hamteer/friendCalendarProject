@@ -17,6 +17,7 @@
     <string name="notifications_preference_name">notificationsAllowed</string>
     <string name="fingerprint_preference_name">fingerprintSwitchState</string>
     <string name="google_preference_name">googleSignedIn</string>
+    <string name="id_preference_name">notificationId</string>
 
     <!-- Sign-in status messages -->
     <string name="signed_in_fmt">Signed in as: %s</string>
@@ -99,11 +100,10 @@
 
     <string name="add_calendar_shortcut_disabled_message">Leider können Sie keinen neuen Kalender hinzufügen</string>
 
-
     <!-- Strings to determine, if app was newly opened, be it through the app icon, shortcuts or notifications -->
     <string name="newly_opened_extra_key">NewlyOpened</string>
     <string name="newly_opened_extra_value">True</string>
-
+    <string name="newly_opened_action">android.intent.action.VIEW_LOCUS</string>
 
     <!-- Strings for FingerprintActivity -->
     <string name="intent_key">class</string>
@@ -128,14 +128,23 @@
     <string name="fingerprint_no_authentification_method_alert_dialog_positive">Einrichten</string>
     <string name="fingerprint_no_authentification_method_alert_dialog_negative">Abbrechen</string>
 
-
     <!-- Strings for Notifications -->
     <string name="channel_id">default</string>
     <string name="channel_name">Standard Channel</string>
     <string name="channel_description">Dieser Channel ist der Standard für alle Benachrichtigungen bezüglich Kalenderereignissen</string>
 
-    <string name="notification_title">Test</string>
-    <string name="notification_text">Das ist ein Test</string>
+    <string name="notifications_id_key">ID</string>
+    <string name="notifications_notification_key">Notification</string>
+    <string name="notifications_event_id_key">EventID</string>
+    <string name="notifications_title_key">Title</string>
+    <string name="notifications_time_key">Time</string>
+    <string name="notifications_minutes_key">Minutes</string>
+    <string name="notifications_close_key">Close</string>
+
+    <string name="notification_description">Findet bald statt</string>
+
+    <string name="notification_action_5">5 Minuten vorher noch einmal erinnern</string>
+    <string name="notification_action_close">Schließen</string>
 
     <!-- Sync Calendars with Google Calendars -->
     <string name="sync_cal">Sync with GMail</string>
@@ -164,4 +173,6 @@
     <string name="private_date_set">privater Termin</string>
     <string name="public_date_set">öffentlicher Termin</string>
 
+    <!-- Strings for DateActivity -->
+    <string name="extra_event_key">SELECTED_EVENT</string>
 </resources>
