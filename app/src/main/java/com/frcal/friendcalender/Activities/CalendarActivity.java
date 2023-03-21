@@ -1,5 +1,7 @@
 package com.frcal.friendcalender.Activities;
 
+import static java.security.AccessController.getContext;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -62,16 +65,6 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
-        boolean fingerprintActive = sharedPreferences.getBoolean("fingerprintSwitchState", false);
-//        boolean firstRunOfApp = sharedPreferences.getBoolean("firstRun", true);
-//        if (firstRunOfApp) {
-//            startActivity(new Intent(this, NotificationInitializationActivity.class));
-//        } else
-        if ((getIntent().getAction() != null && (getIntent().getAction().equals("android.intent.action.MAIN") || getIntent().getAction().equals("android.intent.action.VIEW_LOCUS"))) && fingerprintActive) {
-            startActivity(new Intent(this, FingerprintActivity.class).putExtra(getString(R.string.intent_key), this.getClass().getCanonicalName()));
-            finish();
-        }
         setContentView(R.layout.activity_calendar);
         initCalendarView();
         initUI();
