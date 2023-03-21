@@ -315,7 +315,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 }
 
                 CalenderEvent updatedEvent = new CalenderEvent(currentEvent.calenderID,
-                        currentEvent.eventID, currentEvent.googleEventID, from, to, desc, title,
+                        currentEvent.eventID, currentEvent.googleEventID, fromWithOffset, toWithOffset, desc, title,
                         loc, currentEvent.creator, new DateTime(System.currentTimeMillis()), id);
                 eventManager.updateEvent(updatedEvent);
                 if (googleSync.isChecked()) {
