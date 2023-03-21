@@ -40,7 +40,7 @@ public class CalenderEvent {
     public CalenderEvent(String calenderID, String eventID, String googleEventID,
                          DateTime startTime, DateTime endTime, String description, String summary
             , String location,
-                         String creator, DateTime updated) {
+                         String creator, DateTime updated, int notificationID) {
 
         this.calenderID = calenderID;
         // schau ob eine calenderID uebergeben wurde falls ja nimm die, ansonsten erstell eine
@@ -53,7 +53,7 @@ public class CalenderEvent {
         this.location = location;
         this.creator = creator;
         this.updated = updated;
-        this.notificationID = NotificationPublisher.getUniqueNotificationId();
+        this.notificationID = notificationID;
     }
 
     @Ignore

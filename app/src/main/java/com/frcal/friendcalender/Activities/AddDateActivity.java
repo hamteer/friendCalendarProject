@@ -156,12 +156,13 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                     return;
                 }
 
+                NotificationPublisher publisher = new NotificationPublisher();
 
                 // TODO:
                 //  - DB-Call: Change calenderID, creator, googleEventID,updated
 
                 CalenderEvent event = new CalenderEvent(null, null, null, from, to, desc, title,
-                        loc, null, from);
+                        loc, null, from, publisher.getUniqueNotificationId(context));
                 eventManager.addEvent(event);
                 if (googleSync.isChecked()) {
                     // TODO:
@@ -172,7 +173,6 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 if (notif.isChecked()) {
                     // TODO:
                     //  - set Notification for this Event
-                    NotificationPublisher publisher = new NotificationPublisher();
                     publisher.scheduleNotification(context, event.eventID, title,
                             event.notificationID, from.getValue(), 15);
                 }

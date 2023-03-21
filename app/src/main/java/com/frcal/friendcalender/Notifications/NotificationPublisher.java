@@ -25,15 +25,17 @@ import com.frcal.friendcalender.Activities.DateActivity;
 import com.frcal.friendcalender.R;
 
 public class NotificationPublisher extends BroadcastReceiver {
-
-    private static int previousId;
-
-    static public int getUniqueNotificationId() {
-        if (previousId == 2147483647) {
-            return previousId = 0;
+    public int getUniqueNotificationId(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preference_name),MODE_PRIVATE );
+        int previousId = sharedPreferences.getInt("id_preference_name", 0);
+        int newId;
+        if (previousId == 0 || previousId == 2147483647) {
+            newId = 1;
         } else {
-            return previousId++;
+            newId = previousId + 1;
         }
+        sharedPreferences.edit().putInt("id_preference_name", newId).apply();
+        return newId;
     }
 
     public void createNotificationChannel(Context context) {
@@ -82,6 +84,12 @@ public class NotificationPublisher extends BroadcastReceiver {
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
+        Intent closeIntent = new Intent(context, NotificationPublisher.class);
+        closeIntent.putExtra(context.getString(R.string.notifications_id_key), id);
+        closeIntent.putExtra("notifications_close_key", true);
+        PendingIntent closePendingIntent = PendingIntent.getBroadcast(context, 1, closeIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
         NotificationCompat.Builder builder;
 
         if (minutes == 15) {
@@ -104,7 +112,9 @@ public class NotificationPublisher extends BroadcastReceiver {
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT).setContentIntent(
                             resultPendingIntent).setAutoCancel(true).addAction(
                             R.drawable.baseline_notifications_active_48,
-                            "5 Minuten vorher nochmal erinnern", snoozePendingIntent);
+                            "5 Minuten vorher nochmal erinnern", snoozePendingIntent).addAction(
+                            R.drawable.baseline_notifications_off_48, "Schließen",
+                            closePendingIntent);
         } else {
             builder = new NotificationCompat.Builder(context,
                     context.getString(R.string.channel_id))
@@ -113,7 +123,9 @@ public class NotificationPublisher extends BroadcastReceiver {
                     .setContentText(context.getString(R.string.notification_description_5))
                     .setWhen(time).setShowWhen(true)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT).setContentIntent(
-                            resultPendingIntent).setAutoCancel(true);
+                            resultPendingIntent).setAutoCancel(true).addAction(
+                            R.drawable.baseline_notifications_off_48, "Schließen",
+                            closePendingIntent);
         }
         return builder.build();
     }
@@ -130,6 +142,11 @@ public class NotificationPublisher extends BroadcastReceiver {
                     intent.getIntExtra(context.getString(R.string.notifications_id_key), 0),
                     intent.getLongExtra("notifications_time_key", 0),
                     intent.getIntExtra("notifications_minutes_key", 5));
+        } else if (intent.hasExtra("notifications_close_key")) {
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(
+                    context);
+            notificationManager.cancel(
+                    intent.getIntExtra(context.getString(R.string.notifications_id_key), 0));
         } else if (ActivityCompat.checkSelfPermission(context,
                 Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(context, "Juhu", Toast.LENGTH_SHORT).show();
