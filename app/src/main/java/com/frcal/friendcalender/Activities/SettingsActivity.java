@@ -4,7 +4,6 @@ package com.frcal.friendcalender.Activities;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
@@ -20,7 +19,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -30,18 +28,12 @@ import android.widget.Toast;
 import com.frcal.friendcalender.DataAccess.CalenderManager;
 import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.R;
-import com.frcal.friendcalender.RestAPIClient.AsyncCalListCl;
-import com.frcal.friendcalender.RestAPIClient.CalendarListCl;
 import com.frcal.friendcalender.RestAPIClient.SharedOneTabClient;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.BeginSignInResult;
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.android.gms.auth.api.identity.SignInCredential;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -54,17 +46,14 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, CalenderManager.CalenderManagerListener {
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener,
+        CalenderManager.CalenderManagerListener {
 
     private static final String TAG = "FrCal";
 
@@ -83,6 +72,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActivityResultLauncher<String> permissionRequest = initPermissionRequest();
+
         setContentView(R.layout.activity_settings);
         //For shared Preferences
         Switch notificationsSwitch = findViewById(R.id.notifications_switch);
@@ -90,7 +82,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         // Check for active one tap client
         SharedPreferences prefs = getSharedPreferences("frcalSharedPrefs", MODE_PRIVATE);
         SharedOneTabClient shOneTab = SharedOneTabClient.getInstance();
-        if(shOneTab.getSignInClient()==null){
+        if (shOneTab.getSignInClient() == null) {
             prefs.edit().putBoolean(getString(R.string.google_preference_name), false).apply();
         }
         boolean notificationsActive = prefs.getBoolean(
@@ -104,10 +96,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                             this,
                             Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                         if (isChecked) {
-                            ActivityResultLauncher<String> permissionRequest =
-                                    registerForActivityResult(
-                                            new ActivityResultContracts.RequestPermission(),
-                                            this::setNotificationsState);
                             permissionRequest.launch(
                                     Manifest.permission.POST_NOTIFICATIONS);
                         } else {
@@ -143,12 +131,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 MODE_PRIVATE);
         boolean googleSignedIn = sharedPreferences.getBoolean(
                 getString(R.string.google_preference_name), false);
-        if(googleSignedIn == true){
+        if (googleSignedIn == true) {
             isUserLogged(true);
-        }
-        else {
+        } else {
             isUserLogged(false);
         }
+    }
+
+    private ActivityResultLauncher<String> initPermissionRequest() {
+        return registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                this::setNotificationsState);
     }
 
     private void setNotificationsState(boolean allowed) {
@@ -183,13 +176,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         shOneTab.setSignInClient(Identity.getSignInClient(this));
         oneTapClient = shOneTab.getSignInClient();
         signUpRequest = BeginSignInRequest.builder()
-                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                        .setSupported(true)
-                        // Your server's client ID, not your Android client ID.
-                        .setServerClientId(getString(R.string.server_client_id))
-                        // Show all accounts on the device.
-                        .setFilterByAuthorizedAccounts(false)
-                        .build())
+                .setGoogleIdTokenRequestOptions(
+                        BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                                .setSupported(true)
+                                // Your server's client ID, not your Android client ID.
+                                .setServerClientId(getString(R.string.server_client_id))
+                                // Show all accounts on the device.
+                                .setFilterByAuthorizedAccounts(false)
+                                .build())
                 .build();
         oneTapClient.beginSignIn(signUpRequest)
                 .addOnSuccessListener(this, new OnSuccessListener<BeginSignInResult>() {
@@ -199,7 +193,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                             SharedPreferences sharedPreferences = getSharedPreferences(
                                     getString(R.string.preference_name),
                                     MODE_PRIVATE);
-                            sharedPreferences.edit().putBoolean(getString(R.string.google_preference_name), true).apply();
+                            sharedPreferences.edit().putBoolean(
+                                    getString(R.string.google_preference_name), true).apply();
                             startIntentSenderForResult(
                                     result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
                                     null, 0, 0, 0);
@@ -223,18 +218,20 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 getString(R.string.preference_name),
                 MODE_PRIVATE);
         SharedOneTabClient shOneTab = SharedOneTabClient.getInstance();
-        if(shOneTab.getSignInClient()!=null)
+        if (shOneTab.getSignInClient() != null)
             oneTapClient = shOneTab.getSignInClient();
         oneTapClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
 
                 isUserLogged(false);
-                sharedPreferences.edit().putBoolean(getString(R.string.google_preference_name), false).apply();
+                sharedPreferences.edit().putBoolean(getString(R.string.google_preference_name),
+                        false).apply();
 
             }
         });
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -244,7 +241,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 try {
                     SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(data);
                     String idToken = credential.getGoogleIdToken();
-                    if (idToken !=  null) {
+                    if (idToken != null) {
                         // Got an ID token from Google. Use it to authenticate
                         // with your backend.
                         Verifier verObj = new Verifier(idToken);
@@ -305,15 +302,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 MODE_PRIVATE);
         boolean googleSignedIn = sharedPreferences.getBoolean(
                 getString(R.string.google_preference_name), false);
-        if(googleSignedIn == true){
+        if (googleSignedIn == true) {
             isUserLogged(true);
-        }
-        else {
+        } else {
             isUserLogged(false);
         }
     }
 
-        @Override
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
@@ -331,18 +327,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onCalenderListUpdated() {
-        ArrayList <Calender> calenderArrayList = calenderManager.getCalenders();
+        ArrayList<Calender> calenderArrayList = calenderManager.getCalenders();
         Log.d("CalenderActivity", "onCalenderListUpdated() called");
         // TODO: Adapter to show Calenders which are stored in calenderArrayList
     }
 
-    private class Verifier extends AsyncTask<Void,Void,Void> {
+    private class Verifier extends AsyncTask<Void, Void, Void> {
         private String idToken;
-        Verifier (String idToken) {
+
+        Verifier(String idToken) {
             this.idToken = idToken;
         }
+
         public void verifyToken(String idTokenString) {
-            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(httpTransport, jsonFactory)
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(httpTransport,
+                    jsonFactory)
                     // Specify the CLIENT_ID of the app that accesses the backend:
                     .setAudience(Collections.singletonList(getString(R.string.server_client_id)))
                     // Or, if multiple clients access the backend:
@@ -374,7 +373,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 String locale = (String) payload.get("locale");
                 String familyName = (String) payload.get("family_name");
                 String givenName = (String) payload.get("given_name");
-                SharedPreferences sharedPreferences = getSharedPreferences("MainCal-ID", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences("MainCal-ID",
+                        Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("Cal-ID", email);
                 editor.apply();
@@ -383,7 +383,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             } else {
                 System.out.println("Invalid ID token.");
             }
-    }
+        }
+
         @Override
         protected Void doInBackground(Void... voids) {
             verifyToken(idToken);
