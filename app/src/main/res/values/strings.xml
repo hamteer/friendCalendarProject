@@ -95,10 +95,10 @@
 
     <string name="add_date_shortcut_disabled_message">Leider können Sie keinen neuen Termin erstellen</string>
 
-    <string name="add_calendar_shortcut_label_short">Kalender hinzufügen</string>
-    <string name="add_calendar_shortcut_label_long">Einen neuen Kalender hinzufügen</string>
+    <string name="add_calendar_shortcut_label_short">Freund hinzufügen</string>
+    <string name="add_calendar_shortcut_label_long">Einen neuen Freund hinzufügen</string>
 
-    <string name="add_calendar_shortcut_disabled_message">Leider können Sie keinen neuen Kalender hinzufügen</string>
+    <string name="add_calendar_shortcut_disabled_message">Leider können Sie keinen neuen Freund hinzufügen</string>
 
     <!-- Strings to determine, if app was newly opened, be it through the app icon, shortcuts or notifications -->
     <string name="newly_opened_extra_key">NewlyOpened</string>
