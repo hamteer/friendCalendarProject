@@ -43,6 +43,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.TimeZone;
 
 // TODO: API-Call
 public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener {
@@ -274,11 +275,24 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
                 // create RFC3339-Strings out of start and end time and create DateTime Objects
                 // for them:
+                DateTime fromWithOffset = null;
+                DateTime toWithOffset = null;
+
                 try {
                     from = DateTime.parseRfc3339(
                             getRFC3339FormattedString(dateString, fromString));
                     to = DateTime.parseRfc3339(
                             getRFC3339FormattedString(dateString, toString));
+
+                    TimeZone timeZone = TimeZone.getDefault();
+                    int fromOffset = timeZone.getOffset(from.getValue());
+                    long fromDeviceTime = from.getValue() - fromOffset;
+                    fromWithOffset = new DateTime(fromDeviceTime);
+
+                    int toOffset = timeZone.getOffset(to.getValue());
+                    long toDeviceTime = to.getValue() - toOffset;
+                    toWithOffset = new DateTime(toDeviceTime);
+                    
                 } catch (Exception e) {
                     InputFormatException ife = new InputFormatException(getApplicationContext());
                     ife.notifyUser();
