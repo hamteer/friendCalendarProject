@@ -124,7 +124,7 @@ Virginia Schellenberg: vis9494@thi.de & schellenberg.virginia@mail.de, vis9494
 
 Daniel Kuzma: 
 
-Kerim Agalarov: 
+Kerim Agalarov: Fingerabdruck-Login und Google-Integration 
 
 Niclas Hildner: 
 
