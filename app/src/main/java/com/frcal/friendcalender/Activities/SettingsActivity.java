@@ -231,9 +231,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                 isUserLogged(false);
                 sharedPreferences.edit().putBoolean(getString(R.string.google_preference_name), false).apply();
-
             }
         });
+        shOneTab.setSignInClient(null);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

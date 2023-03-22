@@ -169,6 +169,8 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
 
 
     public String setEvent() {
+        eventManager = new EventManager(context.getApplicationContext(), this);
+
         Event event = new Event().setSummary(this.summary).setLocation(this.location).setDescription(this.description);
 
         EventDateTime start = new EventDateTime().setDateTime(this.startTime);
@@ -201,10 +203,10 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
 
     public String deleteEvent() {
         try {
-            // Retrieve an event
-            Event event = this.service.events().get(this.calendarID, this.eventID).execute();
-            JsonFactory jsonSetEvent = event.getFactory();
-            return jsonSetEvent.toString();
+            // Delete Event in Gmail
+            this.service.events().delete(this.calendarID, this.eventID).execute();
+
+            return "";
         } catch (UserRecoverableAuthIOException e) {
             ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException io) {

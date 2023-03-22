@@ -292,10 +292,19 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                             attendes.add(cal.calenderID);
                         }
                     }
+                    SharedPreferences sharedPreferences = getSharedPreferences(
+                            getString(R.string.preference_name),
+                            MODE_PRIVATE);
+                    boolean googleSignedIn = sharedPreferences.getBoolean(
+                            getString(R.string.google_preference_name), false);
+                    if (googleSignedIn ==true) {
+                        updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc, from, to,attendes);
+                        return;
+                    }
+                    Toast.makeText(DateActivity.this, "Lokalen Termin geupdatet (nicht eingeloggt)", Toast.LENGTH_SHORT).show();
+                    return;
 
 
-
-                    updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc, from, to,attendes);
 
                 }
 
@@ -313,11 +322,19 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
             public void onClick(View v) {
 
                 eventManager.deleteEvent(currentEvent);
-                // TODO:
-                //  - API-Call: delete this event
-                deleteEvent(4,"primary",currentEvent.googleEventID);
-                //  - delete the notification for this event, if it exists
-                Toast.makeText(DateActivity.this, "Termin gelöscht", Toast.LENGTH_SHORT).show();
+                SharedPreferences sharedPreferences = getSharedPreferences(
+                        getString(R.string.preference_name),
+                        MODE_PRIVATE);
+                boolean googleSignedIn = sharedPreferences.getBoolean(
+                        getString(R.string.google_preference_name), false);
+                if (googleSignedIn ==true) {
+                    deleteEvent(4,"primary",currentEvent.googleEventID);
+                    Toast.makeText(DateActivity.this, "Termin gelöscht", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+                //  - delete local
+                Toast.makeText(DateActivity.this, "Lokalen Termin gelöscht (nicht eingeloggt)", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

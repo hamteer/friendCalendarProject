@@ -294,7 +294,18 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 String creator = sh_clid.getString("Cal-ID", "");
                 CalenderEvent event = new CalenderEvent("primary",null, null,from,to,desc,title,loc,creator,from);
                 eventManager.addEvent(event);
+
+                SharedPreferences sharedPreferences = getSharedPreferences(
+                        getString(R.string.preference_name),
+                        MODE_PRIVATE);
+                boolean googleSignedIn = sharedPreferences.getBoolean(
+                        getString(R.string.google_preference_name), false);
                 if (googleSync.isChecked()) {
+                    if (googleSignedIn == false) {
+                        Toast.makeText(AddDateActivity.this, "Lokalen Termin angelegt (nicht eingeloggt)", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     // TODO:
                     //  - API-Call: use previously created CalenderEvent object to also create a event in the user's Google Calendar
                     CalenderManager cM1 = new CalenderManager(getApplicationContext(),context);
