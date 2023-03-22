@@ -138,60 +138,72 @@ https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender
 [Beschreiben Sie die verschiedenen Schritte und Zusammentreffen bis zum Abschluss des Projekts.]
 
 **1.	Termin (07.12.2022):** Sammeln von Vorschlägen für die App
-    **Aufgaben:**   Alle: Gedanken machen, welchen Vorschlag derjenige präferiert und mögliche Anforderungen notieren
+**Aufgaben:**   Alle: Gedanken machen, welchen Vorschlag derjenige präferiert und mögliche Anforderungen notieren
+
 **2.	Treffen (14.12.2022):** Definition von Anforderungen für populärste Ideen
+
 **3.	Treffen (15.02.2023):** Erste Absprache zur Planung von Aufgaben
-    **Aufgaben:** 	Daniel Kuzma: Informieren über Google-API-Termine und beginnen mit Datenbankanbindung
-		            Kerim Agalarov: Bereits erstellte Activity mit Fingerabdruck-Login auf GitHub pushen
-		            Niclas Hildner: Informieren über Google-Kalender-API um Termine zu teilen und mit Einbau beginnen
-		            Philipp Hamann: Informieren über Material Calendar View und dessen Implementierung
-		            Virginia Schellenberg: Urlaub
+**Aufgaben:**	- Daniel Kuzma: Informieren über Google-API-Termine und beginnen mit Datenbankanbindung
+		- Kerim Agalarov: Bereits erstellte Activity mit Fingerabdruck-Login auf GitHub pushen
+		- Niclas Hildner: Informieren über Google-Kalender-API um Termine zu teilen und mit Einbau beginnen
+		- Philipp Hamann: Informieren über Material Calendar View und dessen Implementierung
+		- Virginia Schellenberg: Urlaub
+		
 **4.	Treffen (19.02.2023):** ?
-    **Aufgaben:** 	Daniel Kuzma: Datenbank testen (API-Anfragen aus App heraus stellen)
-		            Kerim Agalarov: SettingsActivity erstellen
-		            Niclas Hildner: Google-Login einbauen
-		            Philipp Hamann: Kalender-Element anpassen
-		            Virginia Schellenberg: Urlaub
+**Aufgaben:**	- Daniel Kuzma: Datenbank testen (API-Anfragen aus App heraus stellen)
+		- Kerim Agalarov: SettingsActivity erstellen
+		- Niclas Hildner: Google-Login einbauen
+		- Philipp Hamann: Kalender-Element anpassen
+		- Virginia Schellenberg: Urlaub
+			    
 **5.	 Treffen (22.02.2023):** ?
-     **Aufgaben:**  Daniel Kuzma: Datenbank verbessern und API-Anfragen einbauen
-		            Kerim Agalarov: API erstellen
-		            Niclas Hildner: API erstellen
-		            Philipp Hamann: Activity-Arbeitsfluss und Layouts planen
-		            Virginia Schellenberg: Urlaub
+**Aufgaben:**	- Daniel Kuzma: Datenbank verbessern und API-Anfragen einbauen
+		- Kerim Agalarov: API erstellen
+		- Niclas Hildner: API erstellen
+		- Philipp Hamann: Activity-Arbeitsfluss und Layouts planen
+		- Virginia Schellenberg: Urlaub
+		
 **6.	Treffen (28.02.2023):** Vorstellung bisheriger Fortschritte, erster Blick auf Activity-Workflow durch Philipp Hamann
-    **Aufgaben:**   Daniel Kuzma: ?
-                Kerim Agalarov: Herausfinden, wie API-Aufrufe an anderen Codestellen möglich sind
-                Niclas Hildner: API kapseln
-                Philipp Hamann: DateActivity erstellen und Activities weiter ausarbeiten
-                Virginia Schellenberg: Shortcuts erstellen
+**Aufgaben:**	- Daniel Kuzma: ?
+               	- Kerim Agalarov: Herausfinden, wie API-Aufrufe an anderen Codestellen möglich sind
+                - Niclas Hildner: API kapseln
+                - Philipp Hamann: DateActivity erstellen und Activities weiter ausarbeiten
+                - Virginia Schellenberg: Shortcuts erstellen
+		
 **7.	Treffen (02.03.2023):** Kurze Präsentation von Fortschritten, Symbolvideos von Fingerabdrucksperre bei WhatsApp durch Virginia Schellenberg
-     **Aufgaben:**	Daniel Kuzma: Finale Anpassung der Datenbank und auf GitHub pushen
-                Kerim Agalarov: API in eigene Klasse kapseln und Aufrufe an geeigneten Stellen
-                Niclas Hildner: API in eigene Klasse kapseln und Aufrufe an geeigneten Stellen
-                Philipp Hamann: UI aller Activities mit XML erstellen
-                Virginia Schellenberg: Shortcuts finalisieren, Ändern der applicationId und Anpassung von FingerprintActivity (auch bei Shortcuts anzeigen und Möglichkeit von PIN, Passwort oder Muster)
+**Aufgaben:**	- Daniel Kuzma: Finale Anpassung der Datenbank und auf GitHub pushen
+                - Kerim Agalarov: API in eigene Klasse kapseln und Aufrufe an geeigneten Stellen
+                - Niclas Hildner: API in eigene Klasse kapseln und Aufrufe an geeigneten Stellen
+                - Philipp Hamann: UI aller Activities mit XML erstellen
+                - Virginia Schellenberg: Shortcuts finalisieren, Ändern der applicationId und Anpassung von FingerprintActivity (auch bei Shortcuts anzeigen und Möglichkeit von PIN, Passwort oder Muster)
+		
 **8.	Treffen (08.03.2023):** Präsentation von Google-API durch Kerim Agalarov und Niclas Hildner, UI durch Philipp Hamann und der finalen Shortcuts durch Virginia Schellenberg
-    **Aufgaben:**	  Daniel Kuzma: Urlaub
-                Kerim Agalarov: API-Funktionen vervollständigen
-                Niclas Hildner: API-Funktionen vervollständigen
-                Philipp Hamann: UI vervollständigen
-                Virginia Schellenberg: Arbeitsfluss für erstmaliges Öffnen zur Initialisierung von Benachrichtigungen, Google-Anmeldung und Fingerabdrucksperre
+**Aufgaben:**	- Daniel Kuzma: Urlaub
+                - Kerim Agalarov: API-Funktionen vervollständigen
+                - Niclas Hildner: API-Funktionen vervollständigen
+                - Philipp Hamann: UI vervollständigen
+                - Virginia Schellenberg: Arbeitsfluss für erstmaliges Öffnen zur Initialisierung von Benachrichtigungen, Google-Anmeldung und Fingerabdrucksperre
+		
 **9.	Treffen (12.03.2023):** Vorstellung fertiger UI durch Philipp Hamann und Engagieren externer Designerin für Gestaltung von Logo
-     **Aufgaben:**	Daniel Kuzma: Datenbankklassen fertig refactoren und Datenbankaufrufe an geeigneten Stellen
-                Kerim Agalarov: API testen und API-Aufrufe an geeigneten Stellen einbauen
-                Niclas Hildner: API testen und API-Aufrufe an geeigneten Stellen einbauen
-                Philipp Hamann: UI für Darkmode und Java-Gerüst der Activity-Klassen erstellen
-                Virginia Schellenberg: Mit Notifications beginnen und in Settings hinzufügen
+**Aufgaben:**	- Daniel Kuzma: Datenbankklassen fertig refactoren und Datenbankaufrufe an geeigneten Stellen
+                - Kerim Agalarov: API testen und API-Aufrufe an geeigneten Stellen einbauen
+                - Niclas Hildner: API testen und API-Aufrufe an geeigneten Stellen einbauen
+                - Philipp Hamann: UI für Darkmode und Java-Gerüst der Activity-Klassen erstellen
+                - Virginia Schellenberg: Mit Notifications beginnen und in Settings hinzufügen
+		
 **10.	Treffen (15.03.2023):** Diskussion über Datenbanken
-    **Aufgaben:**	  Alle: Weiter an bisherigen Aufgaben arbeiten
+**Aufgaben:**	- Alle: Weiter an bisherigen Aufgaben arbeiten
+
 **11.	Treffen (16.03):** ?
-    **Aufgaben:**	  Alle: Weiter an bisherigen Aufgaben arbeiten
+**Aufgaben:**	- Alle: Weiter an bisherigen Aufgaben arbeiten
+    
 **12.	Treffen (19.03.2023):** Diskussionen über bisherigen Stand
-     **Aufgaben:**  Daniel Kuzma: AddDateActivity perfektionieren
-                Kerim Agalarov: ?
-                Niclas Hildner: Events einbinden und Event und Datenbank in OnResume() speichern
-                Philipp Hamann: UI von DateActivity, CalendarActivity und AddDateActivity anpassen
-                Virginia Schellenberg: AlarmManager für Notifications einbauen, NotificationPublisher finalisieren und Anpassung von Notifications auf DateActivity möglich machen
+**Aufgaben:**	- Daniel Kuzma: AddDateActivity perfektionieren
+                - Kerim Agalarov: ?
+                - Niclas Hildner: Events einbinden und Event und Datenbank in OnResume() speichern
+                - Philipp Hamann: UI von DateActivity, CalendarActivity und AddDateActivity anpassen
+                - Virginia Schellenberg: AlarmManager für Notifications einbauen, NotificationPublisher finalisieren und Anpassung von Notifications auf DateActivity möglich machen
+		
 **13.	Treffen (22.03.2023):** ?
 
 
