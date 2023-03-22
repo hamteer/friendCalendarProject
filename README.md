@@ -124,7 +124,7 @@ https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender
 
 **Daniel Kuzma:** 
 
-**Kerim Agalarov:** Fingerabdruck-Login und Google-Integration
+**Kerim Agalarov:** FingerprintActivity (Fingerabdruck-Login), Google-Integration
 
 **Niclas Hildner:** 
 
