@@ -15,32 +15,57 @@ So kann man über unsere Applikation Termine erstellen und diese mit Freunden ü
 [Beschreiben Sie die Funktionen ihrer App. Beziehen Sie sich dabei auf den Anforderungskatalog und stellen Sie eine Verbindung zu den entsprechneden Files oder Directories her.]
 
 NotificationsInitializationActivity, FingerprintInitializationActivity, GoogleInitialization: Beim erstmaligen Öffnen der App nach der Installation wird der Nutzer in einen Initialisierungsfluss weitergeleitet. Bei diesem durchläuft er drei Activities, die ihn nacheinander fragen, ob er Benachrichtigungen aktivieren möchte, dort wird bei Zustimmung zuerst um deren Erlaubnis gebeten, ob er seine Daten mithilfe einer Fingerabdrucksperre sichern und sich mit Google anmelden möchte.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/NotificationInitializationActivity.java
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/FingerprintInitializationActivity.java
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/GoogleInitializationActivity.java
 
 CalendarActivity: Danach gelangt er auf die Hauptseite der App, eine Darstellung des Kalenders, wobei der Nutzer zwischen einer Monats- und Wochenansicht wechseln kann. Zu dieser Activity gelangt der Nutze immer, wenn er die App über ihr Icon öffnet und im Falle einer aktivierten Fingerabdrucksperre eben diese erfolgreich absolviert. Von hier aus kann der Nutzer die Einstellungen öffnen, einen neuen Termin erstellen, einen Freund hinzufügen oder auf die Anzeige eines einzelnen Tages zugreifen. Falls der Nutzer ungültige Daten eingibt, so wird ihm dies prompt vermittelt. Gültige Termine werden hingegen in der Datenbank gespeichert.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/CalendarActivity.java
+
 FingerprintActivity: Sofern der Nutzer die Fingerabdrucksperre eingerichtet hat, wird er beim Öffnen der App, egal auf welchem Wege, auf eine Activity geleitet, wo er seinen Fingerabdruck eingeben muss. Nur sofern dies erfolgreich gelingt, hat er Zugriff auf die restliche App. Wenn die Fingerabdrucksperre nicht eingerichtet ist, wird diese Seite übersprungen.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/FingerprintActivity.java
 
 SettingsActivity: In den Einstellungen kann der Nutzer nachträglich B4enachrichtigungen aktivieren und wieder deaktivieren, ebenso wie die Fingerabdrucksperre. Außerdem kann er die Verknüpfung der App mit dem eigenen Google-Konto entsprechend anpassen.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/SettingsActivity.java
 
 AddDateActivity: Um einen neuen Termin zu erstellen kann der Nutzer einen Titel, ein Datum, eine Uhrzeit für Beginn als auch Ende, eine Beschreibung und einen Ort angeben. Zudem kann er aus einem Dropdown Feld auswählen, mit welchen Freunden der Termin geteilt werden soll, bzw. ob er privat ist. Über zwei Checkboxen hat er auch die Möglichkeit, den neuen Termin mit seinem Google-Kalender zu synchronisieren und sich eine Benachrichtigung etwa 15 Minuten vor dem Termin schicken zu lassen.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/AddDateActivity.java
+
 AddCalendarActivity: Um einen neuen Freund und somit auch dessen Termine hinzuzufügen genügt es, dass der Nutzer dessen Emailadresse eingibt und dies über den entsprechenden Button bestätigt.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/AddCalendarActivity.java
 
 SingleDayActivity: Wenn ein Tag in der CalendarActivity angeklickt wird, so führt dies den Nutzer zur Anzeige aller Termine an diesem Tag. Diese werden mittels Adapter aus der Datenbank ausgelesen und nach Uhrzeit sortiert als vordefinierte Layoutbausteine angezeigt. Sofern der Nutzer einen dieser Termine anklickt, führt ihn dies zur Anzeige von diesem.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/SingleDayActivity.java
 
-DateActivity: Ein bereits bestehender Termin kann nach Belieben verändert werden. Dabei können die gleichen Attribute gesetzt werden, wie auch beim Erstellen eines Termins. Davon abgesehen kann ein Termin natürlich auch gelöscht werden.
+DateActivity: Ein bereits bestehender Termin kann nach Belieben verändert werden. Dabei können die gleichen Attribute gesetzt werden, wie auch beim Erstellen eines Termins in der AddDateActivity. Davon abgesehen kann ein Termin natürlich auch gelöscht werden.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/DateActivity.java
 
 CalendarEventManager, CalendarEvent: Ein neu angelegter Termin wird als CalendarEvent in der entsprechenden Datenbank gespeichert.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/DataAccess/EventManager.java
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/DatabaseEntities/CalenderEvent.java
 
 CalendarManager, Calendar: Wenn ein Freund hinzugefügt wird, wird dessen Kalender, bzw. Termine als Calendar-Objekt in der Datenbank gespeichert.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/DataAccess/CalenderManager.java
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/DatabaseEntities/Calender.java
 
 InputFormatException: Falls eine Termineingabe nicht valide ist, wird dies über eine Exception ausgegeben.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Exception/InputFormatException.java
 
 CalendarCl, CalendarEventList, CalendarEvents, CalendarListCl, SharedOneTabClient: Gespeicherte Termine werden sofort an den eigenen Google-Kalender übergeben. Genauso kann auf Termine des Google-Kalenders zugegriffen werden, um diese in der Appdarzustellen.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/RestAPIClient/CalendarCl.java
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/RestAPIClient/CalendarEventList.java
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/RestAPIClient/CalendarEvents.java
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/RestAPIClient/CalendarListCl.java
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/RestAPIClient/SharedOneTabClient.java
 
 AuthenticationManager: Um nicht mehrfach den gleichen Code implementieren zu müsse, kann in einer separaten Klasse überprüft werden, ob und welche Authentifizierungsmethode auf dem Gerät aktiv ist. Außerdem kann hier eine neue Methode eingerichtet werden, falls sie nicht bereits existiert.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Authentication/AuthenticationManager.java
 
 NotificationPublisher: Um eine Benachrichtigung als Erinnerung für einen Termin zu verschicken existiert eine dafür vorgesehene Klasse. Diese kann sowohl Benachrichtigungen planen, indem sie den AlarmManager nutzt, als diese auch abbrechen. Benachrichtigungen können über eine Action sofort geschlossen werden und auch eine Erinnerung fünf Minuten vor einem Termin ist möglich. Falls eine Benachrichtigung angeklickt wird, führt sie zur Anzeige des Termins, der dafür aus der Datenbank ausgelesen wird.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Notifications/NotificationPublisher.java
 
 shortcuts.xml: Die App kann über Shortcuts geöffnet werden. Diese können – nach Eingabe des Fingerabdrucks, falls dieser aktiviert wurde, zur AddDateActivity oder AddCalendarActivity führen.
+https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/res/xml/shortcuts.xml
 
 
 ### Demo
