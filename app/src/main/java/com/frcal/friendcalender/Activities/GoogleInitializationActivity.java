@@ -39,7 +39,6 @@ public class GoogleInitializationActivity extends AppCompatActivity {
     private SignInClient oneTapClient;
     private static final int REQ_ONE_TAP = 50;
 
-    // for verfiy token
     private static final HttpTransport httpTransport = new NetHttpTransport();
     private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
 
@@ -59,7 +58,6 @@ public class GoogleInitializationActivity extends AppCompatActivity {
         }
     }
 
-    // TODO: Google Anbindung hier
     // UI wird initialisiert
     private void initUI(SharedPreferences sharedPreferences) {
         setContentView(R.layout.activity_google_initialization);
@@ -110,7 +108,8 @@ public class GoogleInitializationActivity extends AppCompatActivity {
                         SharedPreferences sharedPreferences = getSharedPreferences(
                                 getString(R.string.preference_name),
                                 MODE_PRIVATE);
-                        sharedPreferences.edit().putBoolean(getString(R.string.google_preference_name), true).apply();
+                        sharedPreferences.edit().putBoolean(
+                                getString(R.string.google_preference_name), true).apply();
                         startIntentSenderForResult(
                                 result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
                                 null, 0, 0, 0);
@@ -137,7 +136,9 @@ public class GoogleInitializationActivity extends AppCompatActivity {
                     Verifier verObj = new Verifier(idToken);
                     verObj.execute();
                     //LOGIN SUCCESSFUL
-                    startActivity(new Intent(this, CalendarActivity.class));
+                    endActivity(
+                            getSharedPreferences(getString(R.string.preference_name), MODE_PRIVATE),
+                            true);
                     Log.d(TAG, "Got ID token.");
                 }
             } catch (ApiException e) {
@@ -161,13 +162,16 @@ public class GoogleInitializationActivity extends AppCompatActivity {
 
 
     @SuppressLint("StaticFieldLeak")
-    private class Verifier extends AsyncTask<Void,Void,Void> {
+    private class Verifier extends AsyncTask<Void, Void, Void> {
         private final String idToken;
-        Verifier (String idToken) {
+
+        Verifier(String idToken) {
             this.idToken = idToken;
         }
+
         public void verifyToken(String idTokenString) {
-            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(httpTransport, jsonFactory)
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(httpTransport,
+                    jsonFactory)
                     // Specify the CLIENT_ID of the app that accesses the backend:
                     .setAudience(Collections.singletonList(getString(R.string.server_client_id)))
                     // Or, if multiple clients access the backend:
@@ -197,7 +201,8 @@ public class GoogleInitializationActivity extends AppCompatActivity {
                 payload.get("locale");
                 payload.get("family_name");
                 payload.get("given_name");
-                SharedPreferences sharedPreferences = getSharedPreferences("MainCal-ID", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences("MainCal-ID",
+                        Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("Cal-ID", email);
                 editor.apply();
@@ -207,6 +212,7 @@ public class GoogleInitializationActivity extends AppCompatActivity {
                 System.out.println("Invalid ID token.");
             }
         }
+
         @Override
         protected Void doInBackground(Void... voids) {
             verifyToken(idToken);
