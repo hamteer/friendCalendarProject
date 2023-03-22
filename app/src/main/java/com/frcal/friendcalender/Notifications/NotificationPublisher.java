@@ -25,6 +25,25 @@ import com.frcal.friendcalender.R;
 import java.util.TimeZone;
 
 public class NotificationPublisher extends BroadcastReceiver {
+
+    // Damit Benachrichtigungen empfangen werden können, muss ein Benachrichtigungskanal der App
+    // existieren
+    // Dieser wird hier erstellt
+    public void createNotificationChannel(Context context) {
+        CharSequence name = context.getString(R.string.channel_name);
+        String description = context.getString(R.string.channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(
+                context.getString(R.string.channel_id), name, importance);
+        channel.setDescription(description);
+        NotificationManager notificationManager =
+                context.getSystemService(
+                        NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+    }
+
+    // Kreiert eine "einzigartige" NotificationID, um jede Benachrichtigung separat ansteuern und
+    // abbrechen zu können
     public int getUniqueNotificationId(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
                 context.getString(R.string.preference_name), MODE_PRIVATE);
@@ -41,19 +60,8 @@ public class NotificationPublisher extends BroadcastReceiver {
         return newId;
     }
 
-    public void createNotificationChannel(Context context) {
-        CharSequence name = context.getString(R.string.channel_name);
-        String description = context.getString(R.string.channel_description);
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
-        NotificationChannel channel = new NotificationChannel(
-                context.getString(R.string.channel_id), name, importance);
-        channel.setDescription(description);
-        NotificationManager notificationManager =
-                context.getSystemService(
-                        NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
-    }
-
+    // Nachdem eine Notification erstellt wurde, wird diese an den AlarmManager übergeben, so
+    // dass sie zum benötigten Zeitpunkt angezeigt werden kann
     public void scheduleNotification(Context context, String eventId, String title, int id,
                                      long time, int minutes) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
@@ -79,15 +87,12 @@ public class NotificationPublisher extends BroadcastReceiver {
         }
     }
 
-    public void cancelNotification(Context context, int notificationId) {
-        Intent intent = new Intent(context, NotificationPublisher.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        pendingIntent.cancel();
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        am.cancel(pendingIntent);
-    }
-
+    // An dieser Stelle wird die tatsächliche Notification erstellt
+    // Diese hat einen Action Button, welcher die Benachrichtigung löschen kann
+    //Beim Klicken auf die Nachricht wird zudem die Seite des Termines geöffnet
+    // Je nachdem, ob es sich bereits um die Benachrichtigung fünf Minuten oder 15 Minuten vor
+    // dem Termin handelt, wird ein Action Button hinzugefügt, der eine weitere Benachrichtigung
+    // ermöglicht
     private Notification buildNotification(Context context, String eventId, String title, int id,
                                            long time, int minutes) {
         Intent resultIntent = new Intent(context, DateActivity.class);
@@ -148,9 +153,30 @@ public class NotificationPublisher extends BroadcastReceiver {
         return builder.build();
     }
 
+    // Falls ein Termin gelöscht wird, so sollte auch die Benachrichtigung nicht mehr angezeigt
+    // werden
+    // Außerdem wirddiese Methode auch genutzt, falls ein Termin verändert wird, um die
+    // Benachrichtigung mit den neuen Daten schicken zu können
+    public void cancelNotification(Context context, int notificationId) {
+        Intent intent = new Intent(context, NotificationPublisher.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        pendingIntent.cancel();
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        am.cancel(pendingIntent);
+    }
+
+    // Hier wird zuerst überprüft, ob ein ActionButton gedrückt wurde, um in dem Falle die
+    // entsprechende Funktion auszuführen
+    // Andernfalls galt der Aufruf dr Anzeige der Banchrichtigung, was getan wird
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.hasExtra(context.getString(R.string.notifications_minutes_key))) {
+        if (intent.hasExtra(context.getString(R.string.notifications_id_key)) && intent.hasExtra(
+                context.getString(R.string.notifications_event_id_key)) && intent.hasExtra(
+                context.getString(R.string.notifications_title_key)) && intent.hasExtra(
+                context.getString(R.string.notifications_id_key)) && intent.hasExtra(
+                context.getString(R.string.notifications_time_key)) && intent.hasExtra(
+                context.getString(R.string.notifications_minutes_key))) {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(
                     context);
             notificationManager.cancel(
@@ -161,13 +187,17 @@ public class NotificationPublisher extends BroadcastReceiver {
                     intent.getIntExtra(context.getString(R.string.notifications_id_key), 0),
                     intent.getLongExtra(context.getString(R.string.notifications_time_key), 0),
                     intent.getIntExtra(context.getString(R.string.notifications_minutes_key), 5));
-        } else if (intent.hasExtra(context.getString(R.string.notifications_close_key))) {
+        } else if (intent.hasExtra(
+                context.getString(R.string.notifications_close_key)) && intent.hasExtra(
+                context.getString(R.string.notifications_id_key))) {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(
                     context);
             notificationManager.cancel(
                     intent.getIntExtra(context.getString(R.string.notifications_id_key), 0));
         } else if (ActivityCompat.checkSelfPermission(context,
-                Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED && intent.hasExtra(
+                context.getString(R.string.notifications_notification_key)) && intent.hasExtra(
+                context.getString(R.string.notifications_id_key))) {
             Notification notification = intent.getParcelableExtra(
                     context.getString(R.string.notifications_notification_key));
             int id = intent.getIntExtra(context.getString(R.string.notifications_id_key), 0);
