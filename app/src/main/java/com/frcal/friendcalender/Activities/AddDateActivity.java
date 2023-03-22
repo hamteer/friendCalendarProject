@@ -76,7 +76,8 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
         SharedPreferences sharedPreferences = getSharedPreferences("frcalSharedPrefs",
                 MODE_PRIVATE);
         boolean fingerprintActive = sharedPreferences.getBoolean("fingerprintSwitchState", false);
-        if (getIntent().getAction() != null && fingerprintActive) {
+        if ((getIntent().getAction() != null && getIntent().getAction().equals(
+                getString(R.string.newly_opened_action))) && fingerprintActive) {
             startActivity(new Intent(this, FingerprintActivity.class).putExtra(
                     getString(R.string.intent_key), this.getClass().getCanonicalName()));
             finish();

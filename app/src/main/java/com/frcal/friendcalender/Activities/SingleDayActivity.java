@@ -15,12 +15,8 @@ import com.frcal.friendcalender.R;
 import com.google.api.client.util.DateTime;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import org.threeten.bp.LocalDate;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 public class SingleDayActivity extends AppCompatActivity implements DateListRecyclerAdapter.DateListAdapterListener, EventManager.EventManagerListener {
     TextView headline;
@@ -32,9 +28,15 @@ public class SingleDayActivity extends AppCompatActivity implements DateListRecy
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initEvents();
-        initUI();
-        eventManager.requestUpdate();
+
+        if (getIntent().hasExtra("SELECTED_DATE")) {
+            initEvents();
+            initUI();
+            eventManager.requestUpdate();
+        } else {
+            startActivity(new Intent(this, CalendarActivity.class));
+            finish();
+        }
     }
 
     private void initEvents() {
@@ -49,7 +51,8 @@ public class SingleDayActivity extends AppCompatActivity implements DateListRecy
         // set headline to display selected day:
         Bundle extras = getIntent().getExtras();
         selectedDate = (CalendarDay) extras.get("SELECTED_DATE");
-        String selectedDateString = selectedDate.getDay() + "." + selectedDate.getMonth() + "." + selectedDate.getYear();
+        String selectedDateString =
+                selectedDate.getDay() + "." + selectedDate.getMonth() + "." + selectedDate.getYear();
         headline.setText("Termine am " + selectedDateString);
 
         // Activity als Listener auf Adapter registrieren:
@@ -62,14 +65,18 @@ public class SingleDayActivity extends AppCompatActivity implements DateListRecy
     @Override
     public void onEventListUpdated() {
 
-        String day = (selectedDate.getDay()<10)? "0" + selectedDate.getDay() : String.valueOf(selectedDate.getDay());
-        String month = (selectedDate.getMonth()<10)? "0" + selectedDate.getMonth() : String.valueOf(selectedDate.getMonth());
+        String day = (selectedDate.getDay() < 10) ? "0" + selectedDate.getDay() : String.valueOf(
+                selectedDate.getDay());
+        String month = (selectedDate.getMonth() < 10) ? "0" + selectedDate.getMonth() :
+                String.valueOf(
+                        selectedDate.getMonth());
 
         DateTime date = new DateTime(selectedDate.getYear() + "-" + month + "-" + day);
         // check if selectedDay equals startTime-Day => add event to list which gets displayed
         ArrayList<CalenderEvent> eventsOfSelectedDay = new ArrayList<>();
-        for (CalenderEvent event: eventManager.getEvents()){
-            if(event.startTime.toString().substring(0,10).equals(date.toString().substring(0,10))){
+        for (CalenderEvent event : eventManager.getEvents()) {
+            if (event.startTime.toString().substring(0, 10).equals(
+                    date.toString().substring(0, 10))) {
                 eventsOfSelectedDay.add(event);
             }
         }

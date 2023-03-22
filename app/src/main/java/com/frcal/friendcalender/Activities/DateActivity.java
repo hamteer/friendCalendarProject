@@ -27,15 +27,13 @@ import com.frcal.friendcalender.Notifications.NotificationPublisher;
 import com.frcal.friendcalender.R;
 import com.google.api.client.util.DateTime;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 
 import com.frcal.friendcalender.Exception.InputFormatException;
-import com.frcal.friendcalender.R;
-import com.google.api.client.util.DateTime;
 
 import com.frcal.friendcalender.RestAPIClient.CalendarEventList;
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -46,7 +44,8 @@ import java.util.Collections;
 import java.util.TimeZone;
 
 // TODO: API-Call
-public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener {
+public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener,
+        CalenderManager.CalenderManagerListener {
     // UI variables
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
     TextView chooseFriends;
@@ -75,9 +74,13 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         boolean fingerprintActive = sharedPreferences.getBoolean(
                 getString(R.string.fingerprint_preference_name), false);
         if ((getIntent().getAction() != null && getIntent().getAction().equals(
-                "android.intent.action.VIEW_LOCUS")) && fingerprintActive) {
+                getString(R.string.newly_opened_action))) && fingerprintActive) {
             startActivity(new Intent(this, FingerprintActivity.class).putExtra(
                     getString(R.string.intent_key), this.getClass().getCanonicalName()));
+            finish();
+        } else if (!getIntent().hasExtra("SELECTED_EVENT")) {
+            Toast.makeText(this, "Es wurde kein Termin ausgewählt", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, CalendarActivity.class));
             finish();
         }
         setContentView(R.layout.activity_date);
@@ -93,7 +96,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         listOfFriends.add("öffentlicher Termin");
         // now fill in the listOfFriends with all Friends saved in the DB (or the API):
         calenderManager.requestUpdate();
-        for (Calender friend: calenderList) {
+        for (Calender friend : calenderList) {
             listOfFriends.add(friend.name);
             Log.d("initFriendsDialogue", "added " + friend.name);
         }
@@ -116,53 +119,64 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 builder.setTitle("Termin teilen");
                 builder.setCancelable(false);
 
-                // as setMultiChoiceItems, the method used to initialize the dropdown menu, needs an Array,
+                // as setMultiChoiceItems, the method used to initialize the dropdown menu, needs
+                // an Array,
                 // we need to transform our ArrayList into an Array:
                 String[] arrayOfFriends = new String[listOfFriends.size()];
                 for (int i = 0; i < listOfFriends.size(); i++) {
                     arrayOfFriends[i] = listOfFriends.get(i);
                 }
 
-                builder.setMultiChoiceItems(arrayOfFriends, selectedFriends, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        // check condition
-                        if (isChecked) {
-                            listOfSelectedFriends.add(which);
-                            Collections.sort(listOfSelectedFriends);
-                        } else {
-                            listOfSelectedFriends.remove(Integer.valueOf(which));
-                        }
-                    }
-                });
+                builder.setMultiChoiceItems(arrayOfFriends, selectedFriends,
+                        new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which,
+                                                boolean isChecked) {
+                                // check condition
+                                if (isChecked) {
+                                    listOfSelectedFriends.add(which);
+                                    Collections.sort(listOfSelectedFriends);
+                                } else {
+                                    listOfSelectedFriends.remove(Integer.valueOf(which));
+                                }
+                            }
+                        });
 
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // test if event is made private, if yes, set text of TextView accordingly
                         if (listOfSelectedFriends.contains(0)) {
-                            chooseFriends.setText(getResources().getString(R.string.private_date_set));
+                            chooseFriends.setText(
+                                    getResources().getString(R.string.private_date_set));
                             // as the event is not shared, no API call is necessary here.
                             if (listOfSelectedFriends.contains(1)) {
-                                Toast.makeText(DateActivity.this, "Termin kann nicht öffentlich UND privat sein!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DateActivity.this,
+                                        "Termin kann nicht öffentlich UND privat sein!",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             // event is not private, next, we need to check if event is public
                             if (listOfSelectedFriends.contains(1)) {
-                                chooseFriends.setText(getResources().getString(R.string.public_date_set));
-                                // TODO: API call, sync this event with all Friends this user has added to his account
+                                chooseFriends.setText(
+                                        getResources().getString(R.string.public_date_set));
+                                // TODO: API call, sync this event with all Friends this user has
+                                //  added to his account
                             } else {
-                                // event is neither private nor public, but shared with a few specific friends
+                                // event is neither private nor public, but shared with a few
+                                // specific friends
                                 // TODO: API call:
                                 //  either in for loop for each selected friend,
-                                //  or using the existing for loop to build another list to transfer to the API
+                                //  or using the existing for loop to build another list to
+                                //  transfer to the API
                                 //  depending on what methods the API has
 
                                 StringBuilder stringBuilder = new StringBuilder();
 
                                 for (int j = 0; j < listOfSelectedFriends.size(); j++) {
                                     // concat array value
-                                    stringBuilder.append(arrayOfFriends[listOfSelectedFriends.get(j)]);
+                                    stringBuilder.append(
+                                            arrayOfFriends[listOfSelectedFriends.get(j)]);
                                     // check condition
                                     if (j != listOfSelectedFriends.size() - 1) {
                                         // When j value  not equal
@@ -230,7 +244,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         deleteBtn = findViewById(R.id.edit_date_delete_btn);
 
         eventManager = new EventManager(getApplicationContext(), this);
-        calenderManager = new CalenderManager(getApplicationContext(),this);
+        calenderManager = new CalenderManager(getApplicationContext(), this);
     }
 
     /**
@@ -292,7 +306,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                     int toOffset = timeZone.getOffset(to.getValue());
                     long toDeviceTime = to.getValue() - toOffset;
                     toWithOffset = new DateTime(toDeviceTime);
-                    
+
                 } catch (Exception e) {
                     InputFormatException ife = new InputFormatException(getApplicationContext());
                     ife.notifyUser();
@@ -315,7 +329,8 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 }
 
                 CalenderEvent updatedEvent = new CalenderEvent(currentEvent.calenderID,
-                        currentEvent.eventID, currentEvent.googleEventID, fromWithOffset, toWithOffset, desc, title,
+                        currentEvent.eventID, currentEvent.googleEventID, fromWithOffset,
+                        toWithOffset, desc, title,
                         loc, currentEvent.creator, new DateTime(System.currentTimeMillis()), id);
                 eventManager.updateEvent(updatedEvent);
                 if (googleSync.isChecked()) {
@@ -332,6 +347,8 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                             updatedEvent.notificationID, from.getValue(), 15);
 
                 }
+//                startActivity(new Intent(DateActivity.this, SingleDayActivity.class).putExtra(
+//                        "SELECTED_DATE", getCalendarDay(updatedEvent.startTime.getValue())));
                 Toast.makeText(DateActivity.this, "Termin gespeichert", Toast.LENGTH_LONG).show();
                 finish();
             }
@@ -350,12 +367,20 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                     publisher.cancelNotification(context, currentEvent.notificationID);
                 }
 
+//                startActivity(new Intent(DateActivity.this, SingleDayActivity.class).putExtra(
+//                        "SELECTED_DATE", getCalendarDay(currentEvent.startTime.getValue())));
                 Toast.makeText(DateActivity.this, "Termin gelöscht", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
-
     }
+
+//    private CalendarDay getCalendarDay(long milliseconds) {
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(milliseconds);
+//        return CalendarDay.from(calendar.get(Calendar.YEAR),
+//                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+//    }
 
     @Override
     public void onEventListUpdated() {

@@ -36,7 +36,7 @@ public class AddCalendarActivity extends AppCompatActivity implements CalenderMa
         boolean fingerprintActive = sharedPreferences.getBoolean(
                 getString(R.string.fingerprint_preference_name), false);
         if ((getIntent().getAction() != null && getIntent().getAction().equals(
-                "android.intent.action.VIEW_LOCUS")) && fingerprintActive) {
+                getString(R.string.newly_opened_action))) && fingerprintActive) {
             startActivity(new Intent(this, FingerprintActivity.class).putExtra(
                     getString(R.string.intent_key), this.getClass().getCanonicalName()));
             finish();
