@@ -38,10 +38,12 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import com.google.api.client.util.DateTime;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.TimeZone;
 
@@ -332,6 +334,8 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                             event.notificationID, from.getValue(), 15);
                 }
 
+//                startActivity(new Intent(AddDateActivity.this, SingleDayActivity.class).putExtra(
+//                        "SELECTED_DATE", getCalendarDay(event.startTime.getValue())));
 
                 Toast.makeText(AddDateActivity.this, "Termin gespeichert!",
                         Toast.LENGTH_SHORT).show();
@@ -339,6 +343,13 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
             }
         });
     }
+
+//    private CalendarDay getCalendarDay(long milliseconds) {
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(milliseconds);
+//        return CalendarDay.from(calendar.get(Calendar.YEAR),
+//                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+//    }
 
     public static String getRFC3339FormattedString(String dateString, String time) {
 
