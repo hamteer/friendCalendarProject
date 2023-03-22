@@ -39,10 +39,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.threeten.bp.LocalDate;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -290,7 +286,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
                     }
                     if (compare == false) {
                         DateTime datdeb = ev.getEnd().getDateTime();
-                        CalenderEvent eventDB = new CalenderEvent("primary", null, ev.getId(), ev.getStart().getDateTime(), ev.getEnd().getDateTime(), ev.getDescription(), ev.getSummary(), ev.getLocation(), null, null);
+                        CalenderEvent eventDB = new CalenderEvent("primary", null, ev.getId(), ev.getStart().getDateTime(), ev.getEnd().getDateTime(), ev.getDescription(), ev.getSummary(), ev.getLocation(), null, null, 1 );
                         eventManager.addEvent(eventDB);
                     }
             }

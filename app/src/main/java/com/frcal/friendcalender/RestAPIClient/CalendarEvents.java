@@ -188,7 +188,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
         try {
             event = this.service.events().insert(this.calendarID, event).execute();
             JsonFactory jsonSetEvent = event.getFactory();
-            CalenderEvent eventDB = new CalenderEvent(this.calendarID, this.eventID, event.getId(), this.startTime, this.endTime, this.description, this.summary, this.location, null, this.endTime);
+            CalenderEvent eventDB = new CalenderEvent(this.calendarID, this.eventID, event.getId(), this.startTime, this.endTime, this.description, this.summary, this.location, null, this.endTime,1);
             eventManager.addEvent(eventDB);
 
             return jsonSetEvent.toString();
@@ -241,7 +241,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
             // Update the event
             Event updatedEvent = service.events().update(this.calendarID, event.getId(), event).execute();
 
-            CalenderEvent eventDB = new CalenderEvent(this.calendarID, this.eventID, updatedEvent.getId(), this.startTime, this.endTime, this.description, this.summary, this.location, null, this.endTime);
+            CalenderEvent eventDB = new CalenderEvent(this.calendarID, this.eventID, updatedEvent.getId(), this.startTime, this.endTime, this.description, this.summary, this.location, null, this.endTime,1);
             eventManager.addEvent(eventDB);
 
             JsonFactory jsonSetEvent = event.getFactory();
