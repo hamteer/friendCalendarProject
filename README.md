@@ -32,6 +32,8 @@ CalendarEventManager, CalendarEvent: Ein neu angelegter Termin wird als Calendar
 
 CalendarManager, Calendar: Wenn ein Freund hinzugefügt wird, wird dessen Kalender, bzw. Termine als Calendar-Objekt in der Datenbank gespeichert.
 
+InputFormatException: Falls eine Termineingabe nicht valide ist, wird dies über eine Exception ausgegeben.
+
 CalendarCl, CalendarEventList, CalendarEvents, CalendarListCl, SharedOneTabClient: Gespeicherte Termine werden sofort an den eigenen Google-Kalender übergeben. Genauso kann auf Termine des Google-Kalenders zugegriffen werden, um diese in der Appdarzustellen.
 
 AuthenticationManager: Um nicht mehrfach den gleichen Code implementieren zu müsse, kann in einer separaten Klasse überprüft werden, ob und welche Authentifizierungsmethode auf dem Gerät aktiv ist. Außerdem kann hier eine neue Methode eingerichtet werden, falls sie nicht bereits existiert.
