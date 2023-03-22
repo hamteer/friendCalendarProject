@@ -218,7 +218,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
     public String updateEvent() {
 
         try {
-
+            eventManager = new EventManager(context.getApplicationContext(), this);
             // Retrieve the event from the API
             Event event = service.events().get(this.calendarID, this.eventID).execute();
 

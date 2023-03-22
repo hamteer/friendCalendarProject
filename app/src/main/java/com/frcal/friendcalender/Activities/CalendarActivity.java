@@ -286,6 +286,10 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
                     }
                     if (compare == false) {
                         DateTime datdeb = ev.getEnd().getDateTime();
+                        // if EndTime is not set => skip
+                        if (datdeb == null){
+                            continue;
+                        }
                         CalenderEvent eventDB = new CalenderEvent("primary", null, ev.getId(), ev.getStart().getDateTime(), ev.getEnd().getDateTime(), ev.getDescription(), ev.getSummary(), ev.getLocation(), null, null, 1 );
                         eventManager.addEvent(eventDB);
                     }
