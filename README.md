@@ -76,13 +76,13 @@ So kann man über unsere Applikation Termine erstellen und diese mit Freunden ü
 
 **Daniel Kuzma:** 
 
-**Kerim Agalarov:** FingerprintActivity (Fingerabdruck-Login), Google-Integration
+**Kerim Agalarov:** [FingerprintActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/FingerprintActivity.java) (Fingerabdruck-Login), _Google-Komponenten hier eintragen_ (Google-Login)
 
 **Niclas Hildner:** 
 
 **Philipp Hamann:** 
 
-**Virginia Schellenberg:** FingerprintInitializationActivity (Intents), GoogleInitializationActivity(Intents), NotificationsInitializationActivity(Intents), AuthenticationManager (Fingerabdruck-Login), NotificationPublisher (Interaktive Notifications, Intents), shortcuts.xml (App Shortcut)
+**Virginia Schellenberg:** [FingerprintInitializationActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/FingerprintInitializationActivity.java) (Intents), [GoogleInitialization](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/GoogleInitializationActivity.java) (Intents), [NotificationsInitializationActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/NotificationInitializationActivity.java) (Intents), [AuthenticationManager](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Authentication/AuthenticationManager.java) (Fingerabdruck-Login), [NotificationPublisher](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Notifications/NotificationPublisher.java) (Interaktive Notifications, Intents), [shortcuts.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/res/xml/shortcuts.xml) (App Shortcut)
 
 
 ### Projektablauf
