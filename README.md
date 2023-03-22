@@ -6,13 +6,16 @@
 
 [Beschreiben Sie hier in einer kurzen Zusammenfassung Hintergrund, Ziele und Funktionen Ihrer Anwendung. Fügen Sie mehrere sinnvollen Screenshot ein, die den Funktionsumfang der Anwendung demonstrieren.]
 
+
 Unsere App „FriendCalendar“ ist ein Kalender, mithilfe welches man sowohl private als auch öffentliche Termine, zugänglich für Freunde, erstellen kann. Von fünf Ideenvorschlägen entschieden wir uns letztendlich für diesen, da wir mit den Versionen auf dem Markt nie hundertprozentig zufrieden waren und uns daher daran versuchen wollten, eine gute Alternative zu erschaffen.
 
 So kann man über unsere Applikation Termine erstellen und diese mit Freunden über Google teilen oder als private Termine nur im eigenen Kalender speichern. Natürlich lassen sich gespeicherte Termine auch bearbeiten oder wieder löschen. All dies ermöglicht die im Hintergrund agierende Datenbank. Außerdem kann der Nutzer entscheiden, ob er sich an Termine über eine Benachrichtigung erinnern zu lassen, damit er diese nicht vergisst. Um seine privaten Termine vor ungewollten Eingriffen zu schützen, ist es dem Nutzer möglich die App mit einem Fingerabdruck, bzw. anderer Methode zu sichern.
 
+
 ### Funktionen
 
 [Beschreiben Sie die Funktionen ihrer App. Beziehen Sie sich dabei auf den Anforderungskatalog und stellen Sie eine Verbindung zu den entsprechneden Files oder Directories her.]
+
 
 **[NotificationsInitializationActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/NotificationInitializationActivity.java), [FingerprintInitializationActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/FingerprintInitializationActivity.java), [GoogleInitialization](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/GoogleInitializationActivity.java):** Beim erstmaligen Öffnen der App nach der Installation wird der Nutzer in einen Initialisierungsfluss weitergeleitet. Bei diesem durchläuft er drei Activities, die ihn nacheinander fragen, ob er Benachrichtigungen aktivieren möchte, dort wird bei Zustimmung zuerst um deren Erlaubnis gebeten, ob er seine Daten mithilfe einer Fingerabdrucksperre sichern und sich mit Google anmelden möchte.
 
@@ -55,6 +58,7 @@ So kann man über unsere Applikation Termine erstellen und diese mit Freunden ü
 
 [Beschreiben Sie hier die einzelnen Teammitglieder mit Namen, E-Mail-Adresse und Github-Nutzernamen.]
 
+
 **Daniel Kuzma:** email, dak2791
 
 **Kerim Agalarov**: email, AKamKer
@@ -68,6 +72,7 @@ So kann man über unsere Applikation Termine erstellen und diese mit Freunden ü
 ### Zuständigkeiten
 
 [Nennen Sie mindestens eine Komponente Ihrer Anwendung, die in wesentlichen Teilen vom jeweiligen Teammitglied entwickelt wurde.]
+
 
 **Daniel Kuzma:** 
 
@@ -84,72 +89,150 @@ So kann man über unsere Applikation Termine erstellen und diese mit Freunden ü
 
 [Beschreiben Sie die verschiedenen Schritte und Zusammentreffen bis zum Abschluss des Projekts.]
 
+
 **1.	Termin (07.12.2022):** Sammeln von Vorschlägen für die App
-**Aufgaben:**   Alle: Gedanken machen, welchen Vorschlag derjenige präferiert und mögliche Anforderungen notieren
+
+Aufgaben:
+
+- Alle: Gedanken machen, welchen Vorschlag derjenige präferiert und mögliche Anforderungen notieren
+
 
 **2.	Treffen (14.12.2022):** Definition von Anforderungen für populärste Ideen
 
+
 **3.	Treffen (15.02.2023):** Erste Absprache zur Planung von Aufgaben
-**Aufgaben:**	- Daniel Kuzma: Informieren über Google-API-Termine und beginnen mit Datenbankanbindung
-		- Kerim Agalarov: Bereits erstellte Activity mit Fingerabdruck-Login auf GitHub pushen
-		- Niclas Hildner: Informieren über Google-Kalender-API um Termine zu teilen und mit Einbau beginnen
-		- Philipp Hamann: Informieren über Material Calendar View und dessen Implementierung
-		- Virginia Schellenberg: Urlaub
+
+Aufgaben:
+	
+- Daniel Kuzma: Informieren über Google-API-Termine und beginnen mit Datenbankanbindung
+
+- Kerim Agalarov: Bereits erstellte Activity mit Fingerabdruck-Login auf GitHub pushen
+		
+- Niclas Hildner: Informieren über Google-Kalender-API um Termine zu teilen und mit Einbau beginnen
+		
+- Philipp Hamann: Informieren über Material Calendar View und dessen Implementierung
+		
+- Virginia Schellenberg: Urlaub
+		
 		
 **4.	Treffen (19.02.2023):** ?
-**Aufgaben:**	- Daniel Kuzma: Datenbank testen (API-Anfragen aus App heraus stellen)
-		- Kerim Agalarov: SettingsActivity erstellen
-		- Niclas Hildner: Google-Login einbauen
-		- Philipp Hamann: Kalender-Element anpassen
-		- Virginia Schellenberg: Urlaub
+
+Aufgaben:	
+	
+- Daniel Kuzma: Datenbank testen (API-Anfragen aus App heraus stellen)
+
+- Kerim Agalarov: SettingsActivity erstellen
+		
+- Niclas Hildner: Google-Login einbauen
+		
+- Philipp Hamann: Kalender-Element anpassen
+		
+- Virginia Schellenberg: Urlaub
+		
 			    
 **5.	 Treffen (22.02.2023):** ?
-**Aufgaben:**	- Daniel Kuzma: Datenbank verbessern und API-Anfragen einbauen
-		- Kerim Agalarov: API erstellen
-		- Niclas Hildner: API erstellen
-		- Philipp Hamann: Activity-Arbeitsfluss und Layouts planen
-		- Virginia Schellenberg: Urlaub
+
+Aufgaben:
+	
+- Daniel Kuzma: Datenbank verbessern und API-Anfragen einbauen
+
+- Kerim Agalarov: API erstellen
+		
+- Niclas Hildner: API erstellen
+		
+- Philipp Hamann: Activity-Arbeitsfluss und Layouts planen
+		
+- Virginia Schellenberg: Urlaub
+		
 		
 **6.	Treffen (28.02.2023):** Vorstellung bisheriger Fortschritte, erster Blick auf Activity-Workflow durch Philipp Hamann
-**Aufgaben:**	- Daniel Kuzma: ?
-               	- Kerim Agalarov: Herausfinden, wie API-Aufrufe an anderen Codestellen möglich sind
-                - Niclas Hildner: API kapseln
-                - Philipp Hamann: DateActivity erstellen und Activities weiter ausarbeiten
-                - Virginia Schellenberg: Shortcuts erstellen
+
+Aufgaben:
+	
+- Daniel Kuzma: ?
+
+- Kerim Agalarov: Herausfinden, wie API-Aufrufe an anderen Codestellen möglich sind
+		
+- Niclas Hildner: API kapseln
+		
+- Philipp Hamann: DateActivity erstellen und Activities weiter ausarbeiten
+		
+- Virginia Schellenberg: Shortcuts erstellen
+		
 		
 **7.	Treffen (02.03.2023):** Kurze Präsentation von Fortschritten, Symbolvideos von Fingerabdrucksperre bei WhatsApp durch Virginia Schellenberg
-**Aufgaben:**	- Daniel Kuzma: Finale Anpassung der Datenbank und auf GitHub pushen
-                - Kerim Agalarov: API in eigene Klasse kapseln und Aufrufe an geeigneten Stellen
-                - Niclas Hildner: API in eigene Klasse kapseln und Aufrufe an geeigneten Stellen
-                - Philipp Hamann: UI aller Activities mit XML erstellen
-                - Virginia Schellenberg: Shortcuts finalisieren, Ändern der applicationId und Anpassung von FingerprintActivity (auch bei Shortcuts anzeigen und Möglichkeit von PIN, Passwort oder Muster)
+
+Aufgaben:	
+	
+- Daniel Kuzma: Finale Anpassung der Datenbank und auf GitHub pushen
+
+- Kerim Agalarov: API in eigene Klasse kapseln und Aufrufe an geeigneten Stellen
+		
+- Niclas Hildner: API in eigene Klasse kapseln und Aufrufe an geeigneten Stellen
+		
+- Philipp Hamann: UI aller Activities mit XML erstellen
+		
+- Virginia Schellenberg: Shortcuts finalisieren, Ändern der applicationId und Anpassung von FingerprintActivity (auch bei Shortcuts anzeigen und Möglichkeit von PIN, Passwort oder Muster)
+		
 		
 **8.	Treffen (08.03.2023):** Präsentation von Google-API durch Kerim Agalarov und Niclas Hildner, UI durch Philipp Hamann und der finalen Shortcuts durch Virginia Schellenberg
-**Aufgaben:**	- Daniel Kuzma: Urlaub
-                - Kerim Agalarov: API-Funktionen vervollständigen
-                - Niclas Hildner: API-Funktionen vervollständigen
-                - Philipp Hamann: UI vervollständigen
-                - Virginia Schellenberg: Arbeitsfluss für erstmaliges Öffnen zur Initialisierung von Benachrichtigungen, Google-Anmeldung und Fingerabdrucksperre
+
+Aufgaben:	
+	
+- Daniel Kuzma: Urlaub
+
+- Kerim Agalarov: API-Funktionen vervollständigen
+		
+- Niclas Hildner: API-Funktionen vervollständigen
+		
+- Philipp Hamann: UI vervollständigen
+		
+- Virginia Schellenberg: Arbeitsfluss für erstmaliges Öffnen zur Initialisierung von Benachrichtigungen, Google-Anmeldung und Fingerabdrucksperre
+		
 		
 **9.	Treffen (12.03.2023):** Vorstellung fertiger UI durch Philipp Hamann und Engagieren externer Designerin für Gestaltung von Logo
-**Aufgaben:**	- Daniel Kuzma: Datenbankklassen fertig refactoren und Datenbankaufrufe an geeigneten Stellen
-                - Kerim Agalarov: API testen und API-Aufrufe an geeigneten Stellen einbauen
-                - Niclas Hildner: API testen und API-Aufrufe an geeigneten Stellen einbauen
-                - Philipp Hamann: UI für Darkmode und Java-Gerüst der Activity-Klassen erstellen
-                - Virginia Schellenberg: Mit Notifications beginnen und in Settings hinzufügen
+
+Aufgaben:	
+	
+- Daniel Kuzma: Datenbankklassen fertig refactoren und Datenbankaufrufe an geeigneten Stellen
+
+- Kerim Agalarov: API testen und API-Aufrufe an geeigneten Stellen einbauen
+		
+- Niclas Hildner: API testen und API-Aufrufe an geeigneten Stellen einbauen
+		
+- Philipp Hamann: UI für Darkmode und Java-Gerüst der Activity-Klassen erstellen
+		
+- Virginia Schellenberg: Mit Notifications beginnen und in Settings hinzufügen
+		
 		
 **10.	Treffen (15.03.2023):** Diskussion über Datenbanken
-**Aufgaben:**	- Alle: Weiter an bisherigen Aufgaben arbeiten
+
+Aufgaben:
+	
+- Alle: Weiter an bisherigen Aufgaben arbeiten
+
 
 **11.	Treffen (16.03):** ?
-**Aufgaben:**	- Alle: Weiter an bisherigen Aufgaben arbeiten
+
+Aufgaben:
+	
+- Alle: Weiter an bisherigen Aufgaben arbeiten
+
     
 **12.	Treffen (19.03.2023):** Diskussionen über bisherigen Stand
-**Aufgaben:**	- Daniel Kuzma: AddDateActivity perfektionieren
-                - Kerim Agalarov: ?
-                - Niclas Hildner: Events einbinden und Event und Datenbank in OnResume() speichern
-                - Philipp Hamann: UI von DateActivity, CalendarActivity und AddDateActivity anpassen
-                - Virginia Schellenberg: AlarmManager für Notifications einbauen, NotificationPublisher finalisieren und Anpassung von Notifications auf DateActivity möglich machen
+
+Aufgaben:
+	
+- Daniel Kuzma: AddDateActivity perfektionieren
+
+- Kerim Agalarov: ?
+		
+- Niclas Hildner: Events einbinden und Event und Datenbank in OnResume() speichern
+		
+- Philipp Hamann: UI von DateActivity, CalendarActivity und AddDateActivity anpassen
+		
+- Virginia Schellenberg: AlarmManager für Notifications einbauen, NotificationPublisher finalisieren und Anpassung von Notifications auf DateActivity möglich machen
+		
 		
 **13.	Treffen (22.03.2023):** ?
 
