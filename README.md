@@ -124,7 +124,7 @@ https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender
 
 **Daniel Kuzma:** 
 
-**Kerim Agalarov:** 
+**Kerim Agalarov:** Fingerabdruck-Login und Google-Integration
 
 **Niclas Hildner:** 
 
