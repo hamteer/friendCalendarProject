@@ -1,9 +1,12 @@
 package com.frcal.friendcalender.RestAPIClient;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -26,12 +29,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class CalendarEventList extends AsyncTask<Void, Void, Void> {
+public class CalendarEventList extends AsyncTask<Void, Void, List<Event>> {
     private static final HttpTransport httpTransport = new NetHttpTransport();
     private static final int REQUEST_AUTHORIZATION = 1;
     private static final int REQUEST_CALENDAR = 2;
     private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
     private static final String application_name = "My Calendar App";
+
+    public AsyncCalLEventList delegate = null;
     private Context context;
     // <editor-fold desc="Attributes">
     private String calendarID;
@@ -41,32 +46,32 @@ public class CalendarEventList extends AsyncTask<Void, Void, Void> {
 
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected List<Event> doInBackground(Void... voids) {
         switch (this.mtdNr) {
             case 2:
-                getEventList();
-                break;
+                return getEventList();
 
 
         }
         return null;
     }
+
     public CalendarEventList(Integer mtdNr, Context context, String calendarID) {
         this.mtdNr = mtdNr;
         this.context = context;
         this.calendarID = calendarID;
 
 
-
     }
 
     public void setConfig() {
         String[] SCOPES = {"https://www.googleapis.com/auth/calendar"};
-        //SharedPreferences settings = getSharedPreferences(Context.MODE_PRIVATE);
-        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(context, Arrays.asList(SCOPES)).setSelectedAccount(new Account("andoidprojekt1@gmail.com ", "klaus"));
+        SharedPreferences sh_clid = context.getSharedPreferences("MainCal-ID", MODE_PRIVATE);
+        sh_clid.getString("Cal-ID", "");
+
+        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(context, Arrays.asList(SCOPES)).setSelectedAccount(new Account(sh_clid.getString("Cal-ID", ""), "klaus"));
         // Calender client
-        Calendar service = new Calendar.Builder(httpTransport, jsonFactory, credential)
-                .setApplicationName(application_name).build();
+        Calendar service = new Calendar.Builder(httpTransport, jsonFactory, credential).setApplicationName(application_name).build();
 
         this.service = service;
 
@@ -74,12 +79,13 @@ public class CalendarEventList extends AsyncTask<Void, Void, Void> {
     }
 
 
-    public String getEventList() {
+    public List<Event> getEventList() {
 
 // Iterate over the events in the specified calendar
         String pageToken = null;
         List<Event> items;
-        List<Event> allEvents = new ArrayList<Event>();
+        List<Event> allEvents = new ArrayList<>();
+        List<String> jsonResponses = new ArrayList<>();
         try {
 
             do {
@@ -87,10 +93,22 @@ public class CalendarEventList extends AsyncTask<Void, Void, Void> {
                 items = events.getItems();
                 allEvents.addAll(items);
                 pageToken = events.getNextPageToken();
+                jsonResponses.add(events.toPrettyString());
             } while (pageToken != null);
-            return items.toString();
+            return allEvents;
+        } catch (UserRecoverableAuthIOException e) {
+            ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException io) {
-            return io.toString();
+            io.printStackTrace();
+        }
+        return null;
+    }
+    @Override
+    protected void onPostExecute(List<Event> json) {
+        switch (mtdNr) {
+            case 2:
+                delegate.respGetEventList(json);
+
         }
     }
 }

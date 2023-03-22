@@ -1,10 +1,12 @@
 package com.frcal.friendcalender.Activities;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,7 +22,11 @@ import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 import com.frcal.friendcalender.Decorators.EventDecorator;
 import com.frcal.friendcalender.Notifications.NotificationPublisher;
 import com.frcal.friendcalender.R;
+import com.frcal.friendcalender.RestAPIClient.AsyncCalLEventList;
+import com.frcal.friendcalender.RestAPIClient.CalendarEventList;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.Event;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
@@ -29,14 +35,21 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import com.frcal.friendcalender.Decorators.OneDayDecorator;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.threeten.bp.LocalDate;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 // TODO:
 //  - API-Anbindung
 
-public class CalendarActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener {
+public class CalendarActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener, AsyncCalLEventList {
 
     FloatingActionButton addButton, addCalButton, addDateButton;
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator(this);
@@ -64,6 +77,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     @Override
     protected void onResume() {
         super.onResume();
+        getEventList();
         calenderManager.requestUpdate();
         eventManager.requestUpdate();
     }
@@ -146,8 +160,8 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
 
 
         // Grafische Aufbereitung von Tagen, an denen Termine vorhanden sind
-        calenderManager = new CalenderManager(getApplicationContext(),this);
-        eventManager = new EventManager(getApplicationContext(),this);
+        calenderManager = new CalenderManager(getApplicationContext(), this);
+        eventManager = new EventManager(getApplicationContext(), this);
 
 
         // OnClickListener für Tage
@@ -180,13 +194,14 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     // gets called when CalenderList gets updated
     @Override
     public void onCalenderListUpdated() {
-        ArrayList <Calender> calenderArrayList = calenderManager.getCalenders();
+        ArrayList<Calender> calenderArrayList = calenderManager.getCalenders();
         Log.d("CalenderActivity", "onCalenderListUpdated() called");
     }
+
     // gets called when EventList gets updated
     @Override
     public void onEventListUpdated() {
-        ArrayList <CalenderEvent> eventArrayList = eventManager.getEvents();
+        ArrayList<CalenderEvent> eventArrayList = eventManager.getEvents();
         Log.d("CalenderActivity", "onEventListUpdated() called");
         ArrayList<CalendarDay> daysToDecorate = new ArrayList<>();
         for (CalenderEvent event : eventArrayList) {
@@ -203,4 +218,86 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         calendarView.addDecorator(new EventDecorator(Color.RED, daysToDecorate));
     }
 
+    public void evaluateJsonEventList(List<String> jsonList) {
+
+        List<String> eventIDList = new ArrayList<>();
+        List<String> summaryList = new ArrayList<>();
+        List<String> locationList = new ArrayList<>();
+        List<DateTime> startTimeList = new ArrayList<>();
+        List<DateTime> endTimeList = new ArrayList<>();
+        //   String calenderID;
+        try {
+            for (String jsonString : jsonList) {
+                JSONObject json = new JSONObject(jsonString);
+                // calenderID = json.getString("id");
+                JSONArray items = json.getJSONArray("items");
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject event = items.getJSONObject(i);
+                    eventIDList.add(event.getString("id"));
+                    summaryList.add(event.getString("summary"));
+                    locationList.add(event.getString("location"));
+
+                    JSONObject startObj = event.getJSONObject("start");
+                    String startDateTime = startObj.getString("dateTime");
+
+                    JSONObject endObj = event.getJSONObject("ends");
+                    String endDateTime = endObj.getString("dateTime");
+
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    public void getEventList() {
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                getString(R.string.preference_name),
+                MODE_PRIVATE);
+        boolean googleSignedIn = sharedPreferences.getBoolean(
+                getString(R.string.google_preference_name), false);
+        if (googleSignedIn ==true) {
+            CalendarEventList event2 = new CalendarEventList(2, this, "primary");
+            event2.delegate = this;
+            event2.setConfig();
+            event2.execute();
+        }
+    }
+
+    public DateTime convertDateTime(String date) {
+        return DateTime.parseRfc3339(date);
+
+    }
+
+
+    @Override
+    public void respGetEventList(List res) {
+        EventManager eventManager1 = new EventManager(getApplicationContext(), this);
+        ArrayList<CalenderEvent> liste = new ArrayList<>(eventManager1.getEvents());
+        List<Event> result = res;
+        boolean compare=false;
+        //   String calenderID;
+        try {
+            for (Event ev : result) {
+                compare=false;
+                    for (CalenderEvent eventDB : liste) {
+
+                        if (ev.getId().equals(eventDB.googleEventID)) {
+                            compare = true;
+                            break;
+                        }
+                    }
+                    if (compare == false) {
+                        DateTime datdeb = ev.getEnd().getDateTime();
+                        CalenderEvent eventDB = new CalenderEvent("primary", null, ev.getId(), ev.getStart().getDateTime(), ev.getEnd().getDateTime(), ev.getDescription(), ev.getSummary(), ev.getLocation(), null, null);
+                        eventManager.addEvent(eventDB);
+                    }
+            }
+            eventManager.requestUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }

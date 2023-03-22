@@ -17,6 +17,9 @@ import com.frcal.friendcalender.Notifications.NotificationPublisher;
 import com.frcal.friendcalender.DataAccess.CalenderManager;
 import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.Exception.InputFormatException;
+
+import com.frcal.friendcalender.DataAccess.CalenderManager;
+import com.frcal.friendcalender.RestAPIClient.AsyncCalEvent;
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
 
 import android.widget.Button;
@@ -37,10 +40,17 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.LinkedList;
+
+import com.google.api.client.util.DateTime;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.LinkedList;
 import com.google.api.client.util.DateTime;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -52,8 +62,7 @@ import java.util.TimeZone;
 //  - Notification
 
 
-public class AddDateActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener {
-    // UI variables
+public class AddDateActivity extends AppCompatActivity implements EventManager.EventManagerListener, AsyncCalEvent<String>, CalenderManager.CalenderManagerListener  {
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
     TextView chooseFriends;
     String title, desc, loc, dateString, fromString, toString;
@@ -71,6 +80,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
     ArrayList<Integer> listOfSelectedFriends = new ArrayList<>();
     ArrayList<Calender> calenderList = new ArrayList<>();
 
+    AddDateActivity context = this;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -321,10 +331,35 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 String creator = sh_clid.getString("Cal-ID", "");
                 CalenderEvent event = new CalenderEvent("primary", null, null, fromWithOffset, toWithOffset, desc, title, loc, creator, from, id);
                 eventManager.addEvent(event);
+
+                SharedPreferences sharedPreferences = getSharedPreferences(
+                        getString(R.string.preference_name),
+                        MODE_PRIVATE);
+                boolean googleSignedIn = sharedPreferences.getBoolean(
+                        getString(R.string.google_preference_name), false);
                 if (googleSync.isChecked()) {
+                    if (googleSignedIn == false) {
+                        Toast.makeText(AddDateActivity.this, "Lokalen Termin angelegt (nicht eingeloggt)", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     // TODO:
-                    //  - API-Call: use previously created CalenderEvent object to also create a
-                    //  event in the user's Google Calendar
+                    //  - API-Call: use previously created CalenderEvent object to also create a event in the user's Google Calendar
+                    CalenderManager cM1 = new CalenderManager(getApplicationContext(),context);
+                    List<Calender> mailList = new ArrayList<>(cM1.getCalenders());
+                    List<String> attendes = new ArrayList<>();
+
+
+                    if(listOfSelectedFriends.contains(1))
+                    {
+                       for(Calender cal : mailList)
+                       {
+                           attendes.add(cal.calenderID);
+                       }
+                    }
+
+                    addEvent(3, "primary",event.eventID ,title, desc, loc, fromWithOffset, toWithOffset ,attendes);
+
                 }
 
                 if (notif.isChecked()) {
@@ -397,54 +432,18 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
     }
 
-    private void addEvent() {
-        //Woher bekomme ich die Kalender ID bei AddDateActivity?
-        //ID ? Bei der Übergabe in die Datenbank benötigt man eine ID, Welche aber von Google
-        // automatisch bestimmt wird
-        //package DatabaseEntities; wird rot markiert ist es richtig?
-        //Woher attendees
-        CheckBox checkBox = findViewById(R.id.add_date_google_sync_check);
-        boolean isChecked = checkBox.isChecked();
-
-        EditText editText = findViewById(R.id.add_date_title);
-        String summary = editText.getText().toString();
-
-        editText = findViewById(R.id.add_date_day);
-        String date = editText.getText().toString();
-
-        editText = findViewById(R.id.add_date_from);
-        String start = editText.getText().toString();
-
-        editText = findViewById(R.id.add_date_to);
-        String end = editText.getText().toString();
-
-        editText = findViewById(R.id.add_date_description);
-        String description = editText.getText().toString();
-
-        editText = findViewById(R.id.add_date_location);
-        String location = editText.getText().toString();
+    private void addEvent(Integer mtdNr, String calendarID, String eventID,String summary, String description, String location, DateTime startTime, DateTime endTime , List<String> attendees ) {
 
 
-        if (isChecked == true) {
-            try {
-
-                DateTime startDateTime = convertDateTime(start, date);
-                DateTime endDateTime = convertDateTime(end, date);
-
-               /* LinkedList <String> attendees = new LinkedList<>();
-                attendees.add("freundeskalender.kerim@gmail.com"); */
-                CalendarEvents event3 = new CalendarEvents(3, this, "andoidprojekt1@gmail.com",
-                        summary, description, location, startDateTime,
-                        endDateTime /*, attendees */);
-                event3.setConfig();
-                event3.execute();
-            } catch (Exception e) {
-
-            }
-            //Datenbank Speicherung aber woher EventId vlt erstmal alles mit eventlist holen?
-
-
+        try {
+            CalendarEvents event3 = new CalendarEvents(mtdNr, this, calendarID,eventID ,summary, description, location, startTime, endTime , attendees );
+            event3.delegate=this;
+            event3.setConfig();
+            event3.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
 
     }
 
@@ -484,5 +483,24 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
     @Override
     public void onCalenderListUpdated() {
         calenderList = calenderManager.getCalenders();
+    }
+    @Override
+    public void respGetEvent(String res) {
+
+    }
+
+    @Override
+    public void respInsertEvent(String res) {
+
+    }
+
+    @Override
+    public void respDeleteEvent(String res) {
+
+    }
+
+    @Override
+    public void respUpdateEvent(String res) {
+
     }
 }
