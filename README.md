@@ -122,6 +122,17 @@ Virginia Schellenberg: vis9494@thi.de & schellenberg.virginia@mail.de, vis9494
 
 [Nennen Sie mindestens eine Komponente Ihrer Anwendung, die in wesentlichen Teilen vom jeweiligen Teammitglied entwickelt wurde.]
 
+Daniel Kuzma: 
+
+Kerim Agalarov: 
+
+Niclas Hildner: 
+
+Philipp Hamann: 
+
+Virginia Schellenberg: FingerprintInitializationActivity (Intents), GoogleInitializationActivity(Intents), NotificationsInitializationActivity(Intents), AuthenticationManager (Fingerabdruck-Login), NotificationPublisher (Interaktive Notifications, Intents), shortcuts.xml (App Shortcut)
+
+
 ### Projektablauf
 
 [Beschreiben Sie die verschiedenen Schritte und Zusammentreffen bis zum Abschluss des Projekts.]
