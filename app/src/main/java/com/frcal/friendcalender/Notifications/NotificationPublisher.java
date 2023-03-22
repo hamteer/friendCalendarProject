@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Build;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -43,18 +42,16 @@ public class NotificationPublisher extends BroadcastReceiver {
     }
 
     public void createNotificationChannel(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = context.getString(R.string.channel_name);
-            String description = context.getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(
-                    context.getString(R.string.channel_id), name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager =
-                    context.getSystemService(
-                            NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        CharSequence name = context.getString(R.string.channel_name);
+        String description = context.getString(R.string.channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(
+                context.getString(R.string.channel_id), name, importance);
+        channel.setDescription(description);
+        NotificationManager notificationManager =
+                context.getSystemService(
+                        NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
 
     public void scheduleNotification(Context context, String eventId, String title, int id,
@@ -66,16 +63,16 @@ public class NotificationPublisher extends BroadcastReceiver {
         if (notificationsActive && ActivityCompat.checkSelfPermission(context,
                 Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
 
-            Intent intent = new Intent(context, NotificationPublisher.class);
-            intent.putExtra(context.getString(R.string.notifications_notification_key),
-                    buildNotification(context, eventId, title, id, time, minutes));
-            intent.putExtra(context.getString(R.string.notifications_id_key), id);
-            PendingIntent sender = PendingIntent.getBroadcast(context, id, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
             TimeZone timeZone = TimeZone.getDefault();
             int offset = timeZone.getOffset(time);
             long deviceTime = time - offset;
+
+            Intent intent = new Intent(context, NotificationPublisher.class);
+            intent.putExtra(context.getString(R.string.notifications_notification_key),
+                    buildNotification(context, eventId, title, id, deviceTime, minutes));
+            intent.putExtra(context.getString(R.string.notifications_id_key), id);
+            PendingIntent sender = PendingIntent.getBroadcast(context, id, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             am.set(AlarmManager.RTC_WAKEUP, deviceTime - (long) (minutes) * 60 * 1000, sender);
