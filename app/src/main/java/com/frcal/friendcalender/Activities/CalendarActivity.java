@@ -1,6 +1,5 @@
 package com.frcal.friendcalender.Activities;
 
-import static java.security.AccessController.getContext;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -11,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +25,7 @@ import com.frcal.friendcalender.RestAPIClient.AsyncCalLEventList;
 import com.frcal.friendcalender.RestAPIClient.CalendarEventList;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.Event;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
@@ -231,17 +230,9 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
 
                     JSONObject startObj = event.getJSONObject("start");
                     String startDateTime = startObj.getString("dateTime");
-                    String[] parts = startDateTime.split("T");
-                    String startDate = parts[0];
-                    String startTime = parts[1].substring(0, 8);
-                    startTimeList.add(convertDateTime(startTime, startDate));
 
                     JSONObject endObj = event.getJSONObject("ends");
                     String endDateTime = endObj.getString("dateTime");
-                    String endDate = parts[0];
-                    String endTime = parts[1].substring(0, 8);
-                    endTimeList.add(convertDateTime(endTime, endDate));
-
 
                 }
             }
@@ -252,85 +243,51 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     }
 
     public void getEventList() {
-        CalendarEventList event2 = new CalendarEventList(2, this, "primary");
-        event2.delegate = this;
-        event2.setConfig();
-        event2.execute();
-
-
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                getString(R.string.preference_name),
+                MODE_PRIVATE);
+        boolean googleSignedIn = sharedPreferences.getBoolean(
+                getString(R.string.google_preference_name), false);
+        if (googleSignedIn ==true) {
+            CalendarEventList event2 = new CalendarEventList(2, this, "primary");
+            event2.delegate = this;
+            event2.setConfig();
+            event2.execute();
+        }
     }
 
-    public DateTime convertDateTime(String time, String date) {
-        String DateTimeString = date + "" + time;
-        LocalDateTime DateTime = LocalDateTime.parse(DateTimeString);
-        ZoneId zoneId = ZoneId.systemDefault();
-        ZonedDateTime zonedDateTime = DateTime.atZone(zoneId);
-        // Konvertieren Sie das ZonedDateTime-Objekt in ein Instant-Objekt
-        Instant instant = zonedDateTime.toInstant();
-
-        // Konvertieren Sie das Instant-Objekt in ein DateTime-Objekt mit der Default-Zeitzone
-        DateTime dateTime = new DateTime(instant.toEpochMilli());
-
-        return dateTime;
+    public DateTime convertDateTime(String date) {
+        return DateTime.parseRfc3339(date);
 
     }
 
 
     @Override
     public void respGetEventList(List res) {
-        List<String> eventIDList = new ArrayList<>();
-        List<String> summaryList = new ArrayList<>();
-        List<String> locationList = new ArrayList<>();
-        List<String> descriptionList = new ArrayList<>();
-        List<DateTime> startTimeList = new ArrayList<>();
-        List<DateTime> endTimeList = new ArrayList<>();
         EventManager eventManager1 = new EventManager(getApplicationContext(), this);
         ArrayList<CalenderEvent> liste = new ArrayList<>(eventManager1.getEvents());
-
-
+        List<Event> result = res;
+        boolean compare=false;
         //   String calenderID;
         try {
-            for (Object jsonString : res) {
-                JSONObject json = new JSONObject(jsonString.toString());
-                // calenderID = json.getString("id");
-                JSONArray items = json.getJSONArray("items");
-                for (int i = 0; i < items.length(); i++) {
-                    boolean compare = false;
-                    JSONObject event = items.getJSONObject(i);
-                    eventIDList.add(event.getString("id"));
-                    summaryList.add(event.getString("summary"));
-                    locationList.add(event.getString("location"));
-                    descriptionList.add(event.getString("description"));
-
-                    JSONObject startObj = event.getJSONObject("start");
-                    String startDateTime = startObj.getString("dateTime");
-                    String[] parts = startDateTime.split("T");
-                    String startDate = parts[0];
-                    String startTime = parts[1].substring(0, 8);
-                    startTimeList.add(convertDateTime(startTime, startDate));
-
-                    JSONObject endObj = event.getJSONObject("ends");
-                    String endDateTime = endObj.getString("dateTime");
-                    String endDate = parts[0];
-                    String endTime = parts[1].substring(0, 8);
-                    endTimeList.add(convertDateTime(endTime, endDate));
-                    //CalenederActivity wo bekomme ich die event id aus der Datenbank her
+            for (Event ev : result) {
+                compare=false;
                     for (CalenderEvent eventDB : liste) {
-                        if (eventDB.googleEventID.equals(event.getString("id"))) {
+
+                        if (ev.getId().equals(eventDB.googleEventID)) {
                             compare = true;
+                            break;
                         }
                     }
                     if (compare == false) {
-                        CalenderEvent eventDB = new CalenderEvent("primary", null, event.getString("id"), convertDateTime(startTime, startDate), convertDateTime(endTime, endDate), event.getString("description"), event.getString("summary"), event.getString("location"), null, null);
+                        DateTime datdeb = ev.getEnd().getDateTime();
+                        CalenderEvent eventDB = new CalenderEvent("primary", null, ev.getId(), ev.getStart().getDateTime(), ev.getEnd().getDateTime(), ev.getDescription(), ev.getSummary(), ev.getLocation(), null, null);
                         eventManager.addEvent(eventDB);
                     }
-
-
-                }
             }
             eventManager.requestUpdate();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
     }
