@@ -116,7 +116,7 @@ https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender
 
 **Philipp Hamann:** email, hamteer
 
-**Virginia Schellenberg:** vis9494@thi.de & schellenberg.virginia@mail.de, vis9494
+**Virginia Schellenberg:** vis9494@thi.de & schellenberg.virginia@mail.de, @github/vis9494
 
 ### Zuständigkeiten
 
