@@ -78,6 +78,12 @@ https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender
 
 [Beschreiben Sie hier die einzelnen Teammitglieder mit Namen, E-Mail-Adresse und Github-Nutzernamen.]
 
+Daniel Kuzma: email, dak2791
+Kerim Agalarov: email, AKamKer
+Niclas Hildner: email, github
+Philipp Hamann: email, hamteer
+Virginia Schellenberg: vis9494@thi.de & schellenberg.virginia@mail.de, vis9494
+
 ### Zuständigkeiten
 
 [Nennen Sie mindestens eine Komponente Ihrer Anwendung, die in wesentlichen Teilen vom jeweiligen Teammitglied entwickelt wurde.]
