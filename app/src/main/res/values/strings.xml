@@ -151,7 +151,7 @@
 
     <!-- Strings for Initialization -->
     <string name="notifications_initialization_subtitle">Möchten Sie Benachrichtigungen aktivieren?</string>
-    <string name="notifications_initialization_description">Über Benachrichtigungen können Sie sich 15 Minuten vor einem Termin an diesen erinnern lassen\nSie können Ihre Wahl jederzeit in den Einstellungen ändern</string>
+    <string name="notifications_initialization_description">Über Benachrichtigungen können Sie sich einige Minuten vor einem Termin an diesen erinnern lassen\nSie können Ihre Wahl jederzeit in den Einstellungen ändern</string>
     <string name="notifications_initialization_image_description">Bild einer Glocke als Symbol von Benachrichtigungen</string>
     <string name="notifications_initialization_agree_button">Benachrichtigungen aktivieren</string>
     <string name="notifications_initialization_disagree_button">Ohne Benachrichtigungen fortfahren</string>
@@ -159,7 +159,7 @@
     <string name="notifications_initialization_alert_dialog_positive">Ohne Benachrichtigungen fortfahren</string>
     <string name="notifications_initialization_alert_dialog_negative">Benachrichtigungen einrichten</string>
 
-    <string name="fingerprint_initialization_subtitle">Möchten Sie eine Fingerabdrucksperre einrichten</string>
+    <string name="fingerprint_initialization_subtitle">Möchten Sie eine Fingerabdrucksperre einrichten?</string>
     <string name="fingerprint_initialization_description">Mithilfe der Fingerabdrucksperre können Sie Ihre Daten vor unerwünschten fremden Eingriffen schützen\nSie können Ihre Wahl jederzeit in den Einstellungen ändern</string>
     <string name="fingerprint_initialization_image_description">Bild eines Fingerabdrucks</string>
     <string name="fingerprint_initialization_agree_button">Fingerabdrucksperre einrichten</string>
@@ -167,8 +167,11 @@
 
     <string name="google_initialization_subtitle">Möchten Sie Ihr Google-Konto verknüpfen?</string>
     <string name="google_initialization_description">Wenn Sie Ihr Google-Konto verknüpfen, können Sie leichter Ihre Termine synchronisieren und mit Freunden teilen\nSie können Ihre Wahl jederzeit in den Einstellungen ändern</string>
+    <string name="google_initialization_image_description">Unsichtbares Bild eines Kalendars</string>
     <string name="google_initialization_agree_button">Bei Google anmelden</string>
     <string name="google_initialization_disagree_button">Nicht mit Google-Konto verknüpfen</string>
+
+    <!-- Strings for Sharing -->
     <string name="choose_friends_hint">Teilen mit …</string>
     <string name="private_date_set">privater Termin</string>
     <string name="public_date_set">öffentlicher Termin</string>
