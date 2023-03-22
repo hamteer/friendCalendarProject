@@ -3,6 +3,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'AndroidDebugKey'
+            storePassword 'android'
+            keyPassword 'android'
+            storeFile file('D:\\Program Files\\Android Studio\\.android\\debug.keystore')
+        }
+    }
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8

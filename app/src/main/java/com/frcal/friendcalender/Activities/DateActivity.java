@@ -63,7 +63,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
     EventManager eventManager;
     CalenderEvent currentEvent;
 
-    DateActivity context = this;
+    DateActivity selfRef = this;
 
     // Variables for Friend selection dialogue
     boolean[] selectedFriends;
@@ -343,7 +343,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 if (googleSync.isChecked()) {
                     // TODO:
                     //  - API-Call: use previously created CalenderEvent object to also update
-                    CalenderManager cM1 = new CalenderManager(getApplicationContext(),context);
+                    CalenderManager cM1 = new CalenderManager(getApplicationContext(),selfRef);
                     List<Calender> mailList = new ArrayList<>(cM1.getCalenders());
                     List<String> attendes = new ArrayList<>();
 
@@ -478,10 +478,5 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
     @Override
     public void onCalenderListUpdated() {
 
-    }
-
-    @Override
-    public void onCalenderListUpdated() {
-        calenderList = calenderManager.getCalenders();
     }
 }

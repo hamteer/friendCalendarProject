@@ -80,7 +80,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
     ArrayList<Integer> listOfSelectedFriends = new ArrayList<>();
     ArrayList<Calender> calenderList = new ArrayList<>();
 
-    AddDateActivity context = this;
+    AddDateActivity selfRef = this;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -345,7 +345,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
                     // TODO:
                     //  - API-Call: use previously created CalenderEvent object to also create a event in the user's Google Calendar
-                    CalenderManager cM1 = new CalenderManager(getApplicationContext(),context);
+                    CalenderManager cM1 = new CalenderManager(getApplicationContext(), selfRef);
                     List<Calender> mailList = new ArrayList<>(cM1.getCalenders());
                     List<String> attendes = new ArrayList<>();
 
