@@ -73,9 +73,6 @@ public class NotificationInitializationActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.notifications_initialization_alert_dialog))
                 .setPositiveButton(
-                        getString(R.string.notifications_initialization_alert_dialog_positive),
-                        (dialog, id) -> endActivity(sharedPreferences, false))
-                .setNegativeButton(
                         getString(R.string.notifications_initialization_alert_dialog_negative),
                         (dialog, id) -> {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -84,7 +81,12 @@ public class NotificationInitializationActivity extends AppCompatActivity {
                             } else {
                                 endActivity(sharedPreferences, true);
                             }
-                        });
+                        }
+                )
+                .setNegativeButton(
+                        getString(R.string.notifications_initialization_alert_dialog_positive),
+                        (dialog, id) -> endActivity(sharedPreferences, false)
+                );
 
         alertDialog = builder.create();
     }

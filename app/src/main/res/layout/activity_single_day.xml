@@ -11,19 +11,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="40dp"
-        android:scaleX="2"
-        android:scaleY="2"
         android:text="@string/single_day_headline"
         android:textAlignment="center"
+        android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/single_day_headline">
@@ -39,10 +38,6 @@
             app:layout_constraintTop_toBottomOf="@+id/single_day_headline"
             app:layout_constraintVertical_bias="0.078" />
 
-
     </LinearLayout>
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
