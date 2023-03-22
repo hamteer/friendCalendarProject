@@ -75,7 +75,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         super.onResume();
         getEventList();
         calenderManager.requestUpdate();
-        eventManager.requestUpdate();
+        //eventManager.requestUpdate();
     }
 
     private void initUI() {

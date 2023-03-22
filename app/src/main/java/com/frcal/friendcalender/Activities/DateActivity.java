@@ -361,7 +361,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                     boolean googleSignedIn = sharedPreferences.getBoolean(
                             getString(R.string.google_preference_name), false);
                     if (googleSignedIn ==true) {
-                        updateEvent(5, "primary", updatedEvent.googleEventID, title, desc, loc, from, to,attendes);
+                        updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc, fromWithOffset, toWithOffset,attendes);
                     }else{
                         Toast.makeText(DateActivity.this, "Lokalen Termin geupdatet (nicht eingeloggt)", Toast.LENGTH_SHORT).show();
                     }
