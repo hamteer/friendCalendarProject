@@ -74,14 +74,15 @@ So kann man über unsere Applikation Termine erstellen und diese mit Freunden ü
 [Nennen Sie mindestens eine Komponente Ihrer Anwendung, die in wesentlichen Teilen vom jeweiligen Teammitglied entwickelt wurde.]
 
 
-**Daniel Kuzma:** Implementierung von:[CalenderManager](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DataAccess/CalenderManager.java)
-[EventManager](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DataAccess/EventManager.java)
-[Calender](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DatabaseEntities/Calender.java)
-[CalenderEvent](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DatabaseEntities/CalenderEvent.java)
-[AppDatabase](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/AppDatabase.java)
-[CalenderEventAttributeTypeConverter](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/CalenderEventAttributeTypeConverter.java)
-[DAO](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/DAO.java)
-[DatabaseHelper](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/DatabaseHelper.java)
+**Daniel Kuzma:** <br>
+Implementierung von: [CalenderManager](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DataAccess/CalenderManager.java), 
+[EventManager](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DataAccess/EventManager.java), 
+[Calender](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DatabaseEntities/Calender.java), 
+[CalenderEvent](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DatabaseEntities/CalenderEvent.java), 
+[AppDatabase](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/AppDatabase.java), 
+[CalenderEventAttributeTypeConverter](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/CalenderEventAttributeTypeConverter.java), 
+[DAO](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/DAO.java), 
+[DatabaseHelper](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/DatabaseHelper.java), 
 (+ Datenbank-Aufrufe in den Activites)
 
 
