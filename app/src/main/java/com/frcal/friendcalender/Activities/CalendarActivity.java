@@ -73,9 +73,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     @Override
     protected void onResume() {
         super.onResume();
-        getEventList();
-        calenderManager.requestUpdate();
-        eventManager.requestUpdate();
+
     }
 
     private void initUI() {
@@ -185,6 +183,12 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
                 startActivity(new Intent(CalendarActivity.this, SettingsActivity.class));
             });
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getEventList();
     }
 
     // gets called when CalenderList gets updated
