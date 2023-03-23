@@ -59,7 +59,7 @@ So kann man über unsere Applikation Termine erstellen und diese mit Freunden ü
 [Beschreiben Sie hier die einzelnen Teammitglieder mit Namen, E-Mail-Adresse und Github-Nutzernamen.]
 
 
-**Daniel Kuzma:** email, dak2791
+**Daniel Kuzma:** dak2791@thi.de & daniel1kuzma@gmail.com, dak2791
 
 **Kerim Agalarov**: email, AKamKer
 
@@ -149,7 +149,7 @@ Aufgaben:
 
 Aufgaben:
 	
-- Daniel Kuzma: ?
+- Daniel Kuzma: Datenbank ausarbeiten/ unnötige Sachen aus Datenbank entfernen und weitere API-Anfragen
 
 - Kerim Agalarov: Herausfinden, wie API-Aufrufe an anderen Codestellen möglich sind
 		
