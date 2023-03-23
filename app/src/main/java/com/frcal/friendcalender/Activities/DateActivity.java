@@ -455,6 +455,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
     }
 
 
+
     @Override
     public void respGetEvent(Object res) {
 
@@ -477,6 +478,6 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     @Override
     public void onCalenderListUpdated() {
-
+        calenderList = calenderManager.getCalenders();
     }
 }
