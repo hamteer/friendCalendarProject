@@ -225,9 +225,9 @@ Aufgaben:
 	
 - Daniel Kuzma: AddDateActivity perfektionieren
 
-- Kerim Agalarov: ?
+- Kerim Agalarov: Sign-In Bugfixes, Snychronisation von Terminen aus GMail Kalender 
 		
-- Niclas Hildner: Events einbinden und Event und Datenbank in OnResume() speichern
+- Niclas Hildner: Events einbinden und Event in Datenbank speichern
 		
 - Philipp Hamann: UI von DateActivity, CalendarActivity und AddDateActivity anpassen
 		
