@@ -391,13 +391,13 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 if (currentEvent.notificationID != 0) {
                     publisher.cancelNotification(context, currentEvent.notificationID);
                 }
-                if (googleSignedIn == true) {
+                if (googleSignedIn==true  && googleSync.isChecked()){
                     deleteEvent(4, "primary", currentEvent.googleEventID);
-                    Toast.makeText(DateActivity.this, "Termin gelöscht", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(DateActivity.this, "Lokalen Termin gelöscht (nicht eingeloggt)", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
-
-                Toast.makeText(DateActivity.this, "Lokalen Termin gelöscht (nicht eingeloggt)", Toast.LENGTH_SHORT).show();
-                finish();
             }
         });
     }
@@ -459,6 +459,12 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     @Override
     public void respDeleteEvent(Object res) {
+        String result = (String) res;
+        if (result.equals("IOException"))
+            Toast.makeText(DateActivity.this, "Termin bereits gelöscht", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(DateActivity.this, "Termin gelöscht", Toast.LENGTH_SHORT).show();
+
 
     }
 

@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.frcal.friendcalender.DataAccess.CalenderManager;
 import com.frcal.friendcalender.DataAccess.EventManager;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 import com.frcal.friendcalender.Decorators.EventDecorator;
@@ -122,8 +121,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
                 setEvent();
                 break;
             case 4:
-                deleteEvent();
-                break;
+                return deleteEvent();
             case 5:
                 updateEvent();
                 break;
@@ -180,8 +178,8 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
 
         if (attendees != null) {
             List<EventAttendee> attendeesToSET = new ArrayList<>();
-            for (String i : this.attendees) {
-                attendeesToSET.add( new EventAttendee().setEmail(i));
+            for (String email:attendees) {
+                    attendeesToSET.add( new EventAttendee().setEmail(email));
             }
             event.setAttendees((attendeesToSET));
         }
@@ -210,7 +208,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
         } catch (UserRecoverableAuthIOException e) {
             ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
         } catch (IOException io) {
-            io.printStackTrace();
+            return "IOException";
         }
         return "";
     }
