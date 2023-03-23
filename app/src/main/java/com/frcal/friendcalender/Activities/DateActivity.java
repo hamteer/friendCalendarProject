@@ -39,6 +39,7 @@ import com.google.api.services.calendar.model.EventDateTime;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.time.Instant;
@@ -51,7 +52,7 @@ import java.util.Collections;
 import java.util.TimeZone;
 
 // TODO: all
-public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener, AsyncCalEvent,CalenderManager.CalenderManagerListener {
+public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener, AsyncCalEvent, CalenderManager.CalenderManagerListener {
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
     TextView chooseFriends;
     String title, desc, loc, dateString, fromString, toString;
@@ -340,35 +341,35 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                         toWithOffset, desc, title,
                         loc, currentEvent.creator, new DateTime(System.currentTimeMillis()), id);
                 eventManager.updateEvent(updatedEvent);
+                SharedPreferences sharedPreferences = getSharedPreferences(
+                        getString(R.string.preference_name),
+                        MODE_PRIVATE);
+                boolean googleSignedIn = sharedPreferences.getBoolean(
+                        getString(R.string.google_preference_name), false);
                 if (googleSync.isChecked()) {
-                    // TODO:
-                    //  - API-Call: use previously created CalenderEvent object to also update
-                    CalenderManager cM1 = new CalenderManager(getApplicationContext(),selfRef);
-                    List<Calender> mailList = new ArrayList<>(cM1.getCalenders());
+                    if (googleSignedIn == false) {
+                        return;
+                    }
+
+                    CalenderManager cM1 = new CalenderManager(getApplicationContext(), selfRef);
                     List<String> attendes = new ArrayList<>();
 
 
-                    if(listOfSelectedFriends.contains(1))
-                    {
-                        for(Calender cal : mailList)
-                        {
-                            attendes.add(cal.calenderID);
+                    if (listOfSelectedFriends.contains(1)) {
+                        /*for (String cal : listOfFriends) {
+                            attendes.add(cal);
+                        }*/
+                        for (int cal : listOfSelectedFriends) {
+                            attendes.add(listOfFriends.get(cal));
                         }
                     }
-                    SharedPreferences sharedPreferences = getSharedPreferences(
-                            getString(R.string.preference_name),
-                            MODE_PRIVATE);
-                    boolean googleSignedIn = sharedPreferences.getBoolean(
-                            getString(R.string.google_preference_name), false);
-                    if (googleSignedIn ==true) {
-                        updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc, from, to,attendes);
-                        return;
+                    if (listOfSelectedFriends.contains(0)) {
+                        for (int cal : listOfSelectedFriends) {
+                            attendes.add(listOfFriends.get(cal));
+                        }
                     }
-                    Toast.makeText(DateActivity.this, "Lokalen Termin geupdatet (nicht eingeloggt)", Toast.LENGTH_SHORT).show();
+                    updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc, from, to, attendes);
                     return;
-
-
-
                 }
 
                 if (notif.isChecked()) {
@@ -399,8 +400,8 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 if (currentEvent.notificationID != 0) {
                     publisher.cancelNotification(context, currentEvent.notificationID);
                 }
-                if (googleSignedIn ==true) {
-                    deleteEvent(4,"primary",currentEvent.googleEventID);
+                if (googleSignedIn == true) {
+                    deleteEvent(4, "primary", currentEvent.googleEventID);
                     Toast.makeText(DateActivity.this, "Termin gelöscht", Toast.LENGTH_SHORT).show();
                 }
 
@@ -422,7 +423,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     }
 
-    public void updateEvent(Integer mtdNr, String calendarID, String eventID,String summary, String description, String location, DateTime startTime, DateTime endTime , List<String> attendees ) {
+    public void updateEvent(Integer mtdNr, String calendarID, String eventID, String summary, String description, String location, DateTime startTime, DateTime endTime, List<String> attendees) {
 
 
         try {
@@ -432,8 +433,8 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
                /* LinkedList <String> attendees = new LinkedList<>();
                 attendees.add("freundeskalender.kerim@gmail.com"); */
-            CalendarEvents event5 = new CalendarEvents(mtdNr, this, calendarID,eventID ,summary, description, location, startTime, endTime , attendees );
-            event5.delegate=this;
+            CalendarEvents event5 = new CalendarEvents(mtdNr, this, calendarID, eventID, summary, description, location, startTime, endTime, attendees);
+            event5.delegate = this;
             event5.setConfig();
             event5.execute();
         } catch (Exception e) {
@@ -444,15 +445,14 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     }
 
-    public void deleteEvent(Integer mtdNr,  String calendarID, String eventID) {
+    public void deleteEvent(Integer mtdNr, String calendarID, String eventID) {
         CalendarEvents event4 = new CalendarEvents(4, this, "primary", currentEvent.googleEventID);
-        event4.delegate=this;
+        event4.delegate = this;
         event4.setConfig();
         event4.execute();
 
 
     }
-
 
 
     @Override
