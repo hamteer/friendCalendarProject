@@ -346,17 +346,20 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                     // TODO:
                     //  - API-Call: use previously created CalenderEvent object to also create a event in the user's Google Calendar
                     CalenderManager cM1 = new CalenderManager(getApplicationContext(), selfRef);
-                    List<Calender> mailList = new ArrayList<>(cM1.getCalenders());
                     List<String> attendes = new ArrayList<>();
 
-
-                    if(listOfSelectedFriends.contains(1))
-                    {
-                       for(Calender cal : mailList)
-                       {
-                           attendes.add(cal.calenderID);
-                       }
+                    if (listOfSelectedFriends.contains(1)) {
+                        for (int cal : listOfSelectedFriends) {
+                            if (cal>1)
+                                attendes.add(listOfFriends.get(cal));
+                        }
                     }
+                    /*if (listOfSelectedFriends.contains(0)) {
+                        for (int cal : listOfSelectedFriends) {
+                            attendes.add(listOfFriends.get(cal));
+                        }
+                    }*/
+
 
                     addEvent(3, "primary",event.eventID ,title, desc, loc, fromWithOffset, toWithOffset ,attendes);
 
