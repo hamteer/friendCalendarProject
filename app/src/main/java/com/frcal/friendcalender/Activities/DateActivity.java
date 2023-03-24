@@ -360,7 +360,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                                 attendes.add(listOfFriends.get(cal));
                         }
                     }
-                    updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc, from, to, attendes);
+                    updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc, fromWithOffset, toWithOffset, attendes);
                 }
 
                 if (notif.isChecked()) {
