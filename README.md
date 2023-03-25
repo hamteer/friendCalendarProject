@@ -23,7 +23,7 @@ Hier nun eine Anleitung um den [Debug-Keystore](https://github.com/Wirtschaftsin
 <img src="https://user-images.githubusercontent.com/73745030/227740136-7d0d0e5b-6a02-46de-a70f-5823d7d0bbc3.png" width=60%>
 
 ### ❗ Hinweis
-Der Nutzer der App wird in der aktuellen Version, nach jedem Schließen der App, automatisch von Google aus sicherheitstechnischen Gründen abgemeldet. Dies führt dazu, dass der Nutzer der App sich bei erneutem Öffnen, über den "Login mit Google"-Button in der EinstellungsActivity, wieder mit dem Google-Account anmelden muss.  
+Der Nutzer der App wird in der aktuellen Version, nach jedem Schließen der App, automatisch von Google, aus sicherheitstechnischen Gründen, abgemeldet. Dies führt dazu, dass der Nutzer der App sich bei erneutem Öffnen, über den "Login mit Google"-Button in der EinstellungsActivity, wieder mit dem Google-Account anmelden muss.  
 
 ## Projektbeschreibung
 
