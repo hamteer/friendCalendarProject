@@ -87,7 +87,7 @@ Rechts: Benachrichtigung zur Erinnerung an einen Termin
 
 **Philipp Hamann:** phh1901@thi.de & philham.001@gmail.com, hamteer
 
-**Virginia Schellenberg:** vis9494@thi.de & schellenberg.virginia@mail.de, vis9494
+**Virginia Schellenberg:** vis9494@thi.de & schellenberg.virginia@mail.de, [@github/vis9494](https://github.com/vis9494)
 
 ### Zuständigkeiten
 
