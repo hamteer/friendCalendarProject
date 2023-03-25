@@ -63,7 +63,7 @@ So kann man über unsere Applikation Termine erstellen und diese mit Freunden ü
 
 **Kerim Agalarov**: email, AKamKer
 
-**Niclas Hildner:** email, github
+**Niclas Hildner:** niclas.hildner@stud.hs-coburg.de, YourName
 
 **Philipp Hamann:** email, hamteer
 
