@@ -2,7 +2,18 @@
 
 ## Wichtige Informationen und Handbuch
 [Hier ist die Debug-APK zu finden](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app-debug.apk)
-[Hier Debug Keystore, wie ausführen, etc.]
+### Systemumgebung / Testumgebung
+Als Entwicklungs- und Testumgebung wurde Windows 10 verwendet. Die App wurde auf einem emulierten Google Pixel 6 Pro mit API Level 29 durchgeführt.  
+### Testaccount
+Da diese App auf die Google API zugreift und die App noch nicht veröffentlicht wurde, muss der Tester der App folgenden Google-Account verwenden, um den vollen Funktionsumfang nutzen zu können: <br>
+<br>
+E-Mail Adresse: `freundeskalender.test1@gmail.com` <br>
+Passwort: `TestKalender1`<br>
+### Debug SHA1-Keystore
+Wenn der Tester der App die App lokal, in Android-Studio, builden möchte, sodass eine vollständig lauffähige Version entsteht, muss der Tester folgenden [Debug-Keystore] in Android-Studio einbinden, da nur dieser im Google-Cloud-Projekt hinterlegt ist. tbd tutorial einbinden keystore
+
+### ❗ Hinweis
+Der Nutzer der App wird in der aktuellen Version, nach jedem Schließen der App, automatisch von Google aus sicherheitstechnischen Gründen abgemeldet. Dies führt dazu, dass der Nutzer der App sich bei erneutem Öffnen, über den "Login mit Google"-Button in der EinstellungsActivity, wieder mit dem Google-Account anmelden muss.  
 
 ## Projektbeschreibung
 
