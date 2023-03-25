@@ -60,7 +60,7 @@ public class CalendarEventList extends AsyncTask<Void, Void, List<Event>> {
         return null;
 
         /**
-         * Method
+         * Method to execute the other methods asynchronous
          * @author Niclas
          *
          */
