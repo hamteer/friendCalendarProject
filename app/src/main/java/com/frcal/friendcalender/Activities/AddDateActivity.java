@@ -104,12 +104,12 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
     private void initFriendsDialogue() {
         // first, add the always needed options to add either all or no friends:
         listOfFriends.add("privater Termin");
-        listOfFriends.add("öffentlicher Termin");
+        listOfFriends.add("mit allen Freunden teilen");
         // now fill in the listOfFriends with all Friends saved in the DB:
         calenderManager.requestUpdate();
         for (Calender friend: calenderList) {
             listOfFriends.add(friend.name);
-            Log.d("initFriendsDialogue", "added " + friend.name);
+            //Log.d("initFriendsDialogue", "added " + friend.name);
         }
         // CAUTION:
         // this list has to have a specific order:
@@ -482,7 +482,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
             String summary = eventData.getString("summary");
             String location = eventData.getString("location");
         } catch (Exception e) {
-            Log.w("", "handleSignInResult:error", e);
+            //Log.w("", "handleSignInResult:error", e);
 
         }
         //Datenbankaufruf

@@ -24,7 +24,7 @@ public class EventManager {
         this.db = new DatabaseHelper(context);
         this.listener = listener;
         this.events = db.getAllCalenderEvents();
-        Log.d("EventManager", "initialized");
+        //Log.d("EventManager", "initialized");
     }
 
     /**
@@ -45,12 +45,12 @@ public class EventManager {
         for (CalenderEvent eventListElement : this.events) {
             if (eventListElement.eventID.equals(event.eventID)) {
                 // Element already existing => cant add as new Item has to be updated instead
-                Log.d(logTag, "addEvent() Event already existing => updating instead");
+                //Log.d(logTag, "addEvent() Event already existing => updating instead");
                 updateEvent(event);
                 return;
             }
         }
-        Log.d(logTag, "addEvent() Adding new Event");
+        //Log.d(logTag, "addEvent() Adding new Event");
         db.addEvent(event);
         requestUpdate();
     }
@@ -61,7 +61,7 @@ public class EventManager {
      * @param event event with updated contents
      */
     public void updateEvent(CalenderEvent event) {
-        Log.d(logTag, "updateEvent() Updating existing Event");
+        //Log.d(logTag, "updateEvent() Updating existing Event");
         db.updateEvent(event);
         getEvents();
     }
@@ -72,7 +72,7 @@ public class EventManager {
      * @param event event that will be removed
      */
     public void deleteEvent(CalenderEvent event) {
-        Log.d(logTag, "deleteEvent() Deleting Event");
+        //Log.d(logTag, "deleteEvent() Deleting Event");
         db.deleteEvent(event);
         getEvents();
     }
@@ -96,7 +96,7 @@ public class EventManager {
      * @return List of CalenderEvents pulled from the database
      */
     public ArrayList<CalenderEvent> getEvents() {
-        Log.d(logTag, "getEvents() getting Events");
+        //Log.d(logTag, "getEvents() getting Events");
         events = db.getAllCalenderEvents();
         return events;
     }

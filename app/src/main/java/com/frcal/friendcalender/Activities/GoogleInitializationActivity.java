@@ -114,12 +114,12 @@ public class GoogleInitializationActivity extends AppCompatActivity {
                                 result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
                                 null, 0, 0, 0);
                     } catch (IntentSender.SendIntentException e) {
-                        Log.e(TAG, "Couldn't start One Tap UI: " + e.getLocalizedMessage());
+                        //Log.e(TAG, "Couldn't start One Tap UI: " + e.getLocalizedMessage());
                     }
                 })
                 .addOnFailureListener(this, e -> {
                     // No Google Accounts found. Just continue presenting the signed-out UI.
-                    Log.d(TAG, e.getLocalizedMessage());
+                    //Log.d(TAG, e.getLocalizedMessage());
                 });
     }
 
@@ -139,21 +139,21 @@ public class GoogleInitializationActivity extends AppCompatActivity {
                     endActivity(
                             getSharedPreferences(getString(R.string.preference_name), MODE_PRIVATE),
                             true);
-                    Log.d(TAG, "Got ID token.");
+                    //Log.d(TAG, "Got ID token.");
                 }
             } catch (ApiException e) {
                 switch (e.getStatusCode()) {
                     case CommonStatusCodes.CANCELED:
-                        Log.d(TAG, "One-tap dialog was closed.");
+                        //Log.d(TAG, "One-tap dialog was closed.");
                         // Don't re-prompt the user.
                         break;
                     case CommonStatusCodes.NETWORK_ERROR:
-                        Log.d(TAG, "One-tap encountered a network error.");
+                        //Log.d(TAG, "One-tap encountered a network error.");
                         // Try again or just ignore.
                         break;
                     default:
-                        Log.d(TAG, "Couldn't get credential from result."
-                                + e.getLocalizedMessage());
+                        //Log.d(TAG, "Couldn't get credential from result."
+                                //+ e.getLocalizedMessage());
                         break;
                 }
             }

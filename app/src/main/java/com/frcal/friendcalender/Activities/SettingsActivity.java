@@ -211,7 +211,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                     result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
                                     null, 0, 0, 0);
                         } catch (IntentSender.SendIntentException e) {
-                            Log.e(TAG, "Couldn't start One Tap UI: " + e.getLocalizedMessage());
+                            //Log.e(TAG, "Couldn't start One Tap UI: " + e.getLocalizedMessage());
                         }
                     }
                 })
@@ -219,7 +219,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // No Google Accounts found. Just continue presenting the signed-out UI.
-                        Log.d(TAG, e.getLocalizedMessage());
+                        //Log.d(TAG, e.getLocalizedMessage());
                     }
                 });
 
@@ -259,24 +259,24 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         // with your backend.
                         Verifier verObj = new Verifier(idToken);
                         verObj.execute();
-                        Log.d(TAG, "Got ID token.");
+                        //Log.d(TAG, "Got ID token.");
 
                         isUserLogged(true);
                     }
                 } catch (ApiException e) {
                     switch (e.getStatusCode()) {
                         case CommonStatusCodes.CANCELED:
-                            Log.d(TAG, "One-tap dialog was closed.");
+                            //Log.d(TAG, "One-tap dialog was closed.");
                             // Don't re-prompt the user.
                             showOneTapUI = false;
                             break;
                         case CommonStatusCodes.NETWORK_ERROR:
-                            Log.d(TAG, "One-tap encountered a network error.");
+                            //Log.d(TAG, "One-tap encountered a network error.");
                             // Try again or just ignore.
                             break;
                         default:
-                            Log.d(TAG, "Couldn't get credential from result."
-                                    + e.getLocalizedMessage());
+                            //Log.d(TAG, "Couldn't get credential from result."
+                                    //+ e.getLocalizedMessage());
                             break;
                     }
                 }
@@ -303,7 +303,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         if (!serverClientId.trim().endsWith(suffix)) {
             String message = "Invalid server client ID in strings.xml, must end with " + suffix;
 
-            Log.w(TAG, message);
+            //Log.w(TAG, message);
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
     }
@@ -341,7 +341,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onCalenderListUpdated() {
         ArrayList<Calender> calenderArrayList = calenderManager.getCalenders();
-        Log.d("CalenderActivity", "onCalenderListUpdated() called");
+        //Log.d("CalenderActivity", "onCalenderListUpdated() called");
         // TODO: Adapter to show Calenders which are stored in calenderArrayList
     }
 

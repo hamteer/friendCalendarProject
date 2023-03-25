@@ -107,12 +107,12 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
     private void initFriendsDialogue() {
         // first, add the always needed options to add either all or no friends:
         listOfFriends.add("privater Termin");
-        listOfFriends.add("öffentlicher Termin");
+        listOfFriends.add("mit allen Freunden teilen");
         // now fill in the listOfFriends with all Friends saved in the DB (or the API):
         calenderManager.requestUpdate();
         for (Calender friend : calenderList) {
             listOfFriends.add(friend.name);
-            Log.d("initFriendsDialogue", "added " + friend.name);
+            //Log.d("initFriendsDialogue", "added " + friend.name);
         }
         // usw., with DB/API this is probably done in a for-/foreach-loop
 

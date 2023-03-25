@@ -271,10 +271,10 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
     public void onEventListUpdated() {
 
         ArrayList<CalenderEvent> eventArrayList = eventManager.getEvents();
-        Log.d("CalenderActivity", "onEventListUpdated() called");
+        //Log.d("CalenderActivity", "onEventListUpdated() called");
         ArrayList<CalendarDay> daysToDecorate = new ArrayList<>();
         for (CalenderEvent event : eventArrayList) {
-            Log.d("CalenderActivity", event.startTime.toString());
+            //Log.d("CalenderActivity", event.startTime.toString());
             String timeString = event.startTime.toString();
             String year = timeString.substring(0, 4);
             String month = timeString.substring(5, 7);

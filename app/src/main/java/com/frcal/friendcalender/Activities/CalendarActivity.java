@@ -165,7 +165,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
             public void onDateSelected(@NonNull MaterialCalendarView widget,
                                        @NonNull CalendarDay date, boolean selected) {
                 // create Intent, put date in extras, start SingleDateActivity
-                Log.d("FrCal", "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
+                ////Log.d("FrCal", "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
                 Intent intent = new Intent(getApplicationContext(), SingleDayActivity.class);
                 intent.putExtra("SELECTED_DATE", date);
                 startActivity(intent);
@@ -196,17 +196,17 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     @Override
     public void onCalenderListUpdated() {
         ArrayList<Calender> calenderArrayList = calenderManager.getCalenders();
-        Log.d("CalenderActivity", "onCalenderListUpdated() called");
+        //Log.d("CalenderActivity", "onCalenderListUpdated() called");
     }
 
     // gets called when EventList gets updated
     @Override
     public void onEventListUpdated() {
         ArrayList<CalenderEvent> eventArrayList = eventManager.getEvents();
-        Log.d("CalenderActivity", "onEventListUpdated() called");
+        //Log.d("CalenderActivity", "onEventListUpdated() called");
         ArrayList<CalendarDay> daysToDecorate = new ArrayList<>();
         for (CalenderEvent event : eventArrayList) {
-            Log.d("CalenderActivity", event.startTime.toString());
+            //Log.d("CalenderActivity", event.startTime.toString());
             String timeString = event.startTime.toString();
             String year = timeString.substring(0, 4);
             String month = timeString.substring(5, 7);

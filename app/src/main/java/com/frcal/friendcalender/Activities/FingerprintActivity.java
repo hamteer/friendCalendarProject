@@ -150,7 +150,7 @@ public class FingerprintActivity extends AppCompatActivity {
                     public void onAuthenticationError(int errorCode,
                                                       @NonNull CharSequence errString) {
                         super.onAuthenticationError(errorCode, errString);
-                        Log.d(tag, "Authentication error: " + errString);
+                        //Log.d(tag, "Authentication error: " + errString);
                         Toast.makeText(getApplicationContext(),
                                 getString(R.string.fingerprint_error),
                                 Toast.LENGTH_SHORT).show();
@@ -165,7 +165,7 @@ public class FingerprintActivity extends AppCompatActivity {
                     @Override
                     public void onAuthenticationFailed() {
                         super.onAuthenticationFailed();
-                        Log.d(tag, "Authentication failed");
+                        //Log.d(tag, "Authentication failed");
                         Toast.makeText(getApplicationContext(),
                                 getString(R.string.fingerprint_error),
                                 Toast.LENGTH_SHORT).show();

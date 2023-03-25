@@ -20,30 +20,37 @@
         <activity
             android:name=".Activities.AddCalendarActivity"
             android:exported="false"
-            android:parentActivityName=".Activities.CalendarActivity" />
+            android:parentActivityName=".Activities.CalendarActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.AddDateActivity"
             android:exported="false"
-            android:parentActivityName=".Activities.CalendarActivity" />
+            android:parentActivityName=".Activities.CalendarActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.CalendarActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.DateActivity"
             android:exported="false"
-            android:parentActivityName=".Activities.SingleDayActivity" />
+            android:parentActivityName=".Activities.SingleDayActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.SettingsActivity"
             android:exported="false"
-            android:parentActivityName=".Activities.CalendarActivity" />
+            android:parentActivityName=".Activities.CalendarActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.SingleDayActivity"
             android:exported="false"
-            android:parentActivityName=".Activities.CalendarActivity" />
+            android:parentActivityName=".Activities.CalendarActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.FingerprintActivity"
             android:exported="true"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -54,13 +61,16 @@
         </activity>
         <activity
             android:name=".Activities.NotificationInitializationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.FingerprintInitializationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.GoogleInitializationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <receiver android:name=".Notifications.NotificationPublisher"
             tools:ignore="Instantiatable" />
     </application>
