@@ -8,7 +8,7 @@ android {
             keyAlias 'AndroidDebugKey'
             storePassword 'android'
             keyPassword 'android'
-
+            storeFile file('C:\\Users\\Daniel\\.android\\debug.keystore')
         }
     }
     compileOptions {
