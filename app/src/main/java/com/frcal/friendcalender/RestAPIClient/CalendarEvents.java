@@ -186,7 +186,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
         try {
             event = this.service.events().insert(this.calendarID, event).execute();
             JsonFactory jsonSetEvent = event.getFactory();
-            CalenderEvent eventDB = new CalenderEvent(this.calendarID, this.eventID, event.getId(), this.startTime, this.endTime, this.description, this.summary, this.location, null, this.endTime,1);
+            CalenderEvent eventDB = new CalenderEvent(this.calendarID, this.eventID, event.getId(), this.startTime, this.endTime, this.description, this.summary, this.location, null, this.endTime,0);
             eventManager.addEvent(eventDB);
 
             return jsonSetEvent.toString();
