@@ -1,4 +1,4 @@
-# FriendCalender
+# FriendCalendar
 
 ## Wichtige Informationen und Handbuch
 [Hier ist die Debug-APK zu finden](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app-debug.apk)
@@ -18,7 +18,7 @@ Hier nun eine Anleitung um den [Debug-Keystore] einzubinden:
 1. Die Projekt-Struktur öffnen (Strg+Alt+Umschalt+S)
 2. In der linken Leiste die Option "Modules" auswählen
 3. In der neuen Spalte "Modules" nun "app" auswählen
-4. Den Reiter Signing Configs auswählen
+4. Den Reiter "Signing Configs" auswählen
 5. Das geöffnete Formular wie im nachfolgenden Bild ausfüllen und bei "Store File" den absoluten Pfad der heruntergeladenen [Debug-Keystore] angeben
 <img src="https://user-images.githubusercontent.com/73745030/227740136-7d0d0e5b-6a02-46de-a70f-5823d7d0bbc3.png" width=60%>
 
