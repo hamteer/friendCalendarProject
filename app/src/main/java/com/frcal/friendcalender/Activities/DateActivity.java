@@ -52,7 +52,8 @@ import java.util.Collections;
 import java.util.TimeZone;
 
 // TODO: all
-public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener, AsyncCalEvent, CalenderManager.CalenderManagerListener {
+public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener,
+        AsyncCalEvent, CalenderManager.CalenderManagerListener {
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
     TextView chooseFriends;
     String title, desc, loc, dateString, fromString, toString;
@@ -83,8 +84,13 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 getString(R.string.fingerprint_preference_name), false);
         if ((getIntent().getAction() != null && getIntent().getAction().equals(
                 getString(R.string.newly_opened_action))) && fingerprintActive) {
-            startActivity(new Intent(this, FingerprintActivity.class).putExtra(
-                    getString(R.string.intent_key), this.getClass().getCanonicalName()));
+            Intent intent = new Intent(this, FingerprintActivity.class).putExtra(
+                    getString(R.string.intent_key), this.getClass().getCanonicalName());
+            if (getIntent().hasExtra(getString(R.string.extra_event_key))) {
+                intent.putExtra(getString(R.string.extra_event_key),
+                        getIntent().getStringExtra(getString(R.string.extra_event_key)));
+            }
+            startActivity(intent);
             finish();
         } else if (!getIntent().hasExtra("SELECTED_EVENT")) {
             Toast.makeText(this, "Es wurde kein Termin ausgewählt", Toast.LENGTH_SHORT).show();
@@ -368,7 +374,8 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                         }
 
                     }
-                    updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc, fromWithOffset, toWithOffset, attendes);
+                    updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc,
+                            fromWithOffset, toWithOffset, attendes);
                 }
 
                 if (notif.isChecked()) {
@@ -399,11 +406,12 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                 if (currentEvent.notificationID != 0) {
                     publisher.cancelNotification(context, currentEvent.notificationID);
                 }
-                if (googleSignedIn==true  && googleSync.isChecked()){
+                if (googleSignedIn == true && googleSync.isChecked()) {
                     deleteEvent(4, "primary", currentEvent.googleEventID);
                     finish();
                 } else {
-                    Toast.makeText(DateActivity.this, "Lokalen Termin gelöscht (nicht eingeloggt)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DateActivity.this, "Lokalen Termin gelöscht (nicht eingeloggt)",
+                            Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -422,7 +430,9 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     }
 
-    public void updateEvent(Integer mtdNr, String calendarID, String eventID, String summary, String description, String location, DateTime startTime, DateTime endTime, List<String> attendees) {
+    public void updateEvent(Integer mtdNr, String calendarID, String eventID, String summary,
+                            String description, String location, DateTime startTime,
+                            DateTime endTime, List<String> attendees) {
 
 
         try {

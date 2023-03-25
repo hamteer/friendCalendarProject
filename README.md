@@ -11,6 +11,22 @@ Unsere App „FriendCalendar“ ist ein Kalender, mithilfe welches man sowohl pr
 
 So kann man über unsere Applikation Termine erstellen und diese mit Freunden über Google teilen oder als private Termine nur im eigenen Kalender speichern. Natürlich lassen sich gespeicherte Termine auch bearbeiten oder wieder löschen. All dies ermöglicht die im Hintergrund agierende Datenbank. Außerdem kann der Nutzer entscheiden, ob er sich an Termine über eine Benachrichtigung erinnern zu lassen, damit er diese nicht vergisst. Um seine privaten Termine vor ungewollten Eingriffen zu schützen, ist es dem Nutzer möglich die App mit einem Fingerabdruck, bzw. anderer Methode zu sichern.
 
+<img src="https://user-images.githubusercontent.com/94178859/227730290-085998e7-8242-422c-b507-6f43a5785bf5.png" width="200"> <img src="https://user-images.githubusercontent.com/94178859/227730838-53f76df9-32b3-4c04-bdc4-fe460dec56d1.png" width="200"> <img src="https://user-images.githubusercontent.com/94178859/227730876-6d484cd2-446a-4421-8659-0a6dfafff85b.png" width="200">
+
+Links: Login mit Fingerabdruck zum Schutz der Daten
+
+Mitte: Hauptansicht des Kalenders
+
+Rechts: Ansicht eines Kalendertages
+
+<img src="https://user-images.githubusercontent.com/94178859/227730377-3a461e77-221f-4b96-b8a7-6dd1465cd9ae.png" width="200"> <img src="https://user-images.githubusercontent.com/94178859/227731042-4e98e37e-7a0f-4997-aa1f-fe977e788a8d.png" width="200"> <img src="https://user-images.githubusercontent.com/94178859/227730347-e5e9a268-de7c-493d-8ced-347909229eaa.png" width="200">
+
+Links: Bearbeitung eines Termines (Anlegen ähnlich)
+
+Mitte: Hinzufügen eines Freundes von Google
+
+Rechts: Benachrichtigung zur Erinnerung an einen Termin
+
 
 ### Funktionen
 
@@ -63,7 +79,7 @@ So kann man über unsere Applikation Termine erstellen und diese mit Freunden ü
 
 **Kerim Agalarov**: email, AKamKer
 
-**Niclas Hildner:** email, github
+**Niclas Hildner:** niclas.hildner@stud.hs-coburg.de, YourName
 
 **Philipp Hamann:** email, hamteer
 
