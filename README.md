@@ -2,6 +2,8 @@
 
 ## Wichtige Informationen
 
+[Hier Debug Keystore, wie ausführen, etc.]
+
 ## Projektbeschreibung
 
 ### Projektziele
