@@ -81,7 +81,7 @@ Rechts: Benachrichtigung zur Erinnerung an einen Termin
 
 **Niclas Hildner:** niclas.hildner@stud.hs-coburg.de, Your Name and Motherak
 
-**Philipp Hamann:** email, hamteer
+**Philipp Hamann:** phh1901@thi.de & philham.001@gmail.com, hamteer
 
 **Virginia Schellenberg:** vis9494@thi.de & schellenberg.virginia@mail.de, vis9494
 
