@@ -348,17 +348,23 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                     CalenderManager cM1 = new CalenderManager(getApplicationContext(), selfRef);
                     List<String> attendes = new ArrayList<>();
 
+
                     if (listOfSelectedFriends.contains(1)) {
+                        List<Calender> mailList = new ArrayList<>(cM1.getCalenders());
+                        for (Calender cal : mailList) {
+
+                            attendes.add(cal.calenderID);
+                        }
+                    }else if(!(listOfSelectedFriends.contains(0)) )
+                    {
                         for (int cal : listOfSelectedFriends) {
-                            if (cal>1)
+
                                 attendes.add(listOfFriends.get(cal));
                         }
+
                     }
-                    /*if (listOfSelectedFriends.contains(0)) {
-                        for (int cal : listOfSelectedFriends) {
-                            attendes.add(listOfFriends.get(cal));
-                        }
-                    }*/
+
+
 
 
                     addEvent(3, "primary",event.eventID ,title, desc, loc, fromWithOffset, toWithOffset ,attendes);

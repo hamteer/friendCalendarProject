@@ -355,10 +355,18 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
                     List<String> attendes = new ArrayList<>();
 
                     if (listOfSelectedFriends.contains(1)) {
-                        for (int cal : listOfSelectedFriends) {
-                            if (cal>1)
-                                attendes.add(listOfFriends.get(cal));
+                        List<Calender> mailList = new ArrayList<>(cM1.getCalenders());
+                        for (Calender cal : mailList) {
+
+                            attendes.add(cal.calenderID);
                         }
+                    }else if(!(listOfSelectedFriends.contains(0)) )
+                    {
+                        for (int cal : listOfSelectedFriends) {
+
+                            attendes.add(listOfFriends.get(cal));
+                        }
+
                     }
                     updateEvent(5, "primary", updatedEvent.eventID, title, desc, loc, fromWithOffset, toWithOffset, attendes);
                 }
@@ -419,11 +427,6 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
         try {
 
-           /* DateTime startDateTime = convertDateTime(start, date);
-            DateTime endDateTime = convertDateTime(end, date); */
-
-               /* LinkedList <String> attendees = new LinkedList<>();
-                attendees.add("freundeskalender.kerim@gmail.com"); */
             CalendarEvents event5 = new CalendarEvents(mtdNr, this, calendarID, eventID, summary, description, location, startTime, endTime, attendees);
             event5.delegate = this;
             event5.setConfig();
@@ -431,8 +434,6 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         } catch (Exception e) {
 
         }
-        //Datenbank Speicherung aber woher EventId vlt erstmal alles mit eventlist holen?
-
 
     }
 

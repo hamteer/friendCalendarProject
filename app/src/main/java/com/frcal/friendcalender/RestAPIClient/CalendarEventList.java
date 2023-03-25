@@ -28,7 +28,11 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-
+/**
+ * Use this Class to get all Calender-Events from the googlecalendar
+ * @author Niclas
+ *
+ */
 public class CalendarEventList extends AsyncTask<Void, Void, List<Event>> {
     private static final HttpTransport httpTransport = new NetHttpTransport();
     private static final int REQUEST_AUTHORIZATION = 1;
@@ -54,6 +58,12 @@ public class CalendarEventList extends AsyncTask<Void, Void, List<Event>> {
 
         }
         return null;
+
+        /**
+         * Method
+         * @author Niclas
+         *
+         */
     }
 
     public CalendarEventList(Integer mtdNr, Context context, String calendarID) {
