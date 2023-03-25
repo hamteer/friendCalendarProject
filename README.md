@@ -1,4 +1,4 @@
-# Projekttitel
+# FriendCalender
 
 ## Wichtige Informationen und Handbuch
 [Hier ist die Debug-APK zu finden](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app-debug.apk)
@@ -10,7 +10,17 @@ Da diese App auf die Google API zugreift und die App noch nicht veröffentlicht 
 E-Mail Adresse: `freundeskalender.test1@gmail.com` <br>
 Passwort: `TestKalender1`<br>
 ### Debug SHA1-Keystore
-Wenn der Tester der App die App lokal, in Android-Studio, builden möchte, sodass eine vollständig lauffähige Version entsteht, muss der Tester folgenden [Debug-Keystore] in Android-Studio einbinden, da nur dieser im Google-Cloud-Projekt hinterlegt ist. tbd tutorial einbinden keystore
+Wenn der Tester der App die App lokal, in Android-Studio, builden möchte, sodass eine vollständig lauffähige Version entsteht, muss der Tester folgenden [Debug-Keystore] in Android-Studio einbinden, da nur dieser im Google-Cloud-Projekt hinterlegt ist. <br>
+<br>
+
+
+Hier nun eine Anleitung um den [Debug-Keystore] einzubinden:
+1. Die Projekt-Struktur öffnen (Strg+Alt+Umschalt+S)
+2. In der linken Leiste die Option "Modules" auswählen
+3. In der neuen Spalte "Modules" nun "app" auswählen
+4. Den Reiter Signing Configs auswählen
+5. Das geöffnete Formular wie im nachfolgenden Bild ausfüllen und bei "Store File" den absoluten Pfad der heruntergeladenen [Debug-Keystore] angeben
+<img src="https://user-images.githubusercontent.com/73745030/227740136-7d0d0e5b-6a02-46de-a70f-5823d7d0bbc3.png" width=60%>
 
 ### ❗ Hinweis
 Der Nutzer der App wird in der aktuellen Version, nach jedem Schließen der App, automatisch von Google aus sicherheitstechnischen Gründen abgemeldet. Dies führt dazu, dass der Nutzer der App sich bei erneutem Öffnen, über den "Login mit Google"-Button in der EinstellungsActivity, wieder mit dem Google-Account anmelden muss.  
