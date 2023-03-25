@@ -1,7 +1,7 @@
 # Projekttitel
 
 ## Wichtige Informationen und Handbuch
-
+[Hier ist die Debug-APK zu finden](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app-debug.apk)
 [Hier Debug Keystore, wie ausführen, etc.]
 
 ## Projektbeschreibung
