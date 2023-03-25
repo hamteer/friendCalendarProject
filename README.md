@@ -1,5 +1,7 @@
 # Projekttitel
 
+## Wichtige Informationen
+
 ## Projektbeschreibung
 
 ### Projektziele
