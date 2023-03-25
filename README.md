@@ -99,7 +99,7 @@ Implementierung von: [CalenderManager](https://github.com/Wirtschaftsinformatik-
 [CalenderEventAttributeTypeConverter](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/CalenderEventAttributeTypeConverter.java), 
 [DAO](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/DAO.java), 
 [DatabaseHelper](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/DatabaseHelper.java), 
-(+ Datenbank-Aufrufe in den Activites)
+(+ Datenbank-Aufrufe in den Activities)
 
 
 
