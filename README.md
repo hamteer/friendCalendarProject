@@ -91,7 +91,7 @@ Rechts: Benachrichtigung zur Erinnerung an einen Termin
 
 
 **Daniel Kuzma:** <br>
-Implementierung von: [CalenderManager](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DataAccess/CalenderManager.java), 
+[CalenderManager](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DataAccess/CalenderManager.java), 
 [EventManager](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DataAccess/EventManager.java), 
 [Calender](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DatabaseEntities/Calender.java), 
 [CalenderEvent](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DatabaseEntities/CalenderEvent.java), 
@@ -107,10 +107,10 @@ Implementierung von: [CalenderManager](https://github.com/Wirtschaftsinformatik-
 [FingerprintActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/FingerprintActivity.java) (Fingerabdruck-Login), _Google-Komponenten hier eintragen_ (Google-Login)
 
 **Niclas Hildner:** 
-Implementierung von: [CalendarEvents](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/RestApiClient/CalendarEvents.java), 
-Implementierung von: [CalendarEventList](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/RestApiClient/CalendarEventList.java), 
-Implementierung von: [AsyncCalEventList](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/RestApiClient/AsyncCallEventList.java), 
-Implementierung von: [AsyncCalEvent](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/RestApiClient/AsyncCallEvent.java), 
+[CalendarEvents](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/RestApiClient/CalendarEvents.java), 
+[CalendarEventList](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/RestApiClient/CalendarEventList.java), 
+[AsyncCalEventList](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/RestApiClient/AsyncCallEventList.java), 
+[AsyncCalEvent](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/RestApiClient/AsyncCallEvent.java), 
 (+API-Aufrufe in den Activities)
 
 **Philipp Hamann:** 
