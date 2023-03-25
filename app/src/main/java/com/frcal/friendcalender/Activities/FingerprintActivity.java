@@ -241,8 +241,12 @@ public class FingerprintActivity extends AppCompatActivity {
             String activity = getIntent().getStringExtra(
                     getString(R.string.intent_key));
             try {
-                startActivity(new Intent(FingerprintActivity.this,
-                        Class.forName(activity)));
+                Intent intent = new Intent(FingerprintActivity.this, Class.forName(activity));
+                if (getIntent().hasExtra(getString(R.string.extra_event_key))) {
+                    intent.putExtra(getString(R.string.extra_event_key),
+                            getIntent().getStringExtra(getString(R.string.extra_event_key)));
+                }
+                startActivity(intent);
                 finish();
             } catch (ClassNotFoundException e) {
                 Toast.makeText(getApplicationContext(),
