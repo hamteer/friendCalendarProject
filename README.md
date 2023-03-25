@@ -1,6 +1,6 @@
 # Projekttitel
 
-## Wichtige Informationen
+## Wichtige Informationen und Handbuch
 
 [Hier Debug Keystore, wie ausführen, etc.]
 
