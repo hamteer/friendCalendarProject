@@ -1,5 +1,9 @@
 # Projekttitel
 
+## Wichtige Informationen und Handbuch
+
+[Hier Debug Keystore, wie ausführen, etc.]
+
 ## Projektbeschreibung
 
 ### Projektziele
@@ -81,7 +85,7 @@ Rechts: Benachrichtigung zur Erinnerung an einen Termin
 
 **Niclas Hildner:** niclas.hildner@stud.hs-coburg.de, Your Name and Motherak
 
-**Philipp Hamann:** email, hamteer
+**Philipp Hamann:** phh1901@thi.de & philham.001@gmail.com, hamteer
 
 **Virginia Schellenberg:** vis9494@thi.de & schellenberg.virginia@mail.de, vis9494
 
@@ -270,6 +274,8 @@ Aufgaben:
 		
 **13.	Treffen (22.03.2023):** ?
 
+
+**14.	Treffen (25.03.2023):** ?
 
 
 ## Guidelines zur Nutzung dieses Repositorys
