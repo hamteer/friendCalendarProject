@@ -301,18 +301,21 @@ Aufgaben:
 
 Aufgaben:
 
-- alle: weiteres Bugfixing
+- Alle: Weiteres Bugfixing
 
 
-**14.	Treffen (25.03.2023):** Finaler Review der App, Debug-APK erstellen, Log-Messages auskommentieren, letzte Aufgaben verteilen
+**14.	Treffen (25.03.2023):** Finale Review der App, Debug-APK erstellen, Log-Messages auskommentieren, letzte Aufgaben verteilen
 
 Aufgaben:
 
- - alle: ReadMe um eigene Aufgaben/Komponenten ergänzen
- 
- - Kerim Agalarov & Niclas Hildner: Video aufnehmen 
+ - Alle: ReadMe um eigene Aufgaben/Komponenten ergänzen
  
  - Daniel Kuzma: ReadMe ergänzen: Systemumgebung, API-Level, Vorgehen mit Testaccount(s), DebugKeystore-Informationen, Logout-Hinweis
+ 
+ - Kerim Agalarov: Video aufnehmen
+ 
+ - Niclas Hildner: Video aufnehmen
+ 
  
 **15.	Treffen (26.03.2023):** Projektabschluss & Review
 
