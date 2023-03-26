@@ -4,7 +4,6 @@ package com.frcal.friendcalender.RestAPIClient;
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -15,13 +14,12 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.model.CalendarList;
-import com.google.api.services.calendar.model.CalendarListEntry;
+
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 
+// In current Version of Project unused but will be used for further features
 public class CalendarCl extends AsyncTask<Void, Void, String> {
    // Interface to AsyncTask
    public AsyncCalCl delegate = null;
