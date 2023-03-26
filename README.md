@@ -3,27 +3,27 @@
 ## Wichtige Informationen und Handbuch
 [Hier ist die Debug-APK zu finden](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app-debug.apk)
 ### Systemumgebung / Testumgebung
-Als Entwicklungs- und Testumgebung wurde Windows 10 verwendet. Die App wurde auf einem emulierten Google Pixel 6 Pro mit API Level 29 durchgeführt.  
+Als Entwicklungs- und Testumgebung wurde Windows 10 verwendet. Die App wurde auf einem emulierten Google Pixel 6 Pro mit API Level 29 ausgeführt und getestet.  
 ### Testaccount
 Da diese App auf die Google API zugreift und die App noch nicht veröffentlicht wurde, muss der Tester der App folgenden Google-Account verwenden, um den vollen Funktionsumfang nutzen zu können: <br>
 <br>
 E-Mail Adresse: `freundeskalender.test1@gmail.com` <br>
 Passwort: `TestKalender1`<br>
 ### Debug SHA1-Keystore
-Wenn der Tester der App die App lokal, in Android-Studio, builden möchte, sodass eine vollständig lauffähige Version entsteht, muss der Tester folgenden [Debug-Keystore] in Android-Studio einbinden, da nur dieser im Google-Cloud-Projekt hinterlegt ist. <br>
+Wenn der Tester der App die App lokal in Android-Studio builden möchte, sodass eine vollständig lauffähige Version entsteht, muss der Tester folgenden [Debug-Keystore](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/debug.keystore) in Android-Studio einbinden, da nur dieser im Google-Cloud-Projekt hinterlegt ist. <br>
 <br>
 
 
-Hier nun eine Anleitung um den [Debug-Keystore] einzubinden:
+Hier eine Anleitung, um den [Debug-Keystore](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/debug.keystore) einzubinden:
 1. Die Projekt-Struktur öffnen (Strg+Alt+Umschalt+S)
 2. In der linken Leiste die Option "Modules" auswählen
 3. In der neuen Spalte "Modules" nun "app" auswählen
 4. Den Reiter "Signing Configs" auswählen
-5. Das geöffnete Formular wie im nachfolgenden Bild ausfüllen und bei "Store File" den absoluten Pfad der heruntergeladenen [Debug-Keystore] angeben
+5. Das geöffnete Formular wie im nachfolgenden Bild ausfüllen und bei "Store File" den absoluten Pfad der heruntergeladenen [Debug-Keystore](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/debug.keystore) angeben
 <img src="https://user-images.githubusercontent.com/73745030/227740136-7d0d0e5b-6a02-46de-a70f-5823d7d0bbc3.png" width=60%>
 
 ### ❗ Hinweis
-Der Nutzer der App wird in der aktuellen Version, nach jedem Schließen der App, automatisch von Google aus sicherheitstechnischen Gründen abgemeldet. Dies führt dazu, dass der Nutzer der App sich bei erneutem Öffnen, über den "Login mit Google"-Button in der EinstellungsActivity, wieder mit dem Google-Account anmelden muss.  
+Der Nutzer der App wird in der aktuellen Version nach jedem Schließen der App aus sicherheitstechnischen Gründen automatisch von Google abgemeldet. Dies führt dazu, dass der Nutzer der App sich bei erneutem Öffnen über den "Login mit Google"-Button in den Einstellungen wieder mit dem Google-Account anmelden muss.  
 
 ## Projektbeschreibung
 
@@ -32,9 +32,9 @@ Der Nutzer der App wird in der aktuellen Version, nach jedem Schließen der App,
 [Beschreiben Sie hier in einer kurzen Zusammenfassung Hintergrund, Ziele und Funktionen Ihrer Anwendung. Fügen Sie mehrere sinnvollen Screenshot ein, die den Funktionsumfang der Anwendung demonstrieren.]
 
 
-Unsere App „FriendCalendar“ ist ein Kalender, mithilfe welches man sowohl private als auch öffentliche Termine, zugänglich für Freunde, erstellen kann. Von fünf Ideenvorschlägen entschieden wir uns letztendlich für diesen, da wir mit den Versionen auf dem Markt nie hundertprozentig zufrieden waren und uns daher daran versuchen wollten, eine gute Alternative zu erschaffen.
+Unsere App „FriendCalendar“ ist ein Kalender, mithilfe von welchem man sowohl private als auch öffentliche Termine, zugänglich für Freunde, erstellen kann. Von fünf Ideenvorschlägen entschieden wir uns letztendlich für diesen, da wir mit den Versionen auf dem Markt nie hundertprozentig zufrieden waren und uns daher daran versuchen wollten, eine gute Alternative zu schaffen.
 
-So kann man über unsere Applikation Termine erstellen und diese mit Freunden über Google teilen oder als private Termine nur im eigenen Kalender speichern. Natürlich lassen sich gespeicherte Termine auch bearbeiten oder wieder löschen. All dies ermöglicht die im Hintergrund agierende Datenbank. Außerdem kann der Nutzer entscheiden, ob er sich an Termine über eine Benachrichtigung erinnern zu lassen, damit er diese nicht vergisst. Um seine privaten Termine vor ungewollten Eingriffen zu schützen, ist es dem Nutzer möglich die App mit einem Fingerabdruck, bzw. anderer Methode zu sichern.
+So kann man über unsere Applikation Termine erstellen und diese mit Freunden über Google teilen oder als private Termine nur im eigenen Kalender speichern. Natürlich lassen sich gespeicherte Termine auch bearbeiten oder wieder löschen. All dies ermöglicht die im Hintergrund agierende Datenbank. Außerdem kann der Nutzer entscheiden, ob er sich an Termine über eine Benachrichtigung erinnern zu lassen, damit er diese nicht vergisst. Um seine privaten Termine vor ungewollten Eingriffen zu schützen, ist es dem Nutzer möglich die App mit einem Fingerabdruck oder einer anderen Login-Methode zu sichern.
 
 <img src="https://user-images.githubusercontent.com/94178859/227730290-085998e7-8242-422c-b507-6f43a5785bf5.png" width="200"> <img src="https://user-images.githubusercontent.com/94178859/227730838-53f76df9-32b3-4c04-bdc4-fe460dec56d1.png" width="200"> <img src="https://user-images.githubusercontent.com/94178859/227730876-6d484cd2-446a-4421-8659-0a6dfafff85b.png" width="200">
 
@@ -114,7 +114,6 @@ Rechts: Benachrichtigung zur Erinnerung an einen Termin
 
 [Nennen Sie mindestens eine Komponente Ihrer Anwendung, die in wesentlichen Teilen vom jeweiligen Teammitglied entwickelt wurde.]
 
-
 **Daniel Kuzma:** <br>
 [CalenderManager](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DataAccess/CalenderManager.java), 
 [EventManager](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/DataAccess/EventManager.java), 
@@ -125,8 +124,6 @@ Rechts: Benachrichtigung zur Erinnerung an einen Termin
 [DAO](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/DAO.java), 
 [DatabaseHelper](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/room/DatabaseHelper.java), 
 (+ Datenbank-Aufrufe in den Activities)
-
-
 
 **Kerim Agalarov:** <br>
 [FingerprintActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/FingerprintActivity.java) (Fingerabdruck-Login), _Google-Komponenten hier eintragen_ (Google-Login)
@@ -139,6 +136,13 @@ Rechts: Benachrichtigung zur Erinnerung an einen Termin
 (+API-Aufrufe in den Activities)
 
 **Philipp Hamann:** <br>
+Layouts für Activities: [activity_add_calendar.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/res/layout/activity_add_calendar.xml), [activity_add_date.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/res/layout/activity_add_date.xml), [activity_calendar.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/res/layout/activity_calendar.xml), [activity_date.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/res/layout/activity_date.xml), [activity_single_day.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/res/layout/activity_single_day.xml), [activity_settings.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/res/layout/activity_settings.xml) <br>
+Layout für Listen-Items in Tagesansicht: [date_list_item.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/res/layout/date_list_item.xml) <br>
+An verschiedenen Stellen eingesetzte Icons: zu finden im Ordner [drawable](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/res/drawable) <br>
+[AddDateActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/AddDateActivity.java) und [DateActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/DateActivity.java): Layout-Anbindung, Java-Grundgerüst, AlertDialog für Terminteilung, Verarbeitung von Nutzereingaben für Datenbank und API <br>
+[SingleDayActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/SingleDayActivity.java): Layout-Anbindung, Java-Grundgerüst, Auffüllen des RecyclerView mithilfe der Klassen [DateListRecyclerAdapter](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/RecyclerView/DateListRecyclerAdapter.java) & [DateListViewHolder](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/RecyclerView/DateListViewHolder.java) <br>
+[CalendarActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/CalendarActivity.java): Layout-Anbindung, Java-Grundgerüst, CalendarView (Hervorhebung von aktuellem Tag via [OneDayDecorator](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Decorators/OneDayDecorator.java), Markierung von Terminen via [EventDecorator](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Decorators/EventDecorator.java)) <br>
+[InputFormatException](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Exception/InputFormatException.java)
 
 **Virginia Schellenberg:** <br>
 [FingerprintInitializationActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/FingerprintInitializationActivity.java) (Intents), [GoogleInitialization](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/GoogleInitializationActivity.java) (Intents), [NotificationsInitializationActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/NotificationInitializationActivity.java) (Intents), [AuthenticationManager](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Authentication/AuthenticationManager.java) (Fingerabdruck-Login), [NotificationPublisher](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Notifications/NotificationPublisher.java) (Interaktive Notifications, Intents), [shortcuts.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/res/xml/shortcuts.xml) (App Shortcut), [activity_fingerprint.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/84b5eb40c992b42d449dee38dcbce0781cb4ee36/app/src/main/res/layout/activity_fingerprint.xml), [activity_fingerprint_initialization.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/84b5eb40c992b42d449dee38dcbce0781cb4ee36/app/src/main/res/layout/activity_fingerprint_initialization.xml), [activity_google_initialization.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/84b5eb40c992b42d449dee38dcbce0781cb4ee36/app/src/main/res/layout/activity_google_initialization.xml), [activity_notification_initialization.xml](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/84b5eb40c992b42d449dee38dcbce0781cb4ee36/app/src/main/res/layout/activity_notification_initialization.xml)
@@ -174,7 +178,7 @@ Aufgaben:
 - Virginia Schellenberg: Urlaub
 		
 		
-**4.	Treffen (19.02.2023):** ?
+**4.	Treffen (19.02.2023):** Vorstellung verschiedener Möglichkeiten des CalendarView durch Philipp Hamann, Diskussion von Möglichkeiten und potenziellen Schwierigkeiten der Google-Kalender-Api
 
 Aufgaben:	
 	
@@ -189,7 +193,7 @@ Aufgaben:
 - Virginia Schellenberg: Urlaub
 		
 			    
-**5.	 Treffen (22.02.2023):** ?
+**5.	 Treffen (22.02.2023):** Vorstellung des initialen Datenbankschemas durch Daniel Kuzma, Vorstellung der Hervorhebung von Events im CalendarView durch Philipp Hamann, Vorstellung von Settings und Google-Login durch Niclas Hilder und Kerim Agalarov
 
 Aufgaben:
 	
@@ -271,7 +275,7 @@ Aufgaben:
 - Alle: Weiter an bisherigen Aufgaben arbeiten
 
 
-**11.	Treffen (16.03):** ?
+**11.	Treffen (16.03):** Diskussionen über bisherigen Stand
 
 Aufgaben:
 	
@@ -293,11 +297,24 @@ Aufgaben:
 - Virginia Schellenberg: AlarmManager für Notifications einbauen, NotificationPublisher finalisieren und Anpassung von Notifications auf DateActivity möglich machen
 		
 		
-**13.	Treffen (22.03.2023):** ?
+**13.	Treffen (22.03.2023):** Diskussionen und Bugfixes seitens API-Anbindung, Vorstellung der fertigen Notifications durch Virginia Schellenberg
+
+Aufgaben:
+
+- alle: weiteres Bugfixing
 
 
-**14.	Treffen (25.03.2023):** ?
+**14.	Treffen (25.03.2023):** Finaler Review der App, Debug-APK erstellen, Log-Messages auskommentieren, letzte Aufgaben verteilen
 
+Aufgaben:
+
+ - alle: ReadMe um eigene Aufgaben/Komponenten ergänzen
+ 
+ - Kerim Agalarov & Niclas Hildner: Video aufnehmen 
+ 
+ - Daniel Kuzma: ReadMe ergänzen: Systemumgebung, API-Level, Vorgehen mit Testaccount(s), DebugKeystore-Informationen, Logout-Hinweis
+ 
+**15.	Treffen (26.03.2023):** Projektabschluss & Review
 
 ## Guidelines zur Nutzung dieses Repositorys
 
