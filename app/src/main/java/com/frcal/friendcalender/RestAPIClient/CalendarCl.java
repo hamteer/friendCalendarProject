@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CalendarCl extends AsyncTask<Void, Void, String> {
-   // Schnittstelle zu AsyncTask
+   // Interface to AsyncTask
    public AsyncCalCl delegate = null;
    private static final HttpTransport httpTransport = new NetHttpTransport();
    private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
@@ -33,7 +33,7 @@ public class CalendarCl extends AsyncTask<Void, Void, String> {
 
    private Context context;
 
-   // Funktion auswählen 1=getCalender
+   // choose method 1=getCalender
    private int mtdNr; //1=listCalender;
    private static final int REQUEST_AUTHORIZATION = 1;
    private static final int REQUEST_CALENDAR = 2;
@@ -74,9 +74,9 @@ public class CalendarCl extends AsyncTask<Void, Void, String> {
       JsonFactory jsonFactory = new JacksonFactory();
       try {
          com.google.api.services.calendar.model.Calendar calendar = service.calendars().get(calendarId).execute();
-         // Konvertiere das Calendar-Objekt in ein JSON-String
+         // convert Calendar object to JSON-String
          String jsonString = jsonFactory.toPrettyString(calendar);
-         // Konvertiere den JSON-String in ein Calendar-Objekt
+         // convert JSON-String to Calendar object
          // com.google.api.services.calendar.model.Calendar calendarFromJson = jsonFactory.fromString(jsonString, com.google.api.services.calendar.model.Calendar.class);
 
          return jsonString;
@@ -103,7 +103,7 @@ public class CalendarCl extends AsyncTask<Void, Void, String> {
       com.google.api.services.calendar.model.Calendar createdCalendar = null;
       try {
          createdCalendar = service.calendars().insert(calendar).execute();
-         // Konvertiere das Calendar-Objekt in ein JSON-String
+         // convert Calendar object to JSON-String
          String jsonString = jsonFactory.toPrettyString(createdCalendar);
          return jsonString;
 

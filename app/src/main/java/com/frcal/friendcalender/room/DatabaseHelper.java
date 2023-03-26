@@ -19,29 +19,28 @@ public class DatabaseHelper {
     }
 
     private void initDatabase() {
-        // Erstellen der Datenbank; benötigt werden Kontext, Klasse der Datenbank, die man erstellen will und der Name der Datenbank
+        // Create database: we need context, database class and database name
         db = Room.databaseBuilder(context, AppDatabase.class, DATABASE_NAME)
-                // ermöglicht das Ausführen von Datenbankabfragen im MainThread (wird nicht empfohlen!)
                 .allowMainThreadQueries()
                 .build();
     }
 
-    // einzelnes Event in die Datenbank aufnehmen
+    // add single event to database
     public void addEvent(CalenderEvent event) {
         db.taskDao().insertEvent(event);
     }
 
-    // bestehendes Event in der Datenbank updaten
+    // update event in database
     public void updateEvent(CalenderEvent event) {
         db.taskDao().updateEvent(event);
     }
 
-    // bestehendes Event in der Datenbank löschen
+    // delete existing event from database
     public void deleteEvent(CalenderEvent event){
         db.taskDao().deleteEvent(event);
     }
 
-    // einzelnen Calender zur Datenbank hinzufügen
+    // add calendar to database
     public void addCalender(Calender calender) {
         try{
             db.taskDao().insertCalender(calender);
@@ -51,20 +50,20 @@ public class DatabaseHelper {
 
     }
 
-    // bestehenden Calender in der Datenbank updaten
+    // update calendar in database
     public void updateCalender(Calender calender) {
         db.taskDao().updateCalender(calender);
     }
 
-    // bestehenden Calender in der Datenbank löschen
+    // delete existing calendar from database
     public void deleteCalender(Calender calender){
         db.taskDao().deleteCalender(calender);
     }
-    // alle in der Datenbank existierenden Calenders holen
+    // get all existing events from database
     public ArrayList<CalenderEvent> getAllCalenderEvents() {
         return new ArrayList<CalenderEvent>(db.taskDao().getAllCalenderEvents());
     }
-    // alle in der Datenbank existierenden Calenders holen
+    // get all existing calendars from database
     public ArrayList<Calender> getAllCalenders() {
         return new ArrayList<Calender>(db.taskDao().getAllCalenders());
     }

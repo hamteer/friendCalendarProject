@@ -33,7 +33,7 @@ public class CalendarListCl extends AsyncTask<Void, Void, String> {
 
    private Context context;
 
-   // Funktion auswählen 1=getCalender
+   // choose method
    private int mtdNr; //1=listCalender;
    private static final int REQUEST_AUTHORIZATION = 1;
    private  Calendar service;
@@ -61,7 +61,7 @@ public class CalendarListCl extends AsyncTask<Void, Void, String> {
          case 1:
             return listCalendar(context);
          case 2:
-            // in diesem Fall Calendar-ID=new Calendar Name
+            // in this case Calendar-ID = new Calendar Name
             return insertCalendar(context, calendarId);
          case 3:
             return getCalendar(context, calendarId);

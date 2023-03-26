@@ -58,7 +58,7 @@ public class GoogleInitializationActivity extends AppCompatActivity {
         }
     }
 
-    // UI wird initialisiert
+    // Initialize UI
     private void initUI(SharedPreferences sharedPreferences) {
         setContentView(R.layout.activity_google_initialization);
 
@@ -70,9 +70,8 @@ public class GoogleInitializationActivity extends AppCompatActivity {
         disagreeButton.setOnClickListener((View v) -> endActivity(sharedPreferences, false));
     }
 
-    // Je nach Knopfdruck wird die Einstellung für den Google Login gesetzt und die nächste
-    // Activity wird aufgerufen
-    // Damit nicht zu dieser Activity zurückgekehrt werden kann, wird finish() aufgerufen
+    // Depending on the button state, the preferences for the Google login are set and the next activity is started
+    // finish() is called so the user cannot accidentally return to this activity
     private void endActivity(SharedPreferences sharedPreferences, boolean loginState) {
         sharedPreferences.edit().putBoolean(
                 getString(R.string.google_preference_name),

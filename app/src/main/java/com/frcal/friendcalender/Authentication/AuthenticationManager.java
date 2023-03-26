@@ -25,7 +25,7 @@ public class AuthenticationManager {
         NO_AUTHENTICATION
     }
 
-    // Überprüft, welche Authentifizierungsmethode der Nutzer eingerichtet hat
+    // Check which authentication methods are set up
     public static authenticationMethod checkForAuthenticationMethod(Context activityContext) {
         KeyguardManager manager = (KeyguardManager) activityContext.getSystemService(
                 KEYGUARD_SERVICE);
@@ -41,8 +41,8 @@ public class AuthenticationManager {
         }
     }
 
-    // Falls der Nutzer keine Authentifizierungsmethode eingerichtet, so wird dies nachgeholt
-    // Danach wird geprüft, ob er tatsächlich eine Authentifizierungsmethode eingerichtet hat
+    // If not authentication method is set up, this is done now
+    // Afterwards, this setup is checked again
     public static authenticationMethod setAuthenticationMethod(Context activityContext,
                                                                Bundle bundle) {
         KeyguardManager manager = (KeyguardManager) activityContext.getSystemService(
@@ -60,8 +60,7 @@ public class AuthenticationManager {
         return checkForAuthenticationMethod(activityContext);
     }
 
-    // Falls die notwendige Authentifizierungsmethode noch nicht eingerichtet ist, wird der
-    // Nutzer in die Systemeinstellungen geleitet um dies nachzuholen
+    // If the necessary authentication method is not set up, the user is sent to the device settings to do so
     public static void enrollAuthenticationMethod(authenticationMethod authMethod,
                                                   Context activityContext, Bundle bundle) {
         Intent enrollIntent;

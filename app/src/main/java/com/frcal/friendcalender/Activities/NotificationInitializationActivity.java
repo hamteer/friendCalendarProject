@@ -25,8 +25,8 @@ public class NotificationInitializationActivity extends AppCompatActivity {
     private ActivityResultLauncher<String> firstPermissionRequest;
     private ActivityResultLauncher<String> secondPermissionRequest;
 
-    // Wenn Benachrichtigungen bereits gestattet wurden, wird diese Activity übersprungen
-    // Andernfalls werden Berechtigungsanfragen, AlertDialog und UI initialisiert
+    // If the user has already granted the permission to show notifications, this activity is skipped
+    // Otherwise, requests for permissions, AlertDialog and UI are initialized
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +47,8 @@ public class NotificationInitializationActivity extends AppCompatActivity {
         }
     }
 
-    // UI wird initialisiert
-    // Je nachdem, welcher Button gedrückt wird, wird ein ActivityResultLauncher gestartet oder
-    // ein AlertDialog angezeigt
+    // Initialize UI
+    // Depending on the button pressed, an ActivityResultLauncher is started or an AlertDialog shown
     private void initUI(SharedPreferences sharedPreferences) {
         setContentView(R.layout.activity_notification_initialization);
         Button agreeButton = findViewById(R.id.agree_button_notifications_initialization);
@@ -67,8 +66,7 @@ public class NotificationInitializationActivity extends AppCompatActivity {
         disagreeButton.setOnClickListener((View v) -> showAlertDialog());
     }
 
-    // AlertDialog wird initialisiert, wodurch der Nutzer eine zweite Chance erhält
-    // Benachrichtigungen zu erlauben
+    // Initialize AlertDialog to give user another chance to permit notifications
     private void initAlertDialog(SharedPreferences sharedPreferences) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.notifications_initialization_alert_dialog))
@@ -91,14 +89,14 @@ public class NotificationInitializationActivity extends AppCompatActivity {
         alertDialog = builder.create();
     }
 
-    // AlertDialog wird angezeigt
+    // Show AlertDialog
     private void showAlertDialog() {
         alertDialog.show();
     }
 
-    // Berechtigungsanfragen werden initialisiert
-    // Anfrage 1 wird erstellt, wenn auf den Agree-Button der Activity gedrückt wird
-    // Anfrage 2 wird erstellt, wenn auf den positiven Button des AlertDialogs gedrückt wird
+    // Initialize requests for permissions
+    // Request 1 is created upon pressing "agree"-button of the activity
+    // Request 2 is created upon pressing positive button in the AlertDialog
     private void initPermissionRequests(SharedPreferences sharedPreferences) {
         firstPermissionRequest =
                 registerForActivityResult(new ActivityResultContracts.RequestPermission(),
@@ -115,9 +113,8 @@ public class NotificationInitializationActivity extends AppCompatActivity {
                         isGranted -> endActivity(sharedPreferences, isGranted));
     }
 
-    // Je nach Knopfdruck wird die Einstellung für die Benachrichtigungen gesetzt und die nächste
-    // Activity wird aufgerufen
-    // Damit nicht zu dieser Activity zurückgekehrt werden kann, wird finish() aufgerufen
+    // Depending on the button state, the preferences for notifications are set and the next activity is started
+    // finish() is called so the user cannot accidentally return to this activity
     private void endActivity(SharedPreferences sharedPreferences, boolean notificationState) {
         sharedPreferences.edit().putBoolean(
                 getString(R.string.notifications_preference_name),

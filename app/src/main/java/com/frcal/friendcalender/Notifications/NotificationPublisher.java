@@ -26,9 +26,7 @@ import java.util.TimeZone;
 
 public class NotificationPublisher extends BroadcastReceiver {
 
-    // Damit Benachrichtigungen empfangen werden können, muss ein Benachrichtigungskanal der App
-    // existieren
-    // Dieser wird hier erstellt
+    // create notification channel to be able to receive notifications
     public void createNotificationChannel(Context context) {
         CharSequence name = context.getString(R.string.channel_name);
         String description = context.getString(R.string.channel_description);
@@ -42,8 +40,7 @@ public class NotificationPublisher extends BroadcastReceiver {
         notificationManager.createNotificationChannel(channel);
     }
 
-    // Kreiert eine "einzigartige" NotificationID, um jede Benachrichtigung separat ansteuern und
-    // abbrechen zu können
+    // create unique NotificationID to be able to identify and stop each notification independently
     public int getUniqueNotificationId(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
                 context.getString(R.string.preference_name), MODE_PRIVATE);
@@ -60,8 +57,7 @@ public class NotificationPublisher extends BroadcastReceiver {
         return newId;
     }
 
-    // Nachdem eine Notification erstellt wurde, wird diese an den AlarmManager übergeben, so
-    // dass sie zum benötigten Zeitpunkt angezeigt werden kann
+    // After a notification is created, it is sent to the AlarmManager to be shown at the correct time
     public void scheduleNotification(Context context, String eventId, String title, int id,
                                      long time, int minutes) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
@@ -87,12 +83,11 @@ public class NotificationPublisher extends BroadcastReceiver {
         }
     }
 
-    // An dieser Stelle wird die tatsächliche Notification erstellt
-    // Diese hat einen Action Button, welcher die Benachrichtigung löschen kann
-    //Beim Klicken auf die Nachricht wird zudem die Seite des Termines geöffnet
-    // Je nachdem, ob es sich bereits um die Benachrichtigung fünf Minuten oder 15 Minuten vor
-    // dem Termin handelt, wird ein Action Button hinzugefügt, der eine weitere Benachrichtigung
-    // ermöglicht
+    // The notification is created here
+    // It can be deleted via its ActionButton
+    // Upon pressing the message, the page of the event is opened
+    // Depending if this is the notification 15 or 5 minutes ahead of the event,
+    // another ActionButton is added to set up another notification
     private Notification buildNotification(Context context, String eventId, String title, int id,
                                            long time, int minutes) {
         Intent resultIntent = new Intent(context, DateActivity.class);
@@ -153,10 +148,8 @@ public class NotificationPublisher extends BroadcastReceiver {
         return builder.build();
     }
 
-    // Falls ein Termin gelöscht wird, so sollte auch die Benachrichtigung nicht mehr angezeigt
-    // werden
-    // Außerdem wirddiese Methode auch genutzt, falls ein Termin verändert wird, um die
-    // Benachrichtigung mit den neuen Daten schicken zu können
+    // If an event is deleted, its planned notification should also be deleted
+    // This method is also used to change a notification if the associated event is modified
     public void cancelNotification(Context context, int notificationId) {
         Intent intent = new Intent(context, NotificationPublisher.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent,
@@ -166,9 +159,9 @@ public class NotificationPublisher extends BroadcastReceiver {
         am.cancel(pendingIntent);
     }
 
-    // Hier wird zuerst überprüft, ob ein ActionButton gedrückt wurde, um in dem Falle die
-    // entsprechende Funktion auszuführen
-    // Andernfalls galt der Aufruf dr Anzeige der Banchrichtigung, was getan wird
+    // First, check if an ActionButton has been pressed
+    // If yes, the according function is called
+    // If not, the function was called to just show the notification, so this is done
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.hasExtra(context.getString(R.string.notifications_id_key)) && intent.hasExtra(
