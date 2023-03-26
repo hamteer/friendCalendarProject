@@ -32,7 +32,7 @@ Der Nutzer der App wird in der aktuellen Version nach jedem Schließen der App a
 [Beschreiben Sie hier in einer kurzen Zusammenfassung Hintergrund, Ziele und Funktionen Ihrer Anwendung. Fügen Sie mehrere sinnvollen Screenshot ein, die den Funktionsumfang der Anwendung demonstrieren.]
 
 
-Unsere App „FriendCalendar“ ist ein Kalender, mithilfe welchem man sowohl private als auch öffentliche Termine, zugänglich für Freunde, erstellen kann. Von fünf Ideenvorschlägen entschieden wir uns letztendlich für diesen, da wir mit den Versionen auf dem Markt nie hundertprozentig zufrieden waren und uns daher daran versuchen wollten, eine gute Alternative zu schaffen.
+Unsere App „FriendCalendar“ ist ein Kalender, mithilfe von welchem man sowohl private als auch öffentliche Termine, zugänglich für Freunde, erstellen kann. Von fünf Ideenvorschlägen entschieden wir uns letztendlich für diesen, da wir mit den Versionen auf dem Markt nie hundertprozentig zufrieden waren und uns daher daran versuchen wollten, eine gute Alternative zu schaffen.
 
 So kann man über unsere Applikation Termine erstellen und diese mit Freunden über Google teilen oder als private Termine nur im eigenen Kalender speichern. Natürlich lassen sich gespeicherte Termine auch bearbeiten oder wieder löschen. All dies ermöglicht die im Hintergrund agierende Datenbank. Außerdem kann der Nutzer entscheiden, ob er sich an Termine über eine Benachrichtigung erinnern zu lassen, damit er diese nicht vergisst. Um seine privaten Termine vor ungewollten Eingriffen zu schützen, ist es dem Nutzer möglich die App mit einem Fingerabdruck oder einer anderen Login-Methode zu sichern.
 
