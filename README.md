@@ -91,6 +91,10 @@ Rechts: Benachrichtigung zur Erinnerung an einen Termin
 
 ### Demo
 
+
+https://user-images.githubusercontent.com/73745030/227784812-de65aae1-f042-45f3-99c7-649385012bd3.mp4
+
+
 [Demo Video](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/19052612add9b8f0facc70c5b81ced3507bf9c1a/Freundeskalender.mp4)
 
 ## Team
