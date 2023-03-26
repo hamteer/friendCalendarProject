@@ -91,7 +91,7 @@ Rechts: Benachrichtigung zur Erinnerung an einen Termin
 
 ### Demo
 
-[Verlinken Sie zum Abschluss des Projekts ein kurzes Video, in dem Sie die wesentlichen Nutzungsszenarien Ihrer Anwendung demonstrieren.]
+[Demo Video](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/19052612add9b8f0facc70c5b81ced3507bf9c1a/Freundeskalender.mp4)
 
 ## Team
 
