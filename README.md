@@ -5,7 +5,7 @@
 ### Systemumgebung / Testumgebung
 Als Entwicklungs- und Testumgebung wurde Windows 10 verwendet. Die App wurde auf einem emulierten Google Pixel 6 Pro mit API Level 29 ausgeführt und getestet.  
 ### Testaccount
-Da diese App auf die Google API zugreift und die App noch nicht veröffentlicht wurde, muss der Tester der App folgenden Google-Account verwenden, um den vollen Funktionsumfang nutzen zu können: <br>
+Da diese App auf die Google API zugreift und die App noch nicht veröffentlicht wurde, muss der Tester der App folgenden Google-Account verwenden, um den vollen Funktionsumfang nutzen zu können. Zudem muss das Google-Konto im Mobilgerät (in den Einstellungen) hinzugefügt werden: <br>
 <br>
 E-Mail Adresse: `freundeskalender.test1@gmail.com` <br>
 Passwort: `TestKalender1`<br>
@@ -90,6 +90,10 @@ Rechts: Benachrichtigung zur Erinnerung an einen Termin
 
 
 ### Demo
+
+
+https://user-images.githubusercontent.com/73745030/227784812-de65aae1-f042-45f3-99c7-649385012bd3.mp4
+
 
 [Demo Video](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/19052612add9b8f0facc70c5b81ced3507bf9c1a/Freundeskalender.mp4)
 
@@ -330,7 +334,7 @@ Aufgaben:
  - Niclas Hildner: Video aufnehmen
  
  
-**15.	Treffen (26.03.2023):** Projektabschluss & Review
+**15.	Treffen (26.03.2023):** Projektabschluss & Review: Ungenutzte Methoden/Variablen/Imports im Code entfernt, Video aufgenommen und verlinkt, Readme finalisiert
 
 ## Guidelines zur Nutzung dieses Repositorys
 
