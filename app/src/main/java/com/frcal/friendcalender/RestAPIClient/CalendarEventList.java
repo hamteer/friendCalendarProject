@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
+import com.frcal.friendcalender.DataAccess.EventManager;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.HttpTransport;
@@ -16,6 +17,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 
+import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 
@@ -31,6 +33,22 @@ import java.util.List;
  *
  * @author Niclas
  */
+// <editor-fold desc="Description">
+//This is a Java class named "CalendarEventList" that extends the AsyncTask class. It is used to perform asynchronous operations related to fetching events from a Google Calendar using the Google Calendar API.
+
+//The class has several private fields, including an instance of the HttpTransport class, integer constants, a JsonFactory instance, and a String variable representing the name of the application.
+
+//  The class also has a public delegate variable that can be used to set an AsyncCalLEventList instance. The class has a constructor that accepts an integer parameter, a Context object, and a String representing the calendar ID.
+
+//The setConfig() method initializes the GoogleAccountCredential and Calendar objects using the context and calendar ID.
+
+//The getEventList() method uses the Calendar service to fetch all events from the specified calendar by iterating through all available pages of events. It returns a list of Event objects.
+
+// The doInBackground() method is an overridden method from the AsyncTask class that executes the appropriate method based on the method number passed in the constructor. In this case, it calls the getEventList() method.
+
+//The onPostExecute() method is also an overridden method from the AsyncTask class that calls the appropriate response method of the AsyncCalLEventList interface based on the method number passed in the constructor.
+
+// </editor-fold>
 public class CalendarEventList extends AsyncTask<Void, Void, List<Event>> {
     private static final HttpTransport httpTransport = new NetHttpTransport();
     private static final int REQUEST_AUTHORIZATION = 1;

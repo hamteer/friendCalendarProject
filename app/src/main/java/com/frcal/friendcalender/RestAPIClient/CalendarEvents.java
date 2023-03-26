@@ -33,8 +33,30 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import java.util.List;
+/**
+ * Use this Class to get, delete, set and update Calender-Events from the googlecalendar
+ *  * @author Niclas
+ */
 
+// <editor-fold desc="Description">
+/*
+This code is an Android class named CalendarEvents that extends AsyncTask. It manages the interaction with Google Calendar API to perform CRUD (create, read, update, delete) operations on calendar events.
 
+The class has several attributes, some of which include calendarID, eventID, summary, location, description, startTime, endTime, and attendees. These attributes hold the necessary information for creating, reading, updating, and deleting events on the calendar.
+
+The class has several methods, including doInBackground(), setConfig(), getEvent(), setEvent(), deleteEvent(), and updateEvent(). The doInBackground() method is called when the execute() method of the AsyncTask is called. It takes a variable number of void arguments and returns a string. The method determines the method number (mtdNr) that was passed to the constructor and then calls the appropriate method to perform the corresponding CRUD operation on the calendar events.
+
+The setConfig() method sets up the necessary configuration to access the Google Calendar API. It uses the context of the activity to obtain the user's Google account and sets up an HttpTransport and JsonFactory instance.
+
+The getEvent() method retrieves an event from the calendar with the specified calendarID and eventID. If the event is found, it is converted to a JSON string and passed to another activity via an Intent. If a user authorization error occurs, it starts the authorization process by calling the startActivityForResult() method.
+
+The setEvent() method creates a new calendar event with the specified details and adds the event to the calendar. If any attendees are specified, the attendees are added to the event. If the operation is successful, the method returns a JSON string of the newly created event.
+
+The deleteEvent() method deletes a specified event from the calendar. If the operation is successful, the method returns an empty string.
+
+The updateEvent() method updates a specified event on the calendar with the specified details. If the operation is successful, the method returns a JSON string of the updated event.
+*/
+// </editor-fold>
 public class CalendarEvents extends AsyncTask<Void, Void, String> implements EventManager.EventManagerListener {
     private static final HttpTransport httpTransport = new NetHttpTransport();
     private static final int REQUEST_AUTHORIZATION = 1;
@@ -63,7 +85,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
 
 // </editor-fold>
 
-    // <editor-fold desc="Konstruktoren">
+    // <editor-fold desc="Constructors">
     //For insert and update
     public CalendarEvents(Integer mtdNr, Context context, String calendarID, String eventID, String summary, String description, String location, DateTime startTime, DateTime endTime, List<String> attendees) {
         this.mtdNr = mtdNr;
