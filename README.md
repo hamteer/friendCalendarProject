@@ -5,7 +5,7 @@
 ### Systemumgebung / Testumgebung
 Als Entwicklungs- und Testumgebung wurde Windows 10 verwendet. Die App wurde auf einem emulierten Google Pixel 6 Pro mit API Level 29 ausgeführt und getestet.  
 ### Testaccount
-Da diese App auf die Google API zugreift und die App noch nicht veröffentlicht wurde, muss der Tester der App folgenden Google-Account verwenden, um den vollen Funktionsumfang nutzen zu können. Zudem muss das Google-Konto im Mobilgerät (in den Einstellungen) hinzugefügt werden.: <br>
+Da diese App auf die Google API zugreift und die App noch nicht veröffentlicht wurde, muss der Tester der App folgenden Google-Account verwenden, um den vollen Funktionsumfang nutzen zu können. Zudem muss das Google-Konto im Mobilgerät (in den Einstellungen) hinzugefügt werden: <br>
 <br>
 E-Mail Adresse: `freundeskalender.test1@gmail.com` <br>
 Passwort: `TestKalender1`<br>
