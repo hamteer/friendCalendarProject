@@ -28,30 +28,18 @@ import com.frcal.friendcalender.R;
 import com.frcal.friendcalender.RestAPIClient.AsyncCalEvent;
 import com.google.api.client.util.DateTime;
 
-import java.util.Calendar;
 
 import com.frcal.friendcalender.Exception.InputFormatException;
 
-import com.frcal.friendcalender.RestAPIClient.CalendarEventList;
+
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
-import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.model.EventDateTime;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 import java.util.TimeZone;
 
-// TODO: all
+
 public class DateActivity extends AppCompatActivity implements EventManager.EventManagerListener,
         AsyncCalEvent, CalenderManager.CalenderManagerListener {
     EditText editTitle, editDate, editTimeFrom, editTimeTo, editDesc, editLoc;
@@ -106,8 +94,8 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
 
     private void initFriendsDialogue() {
         // first, add the always needed options to add either all or no friends:
-        listOfFriends.add("privater Termin");
-        listOfFriends.add("mit allen Freunden teilen");
+        listOfFriends.add(getResources().getString(R.string.private_date_set));
+        listOfFriends.add(getResources().getString(R.string.public_date_set));
         // now fill in the listOfFriends with all Friends saved in the DB (or the API):
         calenderManager.requestUpdate();
         for (Calender friend : calenderList) {

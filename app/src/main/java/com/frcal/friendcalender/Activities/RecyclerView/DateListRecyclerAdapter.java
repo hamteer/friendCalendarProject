@@ -1,7 +1,5 @@
 package com.frcal.friendcalender.Activities.RecyclerView;
 
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.frcal.friendcalender.Activities.DateActivity;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 import com.frcal.friendcalender.R;
 import com.google.api.client.util.DateTime;

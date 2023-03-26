@@ -174,7 +174,7 @@
     <!-- Strings for Sharing -->
     <string name="choose_friends_hint">Teilen mit …</string>
     <string name="private_date_set">privater Termin</string>
-    <string name="public_date_set">öffentlicher Termin</string>
+    <string name="public_date_set">mit allen Freunden teilen</string>
 
     <!-- Strings for DateActivity -->
     <string name="extra_event_key">SELECTED_EVENT</string>

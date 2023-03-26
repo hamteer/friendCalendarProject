@@ -42,8 +42,6 @@ import org.threeten.bp.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO:
-//  - API-Anbindung
 
 public class CalendarActivity extends AppCompatActivity implements EventManager.EventManagerListener, CalenderManager.CalenderManagerListener, AsyncCalLEventList {
 
@@ -219,38 +217,6 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         calendarView.addDecorator(new EventDecorator(Color.RED, daysToDecorate));
     }
 
-    public void evaluateJsonEventList(List<String> jsonList) {
-
-        List<String> eventIDList = new ArrayList<>();
-        List<String> summaryList = new ArrayList<>();
-        List<String> locationList = new ArrayList<>();
-        List<DateTime> startTimeList = new ArrayList<>();
-        List<DateTime> endTimeList = new ArrayList<>();
-        //   String calenderID;
-        try {
-            for (String jsonString : jsonList) {
-                JSONObject json = new JSONObject(jsonString);
-                // calenderID = json.getString("id");
-                JSONArray items = json.getJSONArray("items");
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject event = items.getJSONObject(i);
-                    eventIDList.add(event.getString("id"));
-                    summaryList.add(event.getString("summary"));
-                    locationList.add(event.getString("location"));
-
-                    JSONObject startObj = event.getJSONObject("start");
-                    String startDateTime = startObj.getString("dateTime");
-
-                    JSONObject endObj = event.getJSONObject("ends");
-                    String endDateTime = endObj.getString("dateTime");
-
-                }
-            }
-        } catch (Exception e) {
-
-        }
-
-    }
 
     public void getEventList() {
         SharedPreferences sharedPreferences = getSharedPreferences(
@@ -266,10 +232,6 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
         }
     }
 
-    public DateTime convertDateTime(String date) {
-        return DateTime.parseRfc3339(date);
-
-    }
 
 
     @Override

@@ -64,12 +64,10 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class SettingsActivity extends AppCompatActivity implements View.OnClickListener,
-        CalenderManager.CalenderManagerListener {
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "FrCal";
 
-    private CalenderManager calenderManager;
 
     private SignInClient oneTapClient;
     private BeginSignInRequest signUpRequest;
@@ -337,13 +335,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-
-    @Override
-    public void onCalenderListUpdated() {
-        ArrayList<Calender> calenderArrayList = calenderManager.getCalenders();
-        //Log.d("CalenderActivity", "onCalenderListUpdated() called");
-        // TODO: Adapter to show Calenders which are stored in calenderArrayList
-    }
 
     private class Verifier extends AsyncTask<Void, Void, Void> {
         private String idToken;

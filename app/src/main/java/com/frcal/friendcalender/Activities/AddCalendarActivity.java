@@ -17,8 +17,7 @@ import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.Notifications.NotificationPublisher;
 import com.frcal.friendcalender.R;
 
-// TODO:
-//  - API-Call
+
 public class AddCalendarActivity extends AppCompatActivity implements CalenderManager.CalenderManagerListener {
 
     CalenderManager calenderManager;
@@ -59,9 +58,6 @@ public class AddCalendarActivity extends AppCompatActivity implements CalenderMa
                 } else if (!testMailUsingRegex(mail)) {
                     Toast.makeText(AddCalendarActivity.this, "Bitte gültige Mailadresse angeben!", Toast.LENGTH_SHORT).show();
                 } else {
-                    // TODO:
-                    //  - API-Call: hat diese Mailadresse ein Google-Konto? -> diese Mailadresse zur Synchronisation hinzufügen
-
                     Calender calender = new Calender(mail,mail,null);
                     calenderManager.addCalender(calender);
                     //Log.d("CalenderActivity", "Added Calender to database");

@@ -3,14 +3,14 @@ package com.frcal.friendcalender.Authentication;
 import static android.content.Context.KEYGUARD_SERVICE;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
-import static androidx.core.content.ContextCompat.getSystemService;
+
 import static androidx.core.content.ContextCompat.startActivity;
 
 import android.app.KeyguardManager;
 
 import androidx.biometric.BiometricManager;
 
-import android.app.KeyguardManager;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;

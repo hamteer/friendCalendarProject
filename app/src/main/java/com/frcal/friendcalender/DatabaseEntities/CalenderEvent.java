@@ -5,7 +5,6 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.frcal.friendcalender.Notifications.NotificationPublisher;
 import com.google.api.client.util.DateTime;
 
 import java.util.UUID;
@@ -22,10 +21,10 @@ public class CalenderEvent {
 
     @NonNull
     public DateTime startTime;
-    //String startTimeZone;
+
     @NonNull
     public DateTime endTime;
-    //String endTimeZone;
+
 
     public String description;
     public String summary;

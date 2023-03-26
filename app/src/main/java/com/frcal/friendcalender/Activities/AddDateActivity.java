@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +17,6 @@ import com.frcal.friendcalender.DataAccess.CalenderManager;
 import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.Exception.InputFormatException;
 
-import com.frcal.friendcalender.DataAccess.CalenderManager;
 import com.frcal.friendcalender.RestAPIClient.AsyncCalEvent;
 import com.frcal.friendcalender.RestAPIClient.CalendarEvents;
 
@@ -41,25 +39,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
-import java.util.LinkedList;
 
-import com.google.api.client.util.DateTime;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.LinkedList;
-import com.google.api.client.util.DateTime;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.TimeZone;
 
-// TODO:
-//  - API-Call
-//  - Notification
 
 
 public class AddDateActivity extends AppCompatActivity implements EventManager.EventManagerListener, AsyncCalEvent<String>, CalenderManager.CalenderManagerListener  {
@@ -103,8 +90,8 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
     private void initFriendsDialogue() {
         // first, add the always needed options to add either all or no friends:
-        listOfFriends.add("privater Termin");
-        listOfFriends.add("mit allen Freunden teilen");
+        listOfFriends.add(getResources().getString(R.string.private_date_set));
+        listOfFriends.add(getResources().getString(R.string.public_date_set));
         // now fill in the listOfFriends with all Friends saved in the DB:
         calenderManager.requestUpdate();
         for (Calender friend: calenderList) {
@@ -162,14 +149,8 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                             // event is not private, next, we need to check if event is public
                             if (listOfSelectedFriends.contains(1)) {
                                 chooseFriends.setText(getResources().getString(R.string.public_date_set));
-                                // TODO: API call, sync this event with all Friends this user has added to his account
                             } else {
                                 // event is neither private nor public, but shared with a few specific friends
-                                // TODO: API call:
-                                //  either in for loop for each selected friend,
-                                //  or using the existing for loop to build another list to transfer to the API
-                                //  depending on what methods the API has
-
                                 StringBuilder stringBuilder = new StringBuilder();
 
                                 for (int j = 0; j < listOfSelectedFriends.size(); j++) {
@@ -325,8 +306,6 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                     id = 0;
                 }
 
-                // TODO:
-                //  - DB-Call: Change calenderID, creator
                 SharedPreferences sh_clid = getSharedPreferences("MainCal-ID", MODE_PRIVATE);
                 String creator = sh_clid.getString("Cal-ID", "");
                 CalenderEvent event = new CalenderEvent("primary", null, null, fromWithOffset, toWithOffset, desc, title, loc, creator, from, id);
@@ -340,11 +319,8 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                 if (googleSync.isChecked()) {
                     if (googleSignedIn == false) {
                         Toast.makeText(AddDateActivity.this, "Lokalen Termin angelegt (nicht eingeloggt)", Toast.LENGTH_SHORT).show();
-                        return;
                     }
 
-                    // TODO:
-                    //  - API-Call: use previously created CalenderEvent object to also create a event in the user's Google Calendar
                     CalenderManager cM1 = new CalenderManager(getApplicationContext(), selfRef);
                     List<String> attendes = new ArrayList<>();
 
@@ -364,22 +340,16 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
                     }
 
-
-
-
                     addEvent(3, "primary",event.eventID ,title, desc, loc, fromWithOffset, toWithOffset ,attendes);
 
                 }
 
                 if (notif.isChecked()) {
-                    // TODO:
-                    //  - set Notification for this Event
+
                     publisher.scheduleNotification(context, event.eventID, title,
                             event.notificationID, from.getValue(), 15);
                 }
 
-//                startActivity(new Intent(AddDateActivity.this, SingleDayActivity.class).putExtra(
-//                        "SELECTED_DATE", getCalendarDay(event.startTime.getValue())));
 
                 Toast.makeText(AddDateActivity.this, "Termin gespeichert!",
                         Toast.LENGTH_SHORT).show();
@@ -388,12 +358,6 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
         });
     }
 
-//    private CalendarDay getCalendarDay(long milliseconds) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(milliseconds);
-//        return CalendarDay.from(calendar.get(Calendar.YEAR),
-//                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-//    }
 
     public static String getRFC3339FormattedString(String dateString, String time) {
 
@@ -455,39 +419,6 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
 
 
     }
-
-    public DateTime convertDateTime(String time, String date) {
-        String DateTimeString = date + "" + time;
-        LocalDateTime DateTime = LocalDateTime.parse(DateTimeString);
-        ZoneId zoneId = ZoneId.systemDefault();
-        ZonedDateTime zonedDateTime = DateTime.atZone(zoneId);
-        // Konvertieren Sie das ZonedDateTime-Objekt in ein Instant-Objekt
-        Instant instant = zonedDateTime.toInstant();
-
-        // Konvertieren Sie das Instant-Objekt in ein DateTime-Objekt mit der Default-Zeitzone
-        DateTime dateTime = new DateTime(instant.toEpochMilli());
-
-        return dateTime;
-
-    }
-
-    public void readEventData(JSONObject eventData) {
-        try {
-            String id = eventData.getString("id");
-            String description = eventData.getString("description");
-            JSONObject endObject = eventData.getJSONObject("end");
-            String endDateTime = endObject.getString("dateTime");
-            JSONObject startObject = eventData.getJSONObject("start");
-            String startDateTime = startObject.getString("dateTime");
-            String summary = eventData.getString("summary");
-            String location = eventData.getString("location");
-        } catch (Exception e) {
-            //Log.w("", "handleSignInResult:error", e);
-
-        }
-        //Datenbankaufruf
-    }
-
 
     @Override
     public void onCalenderListUpdated() {
