@@ -102,9 +102,9 @@ Rechts: Benachrichtigung zur Erinnerung an einen Termin
 
 **Daniel Kuzma:** dak2791@thi.de & daniel1kuzma@gmail.com, dak2791
 
-**Kerim Agalarov**: email, AKamKer
+**Kerim Agalarov**: kerim.agalarov@stud.hs-coburg.de, AKamKer
 
-**Niclas Hildner:** niclas.hildner@stud.hs-coburg.de, Your Name and Motherak
+**Niclas Hildner:** niclas.hildner@stud.hs-coburg.de, Your Name & Motherak
 
 **Philipp Hamann:** phh1901@thi.de & philham.001@gmail.com, hamteer
 
