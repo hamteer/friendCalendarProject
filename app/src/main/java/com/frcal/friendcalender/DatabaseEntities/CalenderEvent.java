@@ -42,7 +42,7 @@ public class CalenderEvent {
                          String creator, DateTime updated, int notificationID) {
 
         this.calenderID = calenderID;
-        // schau ob eine calenderID uebergeben wurde falls ja nimm die, ansonsten erstell eine
+        // check if calendarID is null, if yes create a random one
         this.eventID = (eventID != null) ? eventID : String.valueOf(UUID.randomUUID());
         this.googleEventID = googleEventID;
         this.startTime = startTime;

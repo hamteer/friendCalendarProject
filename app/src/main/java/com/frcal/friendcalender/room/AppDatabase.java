@@ -8,13 +8,12 @@ import com.frcal.friendcalender.DatabaseEntities.Calender;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
 
 
-// Klasse als RoomDatenbank markieren und über die Entitäten informieren
+// annotate class as Room Database and inform about entities
 @Database(entities = {CalenderEvent.class, Calender.class}, version = 1)
-// Datenbank über benötigte TypeConverters informieren
+// inform database about needed TypeConverters
 @TypeConverters({CalenderEventAttributeTypeConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
-    // DAO ist eine Klasse, die mit @Dao annotiert wurde
     public abstract DAO taskDao();
 
 }

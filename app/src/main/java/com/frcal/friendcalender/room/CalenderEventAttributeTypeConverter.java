@@ -10,9 +10,6 @@ import java.util.Date;
 // Class to convert DateTime to long
 public class CalenderEventAttributeTypeConverter {
 
-    /*
-    TypeConverter zum Konvertieren von DateTime <-> Long
-    */
     @TypeConverter
     public static DateTime millisecondsToDate(Long milliseconds) {
         return milliseconds == null ? null : new DateTime(milliseconds);

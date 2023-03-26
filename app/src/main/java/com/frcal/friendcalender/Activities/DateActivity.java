@@ -107,7 +107,7 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         // CAUTION:
         // this list has to have a specific order:
         // the first two items are already declared (private and public)
-        // after that, the user's friends have to be listed IN ALPHABETICAL ORDER!
+        // after that, the user's friends have to be listed
 
         // we initialize the boolean Array that shows us which options are selected:
         selectedFriends = new boolean[listOfFriends.size()];
@@ -406,13 +406,6 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         });
     }
 
-//    private CalendarDay getCalendarDay(long milliseconds) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(milliseconds);
-//        return CalendarDay.from(calendar.get(Calendar.YEAR),
-//                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-//    }
-
     @Override
     public void onEventListUpdated() {
 
@@ -421,18 +414,13 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
     public void updateEvent(Integer mtdNr, String calendarID, String eventID, String summary,
                             String description, String location, DateTime startTime,
                             DateTime endTime, List<String> attendees) {
-
-
         try {
-
             CalendarEvents event5 = new CalendarEvents(mtdNr, this, calendarID, eventID, summary, description, location, startTime, endTime, attendees);
             event5.delegate = this;
             event5.setConfig();
             event5.execute();
         } catch (Exception e) {
-
         }
-
     }
 
     public void deleteEvent(Integer mtdNr, String calendarID, String eventID) {
@@ -440,8 +428,6 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
         event4.delegate = this;
         event4.setConfig();
         event4.execute();
-
-
     }
 
 
@@ -463,8 +449,6 @@ public class DateActivity extends AppCompatActivity implements EventManager.Even
             Toast.makeText(DateActivity.this, "Termin bereits gelöscht", Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(DateActivity.this, "Termin gelöscht", Toast.LENGTH_SHORT).show();
-
-
     }
 
     @Override

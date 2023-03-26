@@ -4,7 +4,6 @@ package com.frcal.friendcalender.RestAPIClient;
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -15,15 +14,14 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.model.CalendarList;
-import com.google.api.services.calendar.model.CalendarListEntry;
+
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 
+// In current Version of Project unused but will be used for further features
 public class CalendarCl extends AsyncTask<Void, Void, String> {
-   // Schnittstelle zu AsyncTask
+   // Interface to AsyncTask
    public AsyncCalCl delegate = null;
    private static final HttpTransport httpTransport = new NetHttpTransport();
    private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
@@ -33,7 +31,7 @@ public class CalendarCl extends AsyncTask<Void, Void, String> {
 
    private Context context;
 
-   // Funktion auswählen 1=getCalender
+   // choose method 1=getCalender
    private int mtdNr; //1=listCalender;
    private static final int REQUEST_AUTHORIZATION = 1;
    private static final int REQUEST_CALENDAR = 2;
@@ -74,9 +72,9 @@ public class CalendarCl extends AsyncTask<Void, Void, String> {
       JsonFactory jsonFactory = new JacksonFactory();
       try {
          com.google.api.services.calendar.model.Calendar calendar = service.calendars().get(calendarId).execute();
-         // Konvertiere das Calendar-Objekt in ein JSON-String
+         // convert Calendar object to JSON-String
          String jsonString = jsonFactory.toPrettyString(calendar);
-         // Konvertiere den JSON-String in ein Calendar-Objekt
+         // convert JSON-String to Calendar object
          // com.google.api.services.calendar.model.Calendar calendarFromJson = jsonFactory.fromString(jsonString, com.google.api.services.calendar.model.Calendar.class);
 
          return jsonString;
@@ -103,7 +101,7 @@ public class CalendarCl extends AsyncTask<Void, Void, String> {
       com.google.api.services.calendar.model.Calendar createdCalendar = null;
       try {
          createdCalendar = service.calendars().insert(calendar).execute();
-         // Konvertiere das Calendar-Objekt in ein JSON-String
+         // convert Calendar object to JSON-String
          String jsonString = jsonFactory.toPrettyString(createdCalendar);
          return jsonString;
 

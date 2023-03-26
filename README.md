@@ -126,7 +126,20 @@ Rechts: Benachrichtigung zur Erinnerung an einen Termin
 (+ Datenbank-Aufrufe in den Activities)
 
 **Kerim Agalarov:** <br>
-[FingerprintActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/FingerprintActivity.java) (Fingerabdruck-Login), _Google-Komponenten hier eintragen_ (Google-Login)
+Fingerprint Login:
+[FingerprintActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/a4d3a8df1303a294250da1289f3dfd363f2a969f/app/src/main/java/com/frcal/friendcalender/Activities/FingerprintActivity.java), 
+[SettingsActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/b3d8123bf8ff47a5db900a97b7a6f89f555288fb/app/src/main/java/com/frcal/friendcalender/Activities/SettingsActivity.java) <br>
+
+Objekte für Google Integration/API-Aufrufe: <br>
+[SharedOneTabClient](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/1cfebd4ab4d2caad6073628b67550b3591d214d7/app/src/main/java/com/frcal/friendcalender/RestAPIClient/SharedOneTabClient.java),
+[CalendarListCl](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/1cfebd4ab4d2caad6073628b67550b3591d214d7/app/src/main/java/com/frcal/friendcalender/RestAPIClient/CalendarListCl.java),
+[CalendarCl](app/src/main/java/com/frcal/friendcalender/RestAPIClient/CalendarCl.java),
+[AsyncCalCl](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/1cfebd4ab4d2caad6073628b67550b3591d214d7/app/src/main/java/com/frcal/friendcalender/RestAPIClient/AsyncCalCl.java) <br>
+
+API-Aufrufe eingebaut in: <br>
+[AddDateActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/1cfebd4ab4d2caad6073628b67550b3591d214d7/app/src/main/java/com/frcal/friendcalender/Activities/AddDateActivity.java),
+[CalendarActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/1cfebd4ab4d2caad6073628b67550b3591d214d7/app/src/main/java/com/frcal/friendcalender/Activities/CalendarActivity.java),
+[DateActivity](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/1cfebd4ab4d2caad6073628b67550b3591d214d7/app/src/main/java/com/frcal/friendcalender/Activities/DateActivity.java)
 
 **Niclas Hildner:** <br>
 [CalendarEvents](https://github.com/Wirtschaftsinformatik-Passau/abschlussprojekt-freundekalender/blob/master/app/src/main/java/com/frcal/friendcalender/RestApiClient/CalendarEvents.java), 

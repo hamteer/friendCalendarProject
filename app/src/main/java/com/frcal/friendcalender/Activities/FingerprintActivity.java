@@ -39,19 +39,16 @@ public class FingerprintActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Um Benachrichtigungen empfangen zu können, wird der Standard-Channel eingerichtet,
-        // sofern er nicht bereits existiert
-        // 2. Falls die App erstmalig nach ihrer Installation geöffnet wird, wird ein gesonderter
-        // Workflow geöffnet
-        // 3. Falls Fingerprint als Main Activity gelauncht wurde, muss überprüft werden, ob die
-        // Eingabe des Fingerabdrucks überhaupt ist, sonst wird sofort die CalendarActivity, bzw.
-        // die Ursprungsactivity aufgerufen
-        // 4. Ermitteln der zu nutzenden Authentifizierungsmethode
-        // 5. Initialisierung der Methoden des BiometricPrompt, die nach Eingabe der
-        // Authentifizierungsmethode ausgeführt werden
-        // 6. Initialisierung des AlertDialogs, der angezeigt wird, sofern keine
-        // Authentifizierungsmethode existiert
-        // 7. Initialisierung der UI anhand der möglichen Authentifizierungsmethode
+        // 1. To get notifications, a standard channel will be created if it doesn't exist already
+        // 2. If this is the first time the app is opened after installation, a special workflow is opened
+        // 3. If the FingerprintActivity is launched as the main activity, the activation of the
+        //    fingerprint in the settings needs to be checked. If it isn't, the originally wanted activity
+        //    (e.g. the CalendarActivity on normal startup) is launched
+        // 4. The authentication method to be used is determined
+        // 5. The methods of the BiometricPrompt class, run after the authentication method is chosen,
+        //    are initialized
+        // 6. The AlertDialog, shown if no authentication methods exist, is initialized
+        // 7. The UI is initialized according to the possible authentication methods
         NotificationPublisher publisher = new NotificationPublisher();
         publisher.createNotificationChannel(this);
 
@@ -77,15 +74,14 @@ public class FingerprintActivity extends AppCompatActivity {
         }
     }
 
-    // Je nach Authentifizierungsmethode wird ein Bild eines Fingerabdrucks und eine Unterschrift
-    // oder ein Button angezeigt
-    // Außerdem wird der Untertitel entsprechend der angesteuerten Activity angepasst
+    // Depending on the authentication method, either a fingerprint icon with an explanation or a button is shown.
+    // Also, the caption is modified depending on the activity that the user tries to open.
     private void initUI(AuthenticationManager.authenticationMethod authMethod) {
         setContentView(R.layout.activity_fingerprint);
 
         TextView subtitle = findViewById(R.id.subtitle_fingerprint_activity);
 
-        // Anpassen des Untertitels
+        // Modify caption
         if (getIntent().getStringExtra(
                 getString(R.string.intent_key)) != null) {
             try {
@@ -109,7 +105,7 @@ public class FingerprintActivity extends AppCompatActivity {
         TextView fingerprintAction = findViewById(R.id.description_fingerprint_image);
         Button loginButton = findViewById(R.id.authentication_button);
 
-        // Anzeigen der entsprechenden UI
+        // show UI according to authentication method
         if (authMethod == AuthenticationManager.authenticationMethod.BIOMETRIC_AUTHENTICATION) {
             fingerprintImage.setVisibility(View.VISIBLE);
             fingerprintImage.setEnabled(true);
@@ -139,9 +135,8 @@ public class FingerprintActivity extends AppCompatActivity {
 
     }
 
-    // Definition der Reaktion auf verschiedene Ergebnisse nach Eingabe der
-    // Authentifizierungsmethode
-    // Bei Fehlern wird dem Nutzer ein Toast angezeigt
+    // Reactions on different events after input of authentication method are defined
+    // If there is an error or a mistake, a Toast is shown to the user
     private void initPrompt() {
         Executor executor = ContextCompat.getMainExecutor(this);
         prompt = new BiometricPrompt(FingerprintActivity.this, executor,
@@ -173,13 +168,11 @@ public class FingerprintActivity extends AppCompatActivity {
                 });
     }
 
-    // Je nach Authentifizierungsmethode wird die Beschreibung des Authentifizierungs-Dialogs
-    // angepasst
-    // Wenn trotz vorheriger Bestimmung der Authentifizierungsmethode kein Fingerabdruck mehr
-    // vorhanden ist, wird die Alternative der regulären Authentifizierungsmethode genutzt und
-    // die UI im Nachhinein angepasst
-    // Falls der Nutzer keine Authentifizierungsmethode eingerichtet hat, wird ihm dies über
-    // einen AlertDialog vermittelt und er hat eine letzte Chance, die Einrichtung nachzuholen
+    // The caption of the authentication dialogue is modified depending on the authentication method
+    // If the fingerprint method is chosen, but there is no fingerprint saved on the device,
+    // the alternative authentication method is used and the UI is changed accordingly
+    // If the user has not set an authentication method for their device, they are notified via
+    // an AlertDialog and can now do so
     private void showPrompt(AuthenticationManager.authenticationMethod authMethod) {
         if (authMethod == AuthenticationManager.authenticationMethod.NO_AUTHENTICATION) {
             showAlertDialog();
@@ -205,9 +198,9 @@ public class FingerprintActivity extends AppCompatActivity {
         prompt.authenticate(promptInfo);
     }
 
-    // Initialisierung des AlertDialogs
-    // Der Nutzer kann eine Authentifizierungsmethode einrichten oder abbrechen, kann dann jedoch
-    // nicht die App öffnen
+    // Initialisation of AlertDialog
+    // The user can set up an authentication method
+    // (or decide against doing so, but will then be unable to open the app for now)
     private void initAlertDialog(Bundle bundle) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.fingerprint_no_authentification_method_alert_dialog))
@@ -226,16 +219,16 @@ public class FingerprintActivity extends AppCompatActivity {
         alertDialog = builder.create();
     }
 
-    // Gibt dem Nutzer eine letzte Chance, eine Authentifizierungsmethode einzurichten
+    // Show the AlertDialog to the user to allow them to set up an authentication method
     private void showAlertDialog() {
         alertDialog.show();
     }
 
 
-    // Startet entweder die CalendarActivity neu, wenn die App über das Icon gestartet wurde oder
-    // die Zielactivity sofern diese ausgelesen werden kann
-    // Andernfalls wird erneut in die CalendarActivity gesprungen und der Nutzer wird über ein Toast
-    // darüber informiert
+    // Either start the CalendarActivity if the app is opened via the icon
+    // or start another target activity if any can be determined
+    // If no target activity can be determined, the CalendarActivity will be started and the user
+    // informed via a Toast
     private void startNextActivity() {
         if (getIntent().getStringExtra(getString(R.string.intent_key)) != null) {
             String activity = getIntent().getStringExtra(

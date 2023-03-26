@@ -111,7 +111,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     }
 
     private void initCalendarView() {
-        // initialer Setup des CalendarView
+        // initial setup of CalendarView
         AndroidThreeTen.init(this);
         calendarView = (MaterialCalendarView) findViewById(R.id.calendarView);
         calendarView.state().edit()
@@ -132,7 +132,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
                 break;
         }
 
-        // Modus zwischen Monats- und Wochenansicht wechseln
+        // change view mode between month and week view
         Button btn = (Button) findViewById(R.id.mode_button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,24 +146,23 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
             }
         });
 
-        // aktuellen Tag farbig hervorheben:
+        // set decoration for current day, set current day as initially highlighted
         calendarView.addDecorator(oneDayDecorator);
-        // bei App-Start ist inital auch der aktuelle Tag ausgewählt:
         calendarView.setSelectedDate(CalendarDay.today());
 
 
-        // Grafische Aufbereitung von Tagen, an denen Termine vorhanden sind
+        // set decoration for days where events are planned
         calenderManager = new CalenderManager(getApplicationContext(), this);
         eventManager = new EventManager(getApplicationContext(), this);
 
 
-        // OnClickListener für Tage
+        // OnClickListener for days
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget,
                                        @NonNull CalendarDay date, boolean selected) {
                 // create Intent, put date in extras, start SingleDateActivity
-                ////Log.d("FrCal", "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
+                // Log.d("FrCal", "in: onDateSelected, selected Day: " + date.getDay() + "." + date.getMonth() + "." + date.getYear());
                 Intent intent = new Intent(getApplicationContext(), SingleDayActivity.class);
                 intent.putExtra("SELECTED_DATE", date);
                 startActivity(intent);

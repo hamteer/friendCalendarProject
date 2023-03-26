@@ -1,19 +1,17 @@
 package com.frcal.friendcalender.RestAPIClient;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.frcal.friendcalender.DataAccess.EventManager;
 import com.frcal.friendcalender.DatabaseEntities.CalenderEvent;
-import com.frcal.friendcalender.Decorators.EventDecorator;
+
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.HttpTransport;
@@ -25,7 +23,7 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
-import com.google.api.services.calendar.model.Events;
+
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import org.threeten.bp.LocalDate;
@@ -33,7 +31,7 @@ import org.threeten.bp.LocalDate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
+
 import java.util.List;
 
 

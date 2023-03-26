@@ -18,7 +18,7 @@ import com.frcal.friendcalender.R;
 
 public class FingerprintInitializationActivity extends AppCompatActivity {
 
-    // Falls die Fingerabdrucksperre bereits gesetzt ist, wird die Activity übersprungen
+    // If the fingerprint lock is already set up, this activity will be skipped
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +35,7 @@ public class FingerprintInitializationActivity extends AppCompatActivity {
         }
     }
 
-    // UI wird initialisiert
+    // Initialize UI
     private void initUI(SharedPreferences sharedPreferences, Bundle bundle) {
         setContentView(R.layout.activity_fingerprint_initialization);
 
@@ -48,8 +48,7 @@ public class FingerprintInitializationActivity extends AppCompatActivity {
         disagreeButton.setOnClickListener((View v) -> endActivity(sharedPreferences, false));
     }
 
-    // Es wird die Authentifizierungsmethode über den AuthenticationManager gesetzt und daraufhin
-    // die Activity beendet
+    // Set authentication method via AuthenticationManager and close activity
     private void setAuthenticationMethod(SharedPreferences sharedPreferences, Bundle bundle) {
         BiometricManager biometricManager = BiometricManager.from(this);
         AuthenticationManager.setAuthenticationMethod(this, bundle);
@@ -57,9 +56,8 @@ public class FingerprintInitializationActivity extends AppCompatActivity {
                 BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS);
     }
 
-    // Je nach Knopfdruck wird die Einstellung für den Fingerabdruck gesetzt und die nächste
-    // Activity wird aufgerufen
-    // Damit nicht zu dieser Activity zurückgekehrt werden kann, wird finish() aufgerufen
+    // Depending on the button state, the preferences for the fingerprint are set and the next activity is started
+    // finish() is called so the user cannot accidentally return to this activity
     private void endActivity(SharedPreferences sharedPreferences, boolean fingerprintState) {
         sharedPreferences.edit().putBoolean(
                 getString(R.string.fingerprint_preference_name),
