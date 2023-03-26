@@ -30,8 +30,8 @@ import java.util.List;
 
 /**
  * Use this Class to get all Calender-Events from the googlecalendar
- * @author Niclas
  *
+ * @author Niclas
  */
 public class CalendarEventList extends AsyncTask<Void, Void, List<Event>> {
     private static final HttpTransport httpTransport = new NetHttpTransport();
@@ -42,7 +42,6 @@ public class CalendarEventList extends AsyncTask<Void, Void, List<Event>> {
 
     public AsyncCalLEventList delegate = null;
     private Context context;
-    // <editor-fold desc="Attributes">
     private String calendarID;
 
     Calendar service;
@@ -50,7 +49,7 @@ public class CalendarEventList extends AsyncTask<Void, Void, List<Event>> {
 
 
     @Override
-    protected List<Event> doInBackground(Void... voids) {
+    protected List<Event> doInBackground(Void... voids) { //Method to execute the other methods asynchronous
         switch (this.mtdNr) {
             case 2:
                 return getEventList();
@@ -59,11 +58,6 @@ public class CalendarEventList extends AsyncTask<Void, Void, List<Event>> {
         }
         return null;
 
-        /**
-         * Method to execute the other methods asynchronous
-         * @author Niclas
-         *
-         */
     }
 
     public CalendarEventList(Integer mtdNr, Context context, String calendarID) {
@@ -91,20 +85,18 @@ public class CalendarEventList extends AsyncTask<Void, Void, List<Event>> {
 
     public List<Event> getEventList() {
 
-// Iterate over the events in the specified calendar
+        // Iterate over the events in the specified calendar
         String pageToken = null;
         List<Event> items;
         List<Event> allEvents = new ArrayList<>();
-        List<String> jsonResponses = new ArrayList<>();
         try {
 
             do {
                 Events events = this.service.events().list(this.calendarID).setPageToken(pageToken).execute();
-                items = events.getItems();
-                allEvents.addAll(items);
+                items = events.getItems();   //get all events of one page
+                allEvents.addAll(items); //add the events to a list
                 pageToken = events.getNextPageToken();
-                jsonResponses.add(events.toPrettyString());
-            } while (pageToken != null);
+            } while (pageToken != null); //the max amount of events of one page is 250
             return allEvents;
         } catch (UserRecoverableAuthIOException e) {
             ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
@@ -113,8 +105,9 @@ public class CalendarEventList extends AsyncTask<Void, Void, List<Event>> {
         }
         return null;
     }
+
     @Override
-    protected void onPostExecute(List<Event> json) {
+    protected void onPostExecute(List<Event> json) { //to call the interface and parse the google events in the CalendarActivity
         switch (mtdNr) {
             case 2:
                 delegate.respGetEventList(json);

@@ -237,7 +237,7 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
     @Override
     public void respGetEventList(List res) {
         EventManager eventManager1 = new EventManager(getApplicationContext(), this);
-        ArrayList<CalenderEvent> liste = new ArrayList<>(eventManager1.getEvents());
+        ArrayList<CalenderEvent> liste = new ArrayList<>(eventManager1.getEvents()); //to get all the events who are stored in the local db
         List<Event> result = res;
         boolean compare=false;
         //   String calenderID;
@@ -247,16 +247,17 @@ public class CalendarActivity extends AppCompatActivity implements EventManager.
                     for (CalenderEvent eventDB : liste) {
 
                         if (ev.getId().equals(eventDB.googleEventID)) {
-                            compare = true;
+                            compare = true; //if the event is in the local db
                             break;
                         }
                     }
-                    if (compare == false) {
+                    if (compare == false) { // if the event is not in the local DB
                         DateTime datdeb = ev.getEnd().getDateTime();
                         // if EndTime is not set => skip
                         if (datdeb == null){
                             continue;
                         }
+                        //store the googleEvent ib the local DB
                         CalenderEvent eventDB = new CalenderEvent("primary", null, ev.getId(), ev.getStart().getDateTime(), ev.getEnd().getDateTime(), ev.getDescription(), ev.getSummary(), ev.getLocation(), null, null, 1 );
                         eventManager.addEvent(eventDB);
                     }

@@ -48,10 +48,10 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
     // <editor-fold desc="Attributes">
     private String calendarID;
     private String eventID;
-    private String summary; // Titel des Termins
-    private String location;
+    private String summary="Kein Titel";
+    private String location ="Kein Ort";
 
-    private String description = "No Description";
+    private String description = "Keine Beschreibung";
 
 
     private DateTime startTime;
@@ -71,7 +71,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
 // </editor-fold>
 
     // <editor-fold desc="Konstruktoren">
-    //For insert
+    //For insert and update
     public CalendarEvents(Integer mtdNr, Context context, String calendarID, String eventID, String summary, String description, String location, DateTime startTime, DateTime endTime, List<String> attendees) {
         this.mtdNr = mtdNr;
         this.context = context;
@@ -92,7 +92,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
     }
 
 
-    //For delete and list
+    //For delete
     public CalendarEvents(Integer mtdNr, Context context, String calendarID, String eventID) {
         this.mtdNr = mtdNr;
         this.context = context;

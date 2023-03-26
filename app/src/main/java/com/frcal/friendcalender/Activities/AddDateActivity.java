@@ -325,7 +325,7 @@ public class AddDateActivity extends AppCompatActivity implements EventManager.E
                     List<String> attendes = new ArrayList<>();
 
 
-                    if (listOfSelectedFriends.contains(1)) {
+                    if (listOfSelectedFriends.contains(1)) { //if you clicked "Sende an alle Freunde"
                         List<Calender> mailList = new ArrayList<>(cM1.getCalenders());
                         for (Calender cal : mailList) {
 
