@@ -334,7 +334,7 @@ Aufgaben:
  - Niclas Hildner: Video aufnehmen
  
  
-**15.	Treffen (26.03.2023):** Projektabschluss & Review
+**15.	Treffen (26.03.2023):** Projektabschluss & Review: Ungenutzte Methoden/Variablen/Imports im Code entfernt, Video aufgenommen und verlinkt, Readme finalisiert
 
 ## Guidelines zur Nutzung dieses Repositorys
 
