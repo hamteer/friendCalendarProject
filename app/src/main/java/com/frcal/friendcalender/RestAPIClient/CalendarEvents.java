@@ -59,15 +59,10 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
 
     private List<String> attendees = new ArrayList<>();
 
-
-
-    /*private List<String> attendees = new LinkedList<>(); */
-
     Calendar service;
     Integer mtdNr;
     EventManager eventManager;
 
-    //private ArrayList<String> attendees2 = new ArrayList<String>();
 // </editor-fold>
 
     // <editor-fold desc="Konstruktoren">
@@ -176,7 +171,7 @@ public class CalendarEvents extends AsyncTask<Void, Void, String> implements Eve
         EventDateTime end = new EventDateTime().setDateTime(this.endTime);
         event.setEnd(end);
 
-        if (attendees != null) {
+        if (attendees != null) { //add all attendees
             List<EventAttendee> attendeesToSET = new ArrayList<>();
             for (String email:attendees) {
                     attendeesToSET.add( new EventAttendee().setEmail(email));
